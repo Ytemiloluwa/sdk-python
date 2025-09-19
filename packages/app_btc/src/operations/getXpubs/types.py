@@ -1,7 +1,6 @@
-from typing import Callable, Optional
+from typing import Callable, Optional, List
 from dataclasses import dataclass
 from enum import IntEnum
-from packages.app_btc.src.proto.generated.btc import GetXpubsIntiateRequest
 
 
 class GetXpubsEvent(IntEnum):
@@ -12,11 +11,12 @@ class GetXpubsEvent(IntEnum):
     PIN_CARD = 3
 
 
-# Type alias for event handler
 GetXpubsEventHandler = Callable[[GetXpubsEvent], None]
 
 
 @dataclass
-class GetXpubsParams(GetXpubsIntiateRequest):
-    """Parameters for get xpubs operation. Extends GetXpubsIntiateRequest."""
+class GetXpubsParams:
+    """Parameters for get xpubs operation."""
+    wallet_id: bytes
+    derivation_paths: List[dict]
     on_event: Optional[GetXpubsEventHandler] = None

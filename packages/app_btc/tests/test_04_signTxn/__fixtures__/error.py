@@ -1,9 +1,9 @@
 from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType, deviceAppErrorTypeDetails
 from .types import SignTxnTestCase, QueryData, ResultData
-from packages.app_btc.src.proto.generated.btc import Query, Result
+from packages.app_btc.src.proto.generated.btc import Query, Result, SignTxnRequest, SignTxnInitiateRequest, SignTxnResponse
+from packages.app_btc.src.proto.generated import error
 from packages.app_btc.src.proto.generated.error import DataFlow, UserRejection
 
-# Common parameters shared across error test cases
 common_params = {
     'params': {
         'wallet_id': bytes([
@@ -38,8 +38,8 @@ common_params = {
         QueryData(
             name='Initiate query',
             data=Query(
-                sign_txn=Query.SignTxn(
-                    initiate=Query.SignTxn.Initiate(
+                sign_txn=SignTxnRequest(
+                    initiate=SignTxnInitiateRequest(
                         wallet_id=bytes([
                             199, 89, 252, 26, 32, 135, 183, 211, 90, 220, 38, 17, 160,
                             103, 233, 62, 110, 172, 92, 20, 35, 250, 190, 146, 62, 8, 53,
@@ -61,8 +61,8 @@ with_unknown_error = SignTxnTestCase(
         ResultData(
             name='error',
             data=Result(
-                sign_txn=Result.SignTxn(
-                    common_error=Result.SignTxn.CommonError(
+                sign_txn=SignTxnResponse(
+                    common_error=error.CommonError(
                         unknown_error=1
                     )
                 )
@@ -81,7 +81,7 @@ with_invalid_app_id = SignTxnTestCase(
         ResultData(
             name='error',
             data=Result(
-                common_error=Result.CommonError(
+                common_error=error.CommonError(
                     corrupt_data=DataFlow.DATA_FLOW_INVALID_DATA
                 )
             ).SerializeToString()
@@ -99,8 +99,8 @@ with_user_rejection = SignTxnTestCase(
         ResultData(
             name='error',
             data=Result(
-                sign_txn=Result.SignTxn(
-                    common_error=Result.SignTxn.CommonError(
+                sign_txn=SignTxnResponse(
+                    common_error=error.CommonError(
                         user_rejection=UserRejection.USER_REJECTION_UNKNOWN
                     )
                 )

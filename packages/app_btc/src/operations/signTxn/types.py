@@ -12,7 +12,6 @@ class SignTxnEvent(IntEnum):
     PIN_CARD = 4
 
 
-# Type alias for event handler
 SignTxnEventHandler = Callable[[SignTxnEvent], None]
 
 

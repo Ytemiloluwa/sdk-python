@@ -54,7 +54,7 @@ def parse_common_error(error: Optional[CommonError]) -> None:
     for field_name, error_type in error_fields:
         if hasattr(error, field_name):
             error_value = getattr(error, field_name)
-            if error_value is not None:
+            if error_value is not None and error_value != 0:
                 raise DeviceAppError(error_type, error_value)
 
 

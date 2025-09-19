@@ -48,7 +48,7 @@ class SDK:
         connection: IDeviceConnection,
         applet_id: int,
         options: Optional[Dict[str, Any]] = None,
-    ) -> "ISDK":
+    ) -> ISDK:
         max_tries = options.get("max_tries") if options else None
         timeout = options.get("timeout") if options else None
         
@@ -289,9 +289,12 @@ class SDK:
 
         if not self.app_versions_map:
             result = await commands.get_app_versions(
-                connection=self.connection,
-                options=options,
-                on_status=on_status,
+                commands.GetAppVersionsParams(
+                    connection=self.connection,
+                    sequence_number=await self.get_new_sequence_number(),
+                    on_status=on_status,
+                    options=options,
+                )
             )
             self.app_versions_map = result
             return result
@@ -448,11 +451,13 @@ class SDK:
             )
 
         return await commands.start_session(
-            connection=self.connection,
-            get_new_sequence_number=self.get_new_sequence_number,
-            get_sequence_number=self.get_sequence_number,
-            on_status=on_status,
-            options=options,
+            commands.StartSessionParams(
+                connection=self.connection,
+                get_new_sequence_number= self.get_new_sequence_number,
+                get_sequence_number=self.get_sequence_number,
+                on_status=on_status,
+                options=options,
+            )
         )
 
     async def close_session(
@@ -474,11 +479,13 @@ class SDK:
             )
 
         return await commands.close_session(
-            connection=self.connection,
-            get_new_sequence_number=self.get_new_sequence_number,
-            get_sequence_number=self.get_sequence_number,
-            on_status=on_status,
-            options=options,
+            commands.CloseSessionParams(
+                connection=self.connection,
+                get_new_sequence_number=self.get_new_sequence_number,
+                get_sequence_number=self.get_sequence_number,
+                on_status=on_status,
+                options=options,
+            )
         )
 
     async def ensure_if_usb_idle(self) -> None:

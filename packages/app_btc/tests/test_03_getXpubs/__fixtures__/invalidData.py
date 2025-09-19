@@ -1,6 +1,6 @@
 from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType, deviceAppErrorTypeDetails
 from .types import GetXpubsTestCase, QueryData, ResultData
-from packages.app_btc.src.proto.generated.btc import Query
+from packages.app_btc.src.proto.generated.btc import Query, GetXpubsRequest, GetXpubsIntiateRequest, GetXpubDerivationPath
 
 # Common parameters for invalid data tests
 common_params = {
@@ -20,15 +20,15 @@ common_params = {
         QueryData(
             name='Initiate query',
             data=Query(
-                get_xpubs=Query.GetXpubs(
-                    initiate=Query.GetXpubs.Initiate(
+                get_xpubs=GetXpubsRequest(
+                    initiate=GetXpubsIntiateRequest(
                         wallet_id=bytes([
                             199, 89, 252, 26, 32, 135, 183, 211, 90, 220, 38, 17, 160,
                             103, 233, 62, 110, 172, 92, 20, 35, 250, 190, 146, 62, 8, 53,
                             86, 128, 26, 3, 187, 121, 64,
                         ]),
                         derivation_paths=[
-                            Query.GetXpubs.Initiate.DerivationPath(
+                            GetXpubDerivationPath(
                                 path=[0x8000002c, 0x80000000, 0x80000000],
                             ),
                         ],
@@ -96,3 +96,4 @@ invalid_data_fixtures = [
 ]
 
 __all__ = ['invalid_data_fixtures']
+

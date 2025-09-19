@@ -1,4 +1,3 @@
-# Re-export all operations from operation modules
 from .getPublicKey import (
     get_public_key,
     GetPublicKeyEvent,
@@ -10,6 +9,7 @@ from .getXpubs import (
     GetXpubsEvent,
     GetXpubsParams,
 )
+from .types import GetXpubsResultResponse
 from .signTxn import (
     sign_txn,
     SignTxnEvent,
@@ -18,18 +18,15 @@ from .signTxn import (
 )
 
 __all__ = [
-    # Operations
     'get_public_key',
     'get_xpubs',
     'sign_txn',
-    # GetPublicKey
     'GetPublicKeyEvent',
     'GetPublicKeyParams',
     'GetPublicKeyResult',
-    # GetXpubs
     'GetXpubsEvent',
     'GetXpubsParams',
-    # SignTxn
+    'GetXpubsResultResponse',
     'SignTxnEvent',
     'SignTxnParams',
     'SignTxnResult',

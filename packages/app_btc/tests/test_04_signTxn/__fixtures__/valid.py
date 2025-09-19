@@ -1,16 +1,11 @@
 from packages.util.utils import hex_to_uint8array, create_flow_status
 from .types import SignTxnTestCase, QueryData, ResultData, StatusData, MockData
-from packages.app_btc.src.proto.generated.btc import Query, Result
-
-
-def query_to_bytes(query_data):
-    """Helper function to convert query data to bytes."""
-    return Query(**query_data).SerializeToString()
-
-
-def result_to_bytes(result_data):
-    """Helper function to convert result data to bytes."""
-    return Result(**result_data).SerializeToString()
+from packages.app_btc.src.proto.generated.btc import (
+    Query, Result, SignTxnRequest, SignTxnInitiateRequest, SignTxnResponse,
+    SignTxnMetadataAccepted, SignTxnInputAccepted, SignTxnOutputAccepted,
+    SignTxnSignatureResponse, PrevTxnChunkAccepted
+)
+from packages.app_btc.src.proto.generated import common
 
 
 with_one_input = SignTxnTestCase(
@@ -46,21 +41,40 @@ with_one_input = SignTxnTestCase(
     },
     queries=[
         QueryData(
-            name='Initiate query',
-            data=query_to_bytes({
-                'sign_txn': {
-                    'initiate': {
-                        'wallet_id': bytes([
+            name='Initate query',
+            data=Query(
+                sign_txn=SignTxnRequest(
+                    initiate=SignTxnInitiateRequest(
+                        wallet_id=bytes([
                             199, 89, 252, 26, 32, 135, 183, 211, 90, 220, 38, 17, 160, 103,
                             233, 62, 110, 172, 92, 20, 35, 250, 190, 146, 62, 8, 53, 86, 128,
                             26, 3, 187, 121, 64,
                         ]),
-                        'derivation_path': [0x80000000 + 44, 0x80000000, 0x80000000],
-                    },
-                },
-            })
+                        derivation_path=[0x80000000 + 44, 0x80000000, 0x80000000],
+                    )
+                )
+            ).SerializeToString(),
         ),
-        # Additional query data would go here - simplified for brevity
+        QueryData(
+            name='Send meta',
+            data=b'',
+        ),
+        QueryData(
+            name='Input 1',
+            data=b'',
+        ),
+        QueryData(
+            name='PrevTxnChunk 1',
+            data=b'',
+        ),
+        QueryData(
+            name='Output 1',
+            data=b'',
+        ),
+        QueryData(
+            name='Signature request 1',
+            data=b'',
+        ),
     ],
     results=[
         ResultData(
@@ -77,14 +91,59 @@ with_one_input = SignTxnTestCase(
                 ),
             ],
         ),
-        # Additional result data would go here
+        ResultData(
+            name='Meta Accepted',
+            data=Result(
+                sign_txn=SignTxnResponse(
+                    meta_accepted=SignTxnMetadataAccepted()
+                )
+            ).SerializeToString(),
+        ),
+        ResultData(
+            name='Input accepted: 1',
+            data=Result(
+                sign_txn=SignTxnResponse(
+                    input_accepted=SignTxnInputAccepted()
+                )
+            ).SerializeToString(),
+        ),
+        ResultData(
+            name='PrevTxnChunk Accepted 1',
+            data=Result(
+                sign_txn=SignTxnResponse(
+                    prev_txn_chunk_accepted=PrevTxnChunkAccepted(
+                        chunk_ack=common.ChunkAck(chunk_index=0)
+                    )
+                )
+            ).SerializeToString(),
+        ),
+        ResultData(
+            name='Output accepted: 1',
+            data=Result(
+                sign_txn=SignTxnResponse(
+                    output_accepted=SignTxnOutputAccepted()
+                )
+            ).SerializeToString(),
+        ),
+        ResultData(
+            name='Signature: 1',
+            data=Result(
+                sign_txn=SignTxnResponse(
+                    signature=SignTxnSignatureResponse(
+                        signature=hex_to_uint8array(
+                            '483045022100d946ce57571ae63f5b1f16aeb759f84736bdb9b364955e8756cc9e25c8f4745b02206ae916c173aaf32c642369c9f196c5fd9cf8b63350cd0c4d5c4b7dbba73b7b740121035f4cf9b856e62a02f5c895094305d7a5370f3fa3f1e625b6c535d4be1fa1d19e',
+                        )
+                    )
+                )
+            ).SerializeToString(),
+        ),
     ],
     mocks=MockData(event_calls=[[0], [1], [2], [3], [4]]),
     output={
         'signatures': [
             '483045022100d946ce57571ae63f5b1f16aeb759f84736bdb9b364955e8756cc9e25c8f4745b02206ae916c173aaf32c642369c9f196c5fd9cf8b63350cd0c4d5c4b7dbba73b7b740121035f4cf9b856e62a02f5c895094305d7a5370f3fa3f1e625b6c535d4be1fa1d19e',
         ],
-        'signed_transaction': '020000000001011d864b4ffbda86f4f16954953e813ca1360565282e6c387f0264cda1763348e10000000000ffffffff01600c000000000000160014cd03240ac5dff43d1a02c9c4017a2bee6fb8573402483045022100d946ce57571ae63f5b1f16aeb759f84736bdb9b364955e8756cc9e25c8f4745b02206ae916c173aaf32c642369c9f196c5fd9cf8b63350cd0c4d5c4b7dbba73b7b740121035f4cf9b856e62a02f5c895094305d7a5370f3fa3f1e625b6c535d4be1fa1d19e00000000',
+        'signed_transaction': '020000000001011d864b4ffbda86f4f16954953e813ca1360565282e6c387f0264cda1763348e10000000000ffffffff01600c000000000000160014cd03240ac5dff43d1a02c9c4017a2bee6fb8573402483045022100a35f696d47784e1314609a7bdb52fce7951d4f9ad2ca16139714a982b7815a1102200b77f3053c3c82c319dd42500ae1499c4b77f0886ece84d7216518ff597973b30121029bb616f300e7d1c05d11a0daf576552a236d6a29c65dea862ff91c1c2f462a7b00000000',
     },
 )
 
@@ -135,25 +194,23 @@ with_multiple_inputs = SignTxnTestCase(
         },
     },
     queries=[
-        # Simplified query structure - full implementation would include all queries
         QueryData(
-            name='Initiate query',
-            data=query_to_bytes({
-                'sign_txn': {
-                    'initiate': {
-                        'wallet_id': bytes([
+            name='Initate query',
+            data=Query(
+                sign_txn=SignTxnRequest(
+                    initiate=SignTxnInitiateRequest(
+                        wallet_id=bytes([
                             199, 89, 252, 26, 32, 135, 183, 211, 90, 220, 38, 17, 160, 103,
                             233, 62, 110, 172, 92, 20, 35, 250, 190, 146, 62, 8, 53, 86, 128,
                             26, 3, 187, 121, 64,
                         ]),
-                        'derivation_path': [0x80000000 + 44, 0x80000000, 0x80000000],
-                    },
-                },
-            })
+                        derivation_path=[0x80000000 + 44, 0x80000000, 0x80000000],
+                    )
+                )
+            ).SerializeToString(),
         ),
     ],
     results=[
-        # Simplified result structure
         ResultData(
             name='Confirmation',
             data=bytes([26, 2, 10, 0]),
@@ -167,6 +224,110 @@ with_multiple_inputs = SignTxnTestCase(
                     expect_event_calls=[1],
                 ),
             ],
+        ),
+        ResultData(
+            name='Meta Accepted',
+            data=Result(
+                sign_txn=SignTxnResponse(
+                    meta_accepted=SignTxnMetadataAccepted()
+                )
+            ).SerializeToString(),
+        ),
+        ResultData(
+            name='Input request: 1',
+            data=Result(
+                sign_txn=SignTxnResponse(
+                    input_accepted=SignTxnInputAccepted()
+                )
+            ).SerializeToString(),
+        ),
+        ResultData(
+            name='Input 1: PrevTxnChunk Accepted 1',
+            data=Result(
+                sign_txn=SignTxnResponse(
+                    prev_txn_chunk_accepted=PrevTxnChunkAccepted(
+                        chunk_ack=common.ChunkAck(chunk_index=0)
+                    )
+                )
+            ).SerializeToString(),
+        ),
+        ResultData(
+            name='Input request: 2',
+            data=Result(
+                sign_txn=SignTxnResponse(
+                    input_accepted=SignTxnInputAccepted()
+                )
+            ).SerializeToString(),
+        ),
+        ResultData(
+            name='Input 2: PrevTxnChunk Accepted 1',
+            data=Result(
+                sign_txn=SignTxnResponse(
+                    prev_txn_chunk_accepted=PrevTxnChunkAccepted(
+                        chunk_ack=common.ChunkAck(chunk_index=0)
+                    )
+                )
+            ).SerializeToString(),
+        ),
+        ResultData(
+            name='Input 2: PrevTxnChunk Accepted 2',
+            data=Result(
+                sign_txn=SignTxnResponse(
+                    prev_txn_chunk_accepted=PrevTxnChunkAccepted(
+                        chunk_ack=common.ChunkAck(chunk_index=1)
+                    )
+                )
+            ).SerializeToString(),
+        ),
+        ResultData(
+            name='Output request: 1',
+            data=Result(
+                sign_txn=SignTxnResponse(
+                    output_accepted=SignTxnOutputAccepted()
+                )
+            ).SerializeToString(),
+        ),
+        ResultData(
+            name='Output request: 2',
+            data=Result(
+                sign_txn=SignTxnResponse(
+                    output_accepted=SignTxnOutputAccepted()
+                )
+            ).SerializeToString(),
+        ),
+        ResultData(
+            name='Signature: 1',
+            data=Result(
+                sign_txn=SignTxnResponse(
+                    signature=SignTxnSignatureResponse(
+                        signature=hex_to_uint8array(
+                            '483045022100e8c05ea1602c7b8e086cf17429415ccfea73952bd2614ded3a8196e42090ccdb02207ea39d215d5f1fa0d2bfc17b912d29ef2116af2c61a7bb53755fb6dbfe6836ed012103828943e8e6bbbbe6848f547c2e3a51236d4fa524fcd67837164ce7c1f0311dd7',
+                        )
+                    )
+                )
+            ).SerializeToString(),
+        ),
+        ResultData(
+            name='Signature: 2',
+            data=Result(
+                sign_txn=SignTxnResponse(
+                    signature=SignTxnSignatureResponse(
+                        signature=hex_to_uint8array(
+                            '47304402202069a87c5082e689140721b58ca4c0b81496f6e18095a992c3abcc96b6745a0602202af96658219ce427853923011d9ea67e2a74b78a6cdc58ce64da35bba49becea0121024aece25573da4ed274ee891341490fe26bd021b63e54e8581fc3ca10085a8fa0',
+                        )
+                    )
+                )
+            ).SerializeToString(),
+        ),
+        ResultData(
+            name='Extra chunk acknowledgment',
+            data=Result(
+                sign_txn=SignTxnResponse(
+                    prev_txn_chunk_accepted=PrevTxnChunkAccepted(
+                        chunk_ack=common.ChunkAck(chunk_index=1)
+                    )
+                )
+            ).SerializeToString(),
         ),
     ],
     mocks=MockData(event_calls=[[0], [1], [2], [3], [4]]),

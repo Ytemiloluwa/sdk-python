@@ -1,6 +1,7 @@
 from packages.core.src.types import ISDK
 from packages.util.utils import create_status_listener, create_logger_with_prefix
 from packages.util.utils.assert_utils import assert_condition
+from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
 from packages.app_btc.src.proto.generated.btc import GetPublicKeyStatus
 from packages.app_btc.src.proto.generated.common import SeedGenerationStatus
 from packages.app_btc.src.utils import (
@@ -17,7 +18,6 @@ from .types import (
 )
 from .publicKeyToAddress import get_address_from_public_key
 
-# Re-export types
 __all__ = ['get_public_key', 'GetPublicKeyEvent', 'GetPublicKeyParams', 'GetPublicKeyResult']
 
 logger = create_logger_with_prefix(root_logger, 'GetPublicKey')
@@ -52,18 +52,20 @@ async def get_public_key(
 
     await configure_app_id(sdk, [params.derivation_path])
 
-    on_status, force_status_update = create_status_listener({
+    status_listener = create_status_listener({
         'enums': GetPublicKeyEvent,
         'operationEnums': GetPublicKeyStatus,
         'seedGenerationEnums': SeedGenerationStatus,
         'onEvent': params.on_event,
         'logger': logger,
     })
+    on_status = status_listener['onStatus']
+    force_status_update = status_listener['forceStatusUpdate']
 
     helper = OperationHelper(
         sdk=sdk,
         query_key='getPublicKey',
-        result_key='getPublicKey',
+        result_key='get_public_key',
         on_status=on_status,
     )
 
@@ -78,13 +80,16 @@ async def get_public_key(
     assert_or_throw_invalid_result(result.result)
 
     force_status_update(GetPublicKeyEvent.VERIFY)
+    
+    if not result.result.public_key or len(result.result.public_key) == 0:
+        raise DeviceAppError(DeviceAppErrorType.INVALID_MSG_FROM_DEVICE)
 
     address = get_address_from_public_key(
         result.result.public_key,
         params.derivation_path,
     )
 
-    return GetPublicKeyResult(
-        public_key=result.result.public_key,
-        address=address,
-    )
+    return {
+        'public_key': result.result.public_key,
+        'address': address,
+    }

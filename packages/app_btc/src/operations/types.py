@@ -1,4 +1,3 @@
-# Re-export all types from operation modules
 from .getPublicKey.types import (
     GetPublicKeyEvent,
     GetPublicKeyEventHandler,
@@ -10,6 +9,7 @@ from .getXpubs.types import (
     GetXpubsEventHandler,
     GetXpubsParams,
 )
+from packages.app_btc.src.proto.generated.btc import GetXpubsResultResponse
 from .signTxn.types import (
     SignTxnEvent,
     SignTxnEventHandler,
@@ -21,16 +21,14 @@ from .signTxn.types import (
 )
 
 __all__ = [
-    # GetPublicKey types
     'GetPublicKeyEvent',
     'GetPublicKeyEventHandler',
     'GetPublicKeyParams',
     'GetPublicKeyResult',
-    # GetXpubs types
     'GetXpubsEvent',
     'GetXpubsEventHandler',
     'GetXpubsParams',
-    # SignTxn types
+    'GetXpubsResultResponse',
     'SignTxnEvent',
     'SignTxnEventHandler',
     'SignTxnInputData',

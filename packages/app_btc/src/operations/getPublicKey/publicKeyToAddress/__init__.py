@@ -1,48 +1,6 @@
-from typing import List, Dict, Callable
-from enum import Enum
+from typing import List
 from coincurve import PublicKey
-from bitcoinlib.keys import HDKey
-
-class PurposeType(Enum):
-    SEGWIT = "segwit"
-    LEGACY = "legacy"
-
-def get_purpose_type(path: List[int]) -> PurposeType:
-    if len(path) > 0:
-        purpose = path[0]
-        if purpose == 84:
-            return PurposeType.SEGWIT
-        elif purpose == 44:
-            return PurposeType.LEGACY
-    return PurposeType.LEGACY
-
-def get_network_from_path(path: List[int]) -> str:
-    if len(path) > 1:
-        coin_type = path[1]
-        if coin_type == 0:
-            return "bitcoin"
-        elif coin_type == 1:
-            return "testnet"
-    return "bitcoin"
-
-def get_payments_function(path: List[int]) -> Callable:
-    def p2wpkh_payment(pubkey: bytes, network: str) -> Dict[str, str]:
-        hd_key = HDKey(pubkey, network=network)
-        address = hd_key.address(encoding='bech32')
-        return {"address": address}
-
-    def p2pkh_payment(pubkey: bytes, network: str) -> Dict[str, str]:
-        hd_key = HDKey(pubkey, network=network)
-        address = hd_key.address(encoding='base58')
-        return {"address": address}
-
-    payment_function_map: Dict[PurposeType, Callable] = {
-        PurposeType.SEGWIT: p2wpkh_payment,
-        PurposeType.LEGACY: p2pkh_payment,
-    }
-
-    purpose = get_purpose_type(path)
-    return payment_function_map[purpose]
+from packages.app_btc.src.utils import get_bitcoin_py_lib, get_network_from_path, get_purpose_type
 
 def get_address_from_public_key(uncompressed_public_key: bytes, path: List[int]) -> str:
     """
@@ -61,11 +19,24 @@ def get_address_from_public_key(uncompressed_public_key: bytes, path: List[int])
     Raises:
         AssertionError: If address could not be derived
     """
-    compressed_public_key = PublicKey(uncompressed_public_key).format(compressed=True)
-    payments_function = get_payments_function(path)
-    network = get_network_from_path(path)
-    result = payments_function(compressed_public_key, network)
+    if len(uncompressed_public_key) == 33:
+        compressed_public_key = uncompressed_public_key
+    elif len(uncompressed_public_key) == 65:
+        compressed_public_key = PublicKey(uncompressed_public_key).format(compressed=True)
+    else:
+        raise ValueError(f"Invalid public key length: {len(uncompressed_public_key)} bytes. Expected 33 (compressed) or 65 (uncompressed).")
+    
+    bitcoin_py_lib = get_bitcoin_py_lib()
+    network_config = get_network_from_path(path)
+    network = 'bitcoin' if network_config.pub_key_hash == 0 else 'testnet'
+    
+    purpose_type = get_purpose_type(path)
+    
+    if purpose_type == 'segwit':
+        result = bitcoin_py_lib.payments.p2wpkh(compressed_public_key, network)
+    else:
+        result = bitcoin_py_lib.payments.p2pkh(compressed_public_key, network)
+    
     address = result["address"]
-
     assert address, "Could not derive address"
     return address

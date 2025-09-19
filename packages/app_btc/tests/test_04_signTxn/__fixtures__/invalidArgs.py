@@ -1,7 +1,6 @@
 import re
 from .types import SignTxnTestCase, QueryData, ResultData
 
-# Common parameters for invalid argument tests
 common_params = {
     'queries': [QueryData(name='empty', data=bytes([]))],
     'results': [ResultData(name='empty', data=bytes([]))],
@@ -9,7 +8,6 @@ common_params = {
     'error_message': re.compile(r'AssertionError'),
 }
 
-# Valid parameters template for invalid argument variations
 valid_params = {
     'wallet_id': bytes([
         199, 89, 252, 26, 32, 135, 183, 211, 90, 220, 38, 17, 160, 103, 233, 62,

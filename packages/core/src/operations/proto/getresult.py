@@ -15,7 +15,6 @@ async def get_result(
     applet_id: int,
     max_tries: int = 5,
     timeout: Optional[int] = None,
-    allow_core_data: Optional[bool] = None
 ) -> Dict[str, Union[bool, Union[Status, bytes]]]:
     assert_condition(applet_id, 'Invalid appletId')
 
@@ -39,12 +38,30 @@ async def get_result(
             raise DeviceAppError(DeviceAppErrorType.EXECUTING_OTHER_COMMAND)
         output = status
     else:
-        msg = Msg.parse(hex_to_uint8array(protobuf_data))
-        
-        if msg.error:
+        # Parse Msg; support both class and instance parse styles across betterproto versions
+        try:
+            msg = Msg.parse(hex_to_uint8array(protobuf_data))
+        except TypeError:
+            msg = Msg().parse(hex_to_uint8array(protobuf_data))
+
+        # Determine which oneof is set and route accordingly
+        active_field = None
+        try:
+            active_field, _ = msg.which_one_of("type")
+        except Exception:
+            active_field = None
+        if not active_field:
+            try:
+                applet = getattr(msg, "cmd", None)
+                if applet is not None and getattr(applet, "applet_id", 0):
+                    active_field = "cmd"
+            except Exception:
+                active_field = None
+
+        # Error handling only if error oneof is active and not NO_ERROR
+        if active_field == "error" and msg.error and msg.error.type != ErrorType.NO_ERROR:
             error_map = {
                 ErrorType.NO_ERROR: DeviceAppErrorType.UNKNOWN_ERROR,
-                ErrorType.UNRECOGNIZED: DeviceAppErrorType.UNKNOWN_ERROR,
                 ErrorType.UNKNOWN_APP: DeviceAppErrorType.UNKNOWN_APP,
                 ErrorType.INVALID_MSG: DeviceAppErrorType.INVALID_MSG,
                 ErrorType.APP_NOT_ACTIVE: DeviceAppErrorType.APP_NOT_ACTIVE,
@@ -52,17 +69,18 @@ async def get_result(
                 ErrorType.DEVICE_SESSION_INVALID: DeviceAppErrorType.DEVICE_SESSION_INVALID,
             }
             raise DeviceAppError(error_map[msg.error.type])
-        
-        output = bytes()
-        
-        if not allow_core_data or msg.cmd:
+
+        # If command oneof is active, validate applet id and return raw_data; otherwise return protobuf_data
+        if active_field == "cmd":
             if not msg.cmd:
                 raise DeviceAppError(DeviceAppErrorType.INVALID_MSG_FROM_DEVICE)
-            
             if msg.cmd.applet_id != applet_id:
                 raise DeviceAppError(DeviceAppErrorType.INVALID_APP_ID_FROM_DEVICE)
-            
-            output = hex_to_uint8array(raw_data)
+            # If raw_data is empty, treat it as a protobuf-only response
+            if raw_data:
+                output = hex_to_uint8array(raw_data)
+            else:
+                output = hex_to_uint8array(protobuf_data)
         else:
             output = hex_to_uint8array(protobuf_data)
 

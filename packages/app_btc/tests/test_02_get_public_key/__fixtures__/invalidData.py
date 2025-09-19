@@ -1,6 +1,6 @@
 from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType, deviceAppErrorTypeDetails
 from .types import GetPublicKeyTestCase, QueryData, ResultData
-from packages.app_btc.src.proto.generated.btc import Query
+from packages.app_btc.src.proto.generated.btc import Query, GetPublicKeyRequest, GetPublicKeyIntiateRequest
 
 # Common parameters for invalid data tests
 common_params = {
@@ -12,8 +12,8 @@ common_params = {
         QueryData(
             name='Initiate query',
             data=Query(
-                get_public_key=Query.GetPublicKey(
-                    initiate=Query.GetPublicKey.Initiate(
+                get_public_key=GetPublicKeyRequest(
+                    initiate=GetPublicKeyIntiateRequest(
                         wallet_id=bytes([10]),
                         derivation_path=[0x80000000 + 44, 0x80000000, 0x80000000, 0, 0],
                     )

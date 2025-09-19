@@ -26,6 +26,8 @@ prebuild:
 	cd packages/core && chmod +x scripts/prebuild.sh && ./scripts/prebuild.sh
 	@echo "App Manager package..."
 	cd packages/app_manager && chmod +x scripts/prebuild.sh && ./scripts/prebuild.sh
+	@echo "BTC App package..."
+	cd packages/app_btc && chmod +x scripts/prebuild && ./scripts/prebuild
 	@echo "Prebuild complete!"
 
 # Run all tests

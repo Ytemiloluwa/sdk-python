@@ -4,10 +4,9 @@ from packages.core.src.types import ISDK
 from packages.util.utils import (
     create_logger_with_prefix,
     create_status_listener,
-    hex_to_uint8_array,
-    uint8_array_to_hex,
+    hex_to_uint8array,
+    uint8array_to_hex,
 )
-from packages.util.utils.assert_utils import assert_condition
 from packages.app_btc.src.proto.generated.btc import SignTxnStatus
 from packages.app_btc.src.proto.generated.common import SeedGenerationStatus
 from packages.app_btc.src.utils import (
@@ -24,12 +23,10 @@ from packages.app_btc.src.services.transaction import get_raw_txn_hash
 from .helpers import assert_sign_txn_params
 from .types import SignTxnParams, SignTxnResult, SignTxnEvent
 
-# Re-export types
 __all__ = ['sign_txn', 'SignTxnEvent', 'SignTxnParams', 'SignTxnResult']
 
 logger = create_logger_with_prefix(root_logger, 'SignTxn')
 
-# Default parameters for transaction signing
 SIGN_TXN_DEFAULT_PARAMS = {
     'version': 2,
     'locktime': 0,
@@ -64,13 +61,15 @@ async def sign_txn(
     await configure_app_id(sdk, [params.derivation_path])
     await sdk.check_feature_support_compatibility([AppFeatures.INPUT_IN_CHUNKS])
 
-    on_status, force_status_update = create_status_listener({
+    status_listener = create_status_listener({
         'enums': SignTxnEvent,
         'operationEnums': SignTxnStatus,
         'seedGenerationEnums': SeedGenerationStatus,
         'onEvent': params.on_event,
         'logger': logger,
     })
+    on_status = status_listener['onStatus']
+    force_status_update = status_listener['forceStatusUpdate']
 
     helper = OperationHelper(
         sdk=sdk,
@@ -102,11 +101,9 @@ async def sign_txn(
     result = await helper.wait_for_result()
     assert_or_throw_invalid_result(result.meta_accepted)
 
-    # Duplicate locally and fill `prev_txn` if missing; we need completed inputs for preparing signed transaction
     inputs = copy.deepcopy(params.txn.inputs)
     
     for i, input_data in enumerate(params.txn.inputs):
-        # Device needs transaction hash which is reversed byte order of the transaction id
         prev_txn_hash = bytes.fromhex(input_data.prev_txn_id)[::-1].hex()
         
         prev_txn = (
@@ -120,9 +117,9 @@ async def sign_txn(
 
         await helper.send_query({
             'input': {
-                'prev_txn_hash': hex_to_uint8_array(prev_txn_hash),
+                'prev_txn_hash': hex_to_uint8array(prev_txn_hash),
                 'prev_output_index': input_data.prev_index,
-                'script_pub_key': hex_to_uint8_array(
+                'script_pub_key': hex_to_uint8array(
                     address_to_script_pub_key(input_data.address, params.derivation_path)
                 ),
                 'value': input_data.value,
@@ -135,7 +132,7 @@ async def sign_txn(
         assert_or_throw_invalid_result(result.input_accepted)
 
         await helper.send_in_chunks(
-            hex_to_uint8_array(prev_txn),
+            hex_to_uint8array(prev_txn),
             'prev_txn_chunk',
             'prev_txn_chunk_accepted',
         )
@@ -143,7 +140,7 @@ async def sign_txn(
     for output in params.txn.outputs:
         await helper.send_query({
             'output': {
-                'script_pub_key': hex_to_uint8_array(
+                'script_pub_key': hex_to_uint8array(
                     address_to_script_pub_key(output.address, params.derivation_path)
                 ),
                 'value': output.value,
@@ -166,7 +163,7 @@ async def sign_txn(
         result = await helper.wait_for_result()
         assert_or_throw_invalid_result(result.signature)
 
-        signatures.append(uint8_array_to_hex(result.signature.signature))
+        signatures.append(uint8array_to_hex(result.signature.signature))
 
     force_status_update(SignTxnEvent.PIN_CARD)
     signed_transaction = create_signed_transaction({

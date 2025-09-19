@@ -1,7 +1,6 @@
-from typing import TypeVar, Optional, Dict
+from typing import TypeVar, Optional, Dict, Any
 from packages.interfaces.errors.app_error import DeviceAppErrorType, DeviceAppError
 from packages.util.utils.assert_utils import assert_condition
-
 from packages.core.src.encoders.proto.generated.error import CommonError
 
 T = TypeVar('T')
@@ -13,6 +12,19 @@ def assert_or_throw_invalid_result(condition: T) -> T:
         DeviceAppError(DeviceAppErrorType.INVALID_MSG_FROM_DEVICE)
     )
     return condition
+
+
+def _is_truthy_error_value(value: Any) -> bool:
+    try:
+        if isinstance(value, bool):
+            return value is True
+        if isinstance(value, int):
+            return value != 0
+        if isinstance(value, (bytes, str, list, tuple, dict)):
+            return len(value) > 0
+    except Exception:
+        pass
+    return value is not None
 
 
 def parse_common_error(error: Optional[CommonError]) -> None:
@@ -29,8 +41,8 @@ def parse_common_error(error: Optional[CommonError]) -> None:
         'corrupt_data': DeviceAppErrorType.CORRUPT_DATA,
     }
 
-    for key in error.__dict__:
+    for key, field in getattr(error, "__dataclass_fields__", {}).items():
         value = getattr(error, key)
-        if value is not None and key in error_types_map:
+        if key in error_types_map and _is_truthy_error_value(value):
             raise DeviceAppError(error_types_map[key], value)
 

@@ -6,7 +6,6 @@ from . import operations
 class BtcApp:
     """
     Bitcoin application class for Cypherock SDK.
-    Direct port of TypeScript BtcApp class.
     """
     
     APPLET_ID = 2

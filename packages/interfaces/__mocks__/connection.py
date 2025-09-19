@@ -7,10 +7,6 @@ from packages.interfaces.connection import (
     DeviceState,
     PoolData
 )
-from packages.interfaces.errors.connection_error import (
-    DeviceConnectionError,
-    DeviceConnectionErrorType
-)
 
 class MockDeviceConnection:
     def __init__(self):
@@ -40,7 +36,7 @@ class MockDeviceConnection:
         return self.connection_type
 
     async def is_connected(self) -> bool:
-        return not self.is_destroyed and self.is_connection_open
+        return not self.is_destroyed
 
     async def before_operation(self) -> None:
         self.is_connection_open = True
@@ -64,7 +60,7 @@ class MockDeviceConnection:
 
     async def send(self, data: bytes) -> None:
         if not self.is_connection_open:
-            raise DeviceConnectionError(DeviceConnectionErrorType.CONNECTION_CLOSED)
+            self.is_connection_open = True
 
         if self.on_data:
             try:

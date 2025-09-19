@@ -1,6 +1,6 @@
 from packages.util.utils import create_flow_status
 from .types import GetPublicKeyTestCase, QueryData, ResultData, StatusData, MockData
-from packages.app_btc.src.proto.generated.btc import Query
+from packages.app_btc.src.proto.generated.btc import Query, GetPublicKeyRequest, GetPublicKeyIntiateRequest
 
 request_address = GetPublicKeyTestCase(
     name='Request Address',
@@ -16,8 +16,8 @@ request_address = GetPublicKeyTestCase(
         QueryData(
             name='Initiate query',
             data=Query(
-                get_public_key=Query.GetPublicKey(
-                    initiate=Query.GetPublicKey.Initiate(
+                get_public_key=GetPublicKeyRequest(
+                    initiate=GetPublicKeyIntiateRequest(
                         wallet_id=bytes([
                             199, 89, 252, 26, 32, 135, 183, 211, 90, 220, 38, 17, 160,
                             103, 233, 62, 110, 172, 92, 20, 35, 250, 190, 146, 62, 8, 53,
@@ -33,9 +33,9 @@ request_address = GetPublicKeyTestCase(
         ResultData(
             name='result',
             data=bytes([
-                10, 37, 10, 35, 10, 33, 3, 41, 155, 232, 126, 245, 18, 49, 110, 235,
-                225, 178, 60, 48, 53, 109, 26, 117, 222, 193, 192, 185, 147, 11, 59,
-                191, 155, 17, 129, 230, 183, 171, 92,
+                10, 37, 10, 35, 10, 33, 2, 189, 157, 191, 154, 193, 155, 2, 138, 82,
+                57, 142, 71, 103, 29, 184, 233, 203, 158, 111, 1, 240, 55, 168, 209,
+                3, 189, 5, 195, 30, 25, 250, 238,
             ]),
             statuses=[
                 StatusData(
@@ -56,11 +56,10 @@ request_address = GetPublicKeyTestCase(
     mocks=MockData(event_calls=[[0], [1], [2], [3], [4]]),
     output={
         'public_key': bytes([
-            3, 41, 155, 232, 126, 245, 18, 49, 110, 235, 225, 178, 60, 48, 53, 109,
-            26, 117, 222, 193, 192, 185, 147, 11, 59, 191, 155, 17, 129, 230, 183,
-            171, 92,
+            2, 189, 157, 191, 154, 193, 155, 2, 138, 82, 57, 142, 71, 103, 29, 184,
+            233, 203, 158, 111, 1, 240, 55, 168, 209, 3, 189, 5, 195, 30, 25, 250, 238,
         ]),
-        'address': '1B87oKEs97mnEC9zi2Pkn8BNT9cAExEqYF',
+        'address': '1AN4L3cNXoY61hoXHNngbNszmrjtKFm9Vk',
     },
 )
 

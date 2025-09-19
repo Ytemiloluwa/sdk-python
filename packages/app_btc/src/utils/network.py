@@ -1,7 +1,6 @@
 from typing import Dict, List, Optional, Literal
 from packages.util.utils.assert_utils import assert_condition
 
-# Optional BDK import
 try:
     from bdkpython import Network
     BDK_AVAILABLE = True
@@ -139,11 +138,11 @@ supported_purpose_map: Dict[int, Optional[List[PurposeType]]] = {
 
 def assert_derivation_path(path: List[int]) -> None:
     supported_purposes = supported_purpose_map.get(path[1])
-    assert_condition(supported_purposes, f"Coin index: {hex(path[1])} not supported")
+    assert_condition(supported_purposes, f"Coin index: 0x{path[1]:x} not supported")
     purpose_type = get_purpose_type(path)
     assert_condition(
         purpose_type in supported_purposes,
-        f"Purpose: {hex(path[0])} not supported for given coin index: {hex(path[1])}",
+        f"Purpose: 0x{path[0]:x} not supported for given coin index: 0x{path[1]:x}",
     )
 
 def to_bdk_network(config: NetworkConfig):

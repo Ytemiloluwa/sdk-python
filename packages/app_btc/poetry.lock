@@ -45,27 +45,6 @@ files = [
 tests = ["PyHamcrest (>=2.0.2)", "mypy", "pytest (>=4.6)", "pytest-benchmark", "pytest-cov", "pytest-flake8"]
 
 [[package]]
-name = "bdkpython"
-version = "0.31.0"
-description = "The Python language bindings for the Bitcoin Development Kit"
-optional = true
-python-versions = "*"
-files = [
-    {file = "bdkpython-0.31.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:5cafbe87f49fd45b298eb0cff43b3b97e69ffdc6ea51fcec2fdc943ff4f84c00"},
-    {file = "bdkpython-0.31.0-cp310-cp310-macosx_11_0_x86_64.whl", hash = "sha256:e7766044bccb6d9d84865bde13725e958730bc2052dc74d665adaf222bdbec31"},
-    {file = "bdkpython-0.31.0-cp310-cp310-manylinux_2_17_x86_64.whl", hash = "sha256:0cc98896ab86686c5f090356b2d25549feb843c38ca09a2fedbd67b9092a6432"},
-    {file = "bdkpython-0.31.0-cp310-cp310-win_amd64.whl", hash = "sha256:f374edf9f33d9a80e8f830295a1d7986ede9605df325df99fd885c549f203a6b"},
-    {file = "bdkpython-0.31.0-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:c116ac94fe5db6200f2db528ccd79304a0659d84cd3ceef008e0a6f1d4289b8e"},
-    {file = "bdkpython-0.31.0-cp38-cp38-macosx_11_0_x86_64.whl", hash = "sha256:b64fab6b563664d7a263d13acc4c4e27a699b803bccd899a641bcccc83a2b0d2"},
-    {file = "bdkpython-0.31.0-cp38-cp38-manylinux_2_17_x86_64.whl", hash = "sha256:70dd4fc87fc1397adabcfb7a1f1c523fed21ebb324cc28d171eecb24e27c8bc7"},
-    {file = "bdkpython-0.31.0-cp38-cp38-win_amd64.whl", hash = "sha256:75b4b388a19ea517d076b2343147ba3b38881bac429173ac4c801f11c17eabde"},
-    {file = "bdkpython-0.31.0-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:51bbdce21740fec0e418b4c3ffa041f317ff679c90075a3c3b587a4c6d0d5075"},
-    {file = "bdkpython-0.31.0-cp39-cp39-macosx_11_0_x86_64.whl", hash = "sha256:939f378a040509bc2a64d5bf1fc6de73c922494ccf9860777dba905fbd8a619e"},
-    {file = "bdkpython-0.31.0-cp39-cp39-manylinux_2_17_x86_64.whl", hash = "sha256:6e711010941c02b058cbd8bb71eb5cbe39740b219f2d1440f118d573c809bb70"},
-    {file = "bdkpython-0.31.0-cp39-cp39-win_amd64.whl", hash = "sha256:6d6d844a62fcf758ac5ebcdffe263c1fed4f5add9287400bc50a110f39d93476"},
-]
-
-[[package]]
 name = "bech32"
 version = "1.2.0"
 description = "Reference implementation for Bech32 and segwit addresses."
@@ -1203,6 +1182,17 @@ files = [
 ]
 
 [[package]]
+name = "semver"
+version = "3.0.4"
+description = "Python helper for Semantic Versioning (https://semver.org)"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "semver-3.0.4-py3-none-any.whl", hash = "sha256:9c824d87ba7f7ab4a1890799cec8596f15c1241cb473404ea1cb0c55e4b04746"},
+    {file = "semver-3.0.4.tar.gz", hash = "sha256:afc7d8c584a5ed0a11033af086e8af226a9c0b206f313e0301f8dd7b6b589602"},
+]
+
+[[package]]
 name = "six"
 version = "1.17.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -1357,10 +1347,7 @@ h2 = ["h2 (>=4,<5)"]
 socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
 
-[extras]
-bdk = ["bdkpython"]
-
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.11"
-content-hash = "e4a0bb6e8925f130f15b69f531668c095ff2c55872a6cb7b668182c2987aeb52"
+content-hash = "1593cb0500fb3344f3f42691fc781836531a612ee93923decef2074340de52d6"

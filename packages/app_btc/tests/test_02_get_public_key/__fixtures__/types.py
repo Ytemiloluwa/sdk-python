@@ -1,4 +1,4 @@
-from typing import List, Dict, Any, Optional, Union
+from typing import List, Any, Optional, Union
 from dataclasses import dataclass
 from packages.app_btc.src.operations.getPublicKey.types import GetPublicKeyParams, GetPublicKeyResult
 
@@ -55,3 +55,5 @@ __all__ = [
     'GetPublicKeyTestCase',
     'Fixtures',
 ]
+
+

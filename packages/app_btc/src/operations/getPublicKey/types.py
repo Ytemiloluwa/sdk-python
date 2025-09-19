@@ -1,7 +1,6 @@
-from typing import Callable, Optional
+from typing import Callable, Optional, List
 from dataclasses import dataclass
 from enum import IntEnum
-from packages.app_btc.src.proto.generated.btc import GetPublicKeyIntiateRequest
 
 
 class GetPublicKeyEvent(IntEnum):
@@ -13,12 +12,13 @@ class GetPublicKeyEvent(IntEnum):
     VERIFY = 4
 
 
-# Type alias for event handler
 GetPublicKeyEventHandler = Callable[[GetPublicKeyEvent], None]
 
 @dataclass
-class GetPublicKeyParams(GetPublicKeyIntiateRequest):
-    """Parameters for get public key operation. Extends GetPublicKeyIntiateRequest."""
+class GetPublicKeyParams:
+    """Parameters for get public key operation."""
+    wallet_id: bytes
+    derivation_path: List[int]
     on_event: Optional[GetPublicKeyEventHandler] = None
 
 

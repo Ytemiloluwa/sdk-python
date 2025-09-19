@@ -1,8 +1,7 @@
 from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType, deviceAppErrorTypeDetails
 from .types import SignTxnTestCase, QueryData, ResultData
-from packages.app_btc.src.proto.generated.btc import Query
+from packages.app_btc.src.proto.generated.btc import Query, SignTxnRequest, SignTxnInitiateRequest
 
-# Common parameters for invalid data tests
 common_params = {
     'params': {
         'wallet_id': bytes([
@@ -37,8 +36,8 @@ common_params = {
         QueryData(
             name='Initiate query',
             data=Query(
-                sign_txn=Query.SignTxn(
-                    initiate=Query.SignTxn.Initiate(
+                sign_txn=SignTxnRequest(
+                    initiate=SignTxnInitiateRequest(
                         wallet_id=bytes([
                             199, 89, 252, 26, 32, 135, 183, 211, 90, 220, 38, 17, 160,
                             103, 233, 62, 110, 172, 92, 20, 35, 250, 190, 146, 62, 8, 53,

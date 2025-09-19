@@ -24,7 +24,12 @@ def decode_result(data: bytes) -> Result:
         DeviceAppError: If decoding fails
     """
     try:
-        return Result.FromString(data)
+        return Result.parse(data)
+    except TypeError:
+        try:
+            return Result().parse(data)
+        except Exception:
+            raise DeviceAppError(DeviceAppErrorType.INVALID_MSG_FROM_DEVICE)
     except Exception:
         raise DeviceAppError(DeviceAppErrorType.INVALID_MSG_FROM_DEVICE)
 
@@ -39,8 +44,50 @@ def encode_query(query: Dict[str, Any]) -> bytes:
     Returns:
         Encoded query bytes
     """
-    query_obj = Query(**query)
-    return query_obj.SerializeToString()
+    if 'get_public_key' in query:
+        from packages.app_btc.src.proto.generated.btc import GetPublicKeyRequest, GetPublicKeyIntiateRequest
+        get_pub_key_data = query['get_public_key']
+        if 'initiate' in get_pub_key_data:
+            initiate_data = get_pub_key_data['initiate']
+            initiate = GetPublicKeyIntiateRequest(
+                wallet_id=initiate_data['wallet_id'],
+                derivation_path=initiate_data['derivation_path']
+            )
+            request = GetPublicKeyRequest(initiate=initiate)
+            query_obj = Query(get_public_key=request)
+        else:
+            query_obj = Query()
+    elif 'get_xpubs' in query:
+        from packages.app_btc.src.proto.generated.btc import GetXpubsRequest, GetXpubsIntiateRequest, GetXpubDerivationPath
+        get_xpubs_data = query['get_xpubs']
+        if 'initiate' in get_xpubs_data:
+            initiate_data = get_xpubs_data['initiate']
+            derivation_paths = [GetXpubDerivationPath(path=dp['path']) for dp in initiate_data['derivation_paths']]
+            initiate = GetXpubsIntiateRequest(
+                wallet_id=initiate_data['wallet_id'],
+                derivation_paths=derivation_paths
+            )
+            request = GetXpubsRequest(initiate=initiate)
+            query_obj = Query(get_xpubs=request)
+        else:
+            query_obj = Query()
+    elif 'sign_txn' in query:
+        from packages.app_btc.src.proto.generated.btc import SignTxnRequest, SignTxnInitiateRequest
+        sign_txn_data = query['sign_txn']
+        if 'initiate' in sign_txn_data:
+            initiate_data = sign_txn_data['initiate']
+            initiate = SignTxnInitiateRequest(
+                wallet_id=initiate_data['wallet_id'],
+                derivation_path=initiate_data['derivation_path']
+            )
+            request = SignTxnRequest(initiate=initiate)
+            query_obj = Query(sign_txn=request)
+        else:
+            query_obj = Query()
+    else:
+        query_obj = Query()
+    
+    return bytes(query_obj)
 
 
 class OperationHelper(Generic[Q, R]):
@@ -72,7 +119,14 @@ class OperationHelper(Generic[Q, R]):
         Args:
             query: Query data
         """
-        query_data = {self.query_key: query}
+        op_key = self.query_key
+        if op_key == 'getPublicKey':
+            op_key = 'get_public_key'
+        elif op_key == 'getXpubs':
+            op_key = 'get_xpubs'
+        elif op_key == 'signTxn':
+            op_key = 'sign_txn'
+        query_data = {op_key: query}
         encoded_query = encode_query(query_data)
         await self.sdk.send_query(encoded_query)
     
@@ -86,13 +140,35 @@ class OperationHelper(Generic[Q, R]):
         Raises:
             DeviceAppError: If result is invalid or contains errors
         """
-        result_data = await self.sdk.wait_for_result(on_status=self.on_status)
+        result_data = await self.sdk.wait_for_result({"on_status": self.on_status})
         result = decode_result(result_data)
+
+        result_key = self.result_key
+        if result_key == 'getPublicKey':
+            result_key = 'get_public_key'
+        elif result_key == 'getXpubs':
+            result_key = 'get_xpubs'
+        elif result_key == 'signTxn':
+            result_key = 'sign_txn'
+
+        if '.' in result_key:
+            parts = result_key.split('.')
+            result_value = result
+            for part in parts:
+                result_value = getattr(result_value, part, None)
+                if result_value is None:
+                    break
+        else:
+            result_value = getattr(result, result_key, None)
         
-        result_value = getattr(result, self.result_key, None)
+        # Check for errors in the specific operation response first
+        if result_value and hasattr(result_value, 'common_error'):
+            parse_common_error(result_value.common_error)
+        
+        # Check for errors in the top-level result
         parse_common_error(getattr(result, 'common_error', None))
+        
         assert_or_throw_invalid_result(result_value)
-        parse_common_error(getattr(result_value, 'common_error', None))
         
         return result_value
     

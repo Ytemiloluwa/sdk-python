@@ -1,4 +1,4 @@
-from typing import List, Dict, Any, Optional, Union
+from typing import List, Any, Optional, Union
 from dataclasses import dataclass
 from packages.app_btc.src.operations.signTxn.types import SignTxnParams, SignTxnResult
 
@@ -36,7 +36,7 @@ class SignTxnTestCase:
     mocks: Optional[MockData] = None
     output: Optional[SignTxnResult] = None
     error_instance: Optional[type] = None
-    error_message: Optional[Union[str, Any]] = None  # Can be string or regex pattern
+    error_message: Optional[Union[str, Any]] = None
 
 
 @dataclass

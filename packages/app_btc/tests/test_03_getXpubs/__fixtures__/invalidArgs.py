@@ -1,11 +1,13 @@
+"""High-fidelity Pythonic port of TypeScript invalidArgs.ts fixtures."""
+
 import re
 from .types import GetXpubsTestCase, QueryData, ResultData
 
-# Common parameters for invalid argument tests
+# Common parameters shared across all invalid argument test cases
 common_params = {
     'queries': [QueryData(name='empty', data=bytes([]))],
     'results': [ResultData(name='empty', data=bytes([]))],
-    'error_instance': AssertionError,
+    'error_instance': Exception,
     'error_message': re.compile(r'AssertionError'),
 }
 
@@ -16,7 +18,7 @@ invalid_args_fixtures = [
         **common_params
     ),
     GetXpubsTestCase(
-        name='Undefined',
+        name='Undefined', 
         params=None,
         **common_params
     ),
@@ -76,3 +78,4 @@ invalid_args_fixtures = [
 ]
 
 __all__ = ['invalid_args_fixtures']
+

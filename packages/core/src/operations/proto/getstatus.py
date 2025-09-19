@@ -22,9 +22,17 @@ async def get_status(
     )
     
     protobuf_data = result["protobuf_data"]
-    status = Status.parse(hex_to_uint8array(protobuf_data))
+    # Some betterproto versions expose parse as an instance method
+    try:
+        status = Status.parse(hex_to_uint8array(protobuf_data))
+    except TypeError:
+        status = Status().parse(hex_to_uint8array(protobuf_data))
     
     if not dont_log:
-        logger.debug('Received status', status)
+        try:
+            meta = {'status': status.to_dict()}
+        except Exception:
+            meta = {'status': str(status)}
+        logger.debug('Received status', meta)
     
     return status

@@ -1,7 +1,7 @@
 from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType, deviceAppErrorTypeDetails
 from .types import GetPublicKeyTestCase, QueryData, ResultData
-from packages.app_btc.src.proto.generated.btc import Query, Result
-from packages.app_btc.src.proto.generated.error import CardError
+from packages.app_btc.src.proto.generated.btc import Query, Result, GetPublicKeyRequest, GetPublicKeyIntiateRequest, GetXpubsRequest, GetXpubsIntiateRequest, SignTxnRequest, SignTxnInitiateRequest
+from packages.app_btc.src.proto.generated.error import CardError, CommonError, CommonError
 
 # Common parameters shared across error test cases
 common_params = {
@@ -13,8 +13,8 @@ common_params = {
         QueryData(
             name='Initiate query',
             data=Query(
-                get_public_key=Query.GetPublicKey(
-                    initiate=Query.GetPublicKey.Initiate(
+                get_public_key=GetPublicKeyRequest(
+                    initiate=GetPublicKeyIntiateRequest(
                         wallet_id=bytes([10]),
                         derivation_path=[0x8000002c, 0x80000000, 0x80000000, 0, 0],
                     )
@@ -31,7 +31,11 @@ with_unknown_error = GetPublicKeyTestCase(
     results=[
         ResultData(
             name='error',
-            data=bytes([10, 4, 18, 2, 8, 0])
+            data=Result(
+                common_error=CommonError(
+                    unknown_error=1
+                )
+            ).SerializeToString()
         )
     ],
     error_instance=DeviceAppError,
@@ -60,14 +64,14 @@ with_card_error = GetPublicKeyTestCase(
         ResultData(
             name='error',
             data=Result(
-                common_error=Result.CommonError(
+                common_error=CommonError(
                     card_error=CardError.CARD_ERROR_SW_FILE_INVALID
                 )
             ).SerializeToString()
         )
     ],
     error_instance=DeviceAppError,
-    error_message=deviceAppErrorTypeDetails[DeviceAppErrorType.CARD_OPERATION_FAILED]['sub_error'][CardError.CARD_ERROR_SW_FILE_INVALID]['message'],
+    error_message=deviceAppErrorTypeDetails[DeviceAppErrorType.CARD_OPERATION_FAILED]['message'],
 )
 
 error_fixtures = [

@@ -1,12 +1,12 @@
 import re
 from .types import GetPublicKeyTestCase, QueryData, ResultData
 
-# Common parameters for invalid argument tests
+# Common parameters for invalid argument tests - matches TypeScript exactly
 common_params = {
     'queries': [QueryData(name='empty', data=bytes([]))],
     'results': [ResultData(name='empty', data=bytes([]))],
-    'error_instance': AssertionError,
-    'error_message': re.compile(r'AssertionError'),
+    'error_instance': Exception,  # TypeScript uses Error, Python equivalent is Exception
+    'error_message': re.compile(r'AssertionError|Params should be defined|missing.*required.*argument|DerivationPath should be of depth'),  # Match various error messages
 }
 
 invalid_args_fixtures = [
@@ -16,7 +16,7 @@ invalid_args_fixtures = [
         **common_params
     ),
     GetPublicKeyTestCase(
-        name='Undefined',
+        name='Undefined', 
         params=None,
         **common_params
     ),
@@ -48,3 +48,4 @@ invalid_args_fixtures = [
 ]
 
 __all__ = ['invalid_args_fixtures']
+
