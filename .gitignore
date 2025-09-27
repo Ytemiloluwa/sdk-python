@@ -43,8 +43,4 @@ thumbs.db
 .ipynb_checkpoints
 
 # Generated protobuf files
-packages/core/src/encoders/proto/generated/
-packages/app_manager/src/proto/generated/
-packages/app_btc/src/proto/generated/
-
-
+**/proto
