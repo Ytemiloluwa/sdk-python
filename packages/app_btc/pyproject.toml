@@ -1,0 +1,59 @@
+[tool.poetry]
+name = "cypherock-sdk-app-btc"
+version = "0.1.0"
+description = "Bitcoin app for Cypherock SDK"
+authors = ["Temiloluwa Yusuf <ytemiloluwa@gmail.com>"]
+readme = "README.md"
+packages = [{include = "src"}]
+
+[tool.poetry.dependencies]
+python = ">=3.11"
+# Bitcoin libraries
+bitcoinlib = "^0.7.5"
+python-bitcointx = "^1.1.4"
+coincurve = "^20.0.0"
+base58 = "^2.1.1"
+ecdsa = "^0.18.0"
+bech32 = "^1.2.0"
+# HTTP client
+httpx = "^0.24.0"
+# Cryptography
+cryptography = "^41.0.0"
+# Protobuf
+betterproto = "^1.2.5"
+protobuf = "^4.24.0"
+semver = "^3.0.4"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.5.0"
+black = "^24.4.2"
+mypy = "^1.10.0"
+pytest = "^8.2.2"
+pytest-asyncio = "^0.23.0"
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+pythonpath = "."
+testpaths = ["tests"]
+filterwarnings = [
+    "ignore::pytest.PytestRemovedIn9Warning",
+    "ignore::DeprecationWarning",
+    "ignore::RuntimeWarning",
+    "ignore:.*Task exception was never retrieved.*:RuntimeWarning",
+    "ignore:.*coroutine.*was never awaited.*:RuntimeWarning",
+]

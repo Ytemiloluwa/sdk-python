@@ -42,7 +42,7 @@ async def send_command(
 
     for packet in packets_list:
         tries = 1
-        inner_max_tries = max_tries
+        inner_max_tries = max_tries if max_tries is not None else 5
         first_error = None
         is_success = False
 

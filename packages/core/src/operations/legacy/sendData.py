@@ -110,6 +110,12 @@ async def send_data(
     assert_condition(is_hex(data), 'Index hex in data')
     assert_condition(max_tries is None or max_tries > 0, 'Max tries cannot be negative')
 
+    # Check if connection is still active before proceeding
+    if not await connection.is_connected():
+        raise DeviceConnectionError(
+            DeviceConnectionErrorType.CONNECTION_CLOSED
+        )
+
     if version not in [PacketVersionMap.v1, PacketVersionMap.v2]:
         raise DeviceCompatibilityError(
             DeviceCompatibilityErrorType.INVALID_SDK_OPERATION,
@@ -120,6 +126,12 @@ async def send_data(
     packets_list = xmodem_encode(data, command, version)
 
     for packet in packets_list:
+        # Check connection before sending each packet
+        if not await connection.is_connected():
+            raise DeviceConnectionError(
+                DeviceConnectionErrorType.CONNECTION_CLOSED
+            )
+            
         tries = 1
         is_done = False
         local_max_tries = inner_max_tries

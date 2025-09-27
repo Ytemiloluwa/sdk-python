@@ -58,6 +58,11 @@ async def get_app_versions(params: GetAppVersionsParams):
     )
     try:
         msg = Msg.parse(result)
+    except TypeError:
+        try:
+            msg = Msg().parse(result)
+        except Exception:
+            raise DeviceAppError(DeviceAppErrorType.INVALID_MSG_FROM_DEVICE)
     except Exception:
         raise DeviceAppError(DeviceAppErrorType.INVALID_MSG_FROM_DEVICE)
     response = msg.app_version.response if msg.app_version and msg.app_version.response else None

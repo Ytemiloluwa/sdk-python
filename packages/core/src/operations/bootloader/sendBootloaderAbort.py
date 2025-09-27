@@ -30,6 +30,12 @@ async def send_bootloader_abort(
     max_tries = options.get('max_tries', 5)
 
     assert_condition(connection, 'Invalid connection')
+    
+    # Check if connection is still active before proceeding
+    if not await connection.is_connected():
+        raise DeviceConnectionError(
+            DeviceConnectionErrorType.CONNECTION_CLOSED
+        )
 
     packets_list = ['41']
     data_list = [hex_to_uint8array(packet) for packet in packets_list]

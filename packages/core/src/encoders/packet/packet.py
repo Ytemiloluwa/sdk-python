@@ -1,4 +1,3 @@
-import os
 import time
 from typing import TypedDict, List, Dict
 from enum import Enum
@@ -197,42 +196,59 @@ def decode_packet(
         if offset == -1:
             return packet_list
 
+        # Add bounds checking for all field reads
+        if offset + len(start_of_frame) > len(data):
+            break
         start_of_frame = data[offset : offset + len(start_of_frame)]
         offset += len(start_of_frame)
 
+        if offset + usable_config.radix.crc // 4 > len(data):
+            break
         crc = data[offset : offset + usable_config.radix.crc // 4]
         offset += usable_config.radix.crc // 4
 
+        if offset + usable_config.radix.current_packet_number // 4 > len(data):
+            break
         current_packet_number = int(
             data[offset : offset + usable_config.radix.current_packet_number // 4],
             16,
         )
         offset += usable_config.radix.current_packet_number // 4
 
+        if offset + usable_config.radix.total_packet // 4 > len(data):
+            break
         total_packet_number = int(
             data[offset : offset + usable_config.radix.total_packet // 4],
             16,
         )
         offset += usable_config.radix.total_packet // 4
 
+        if offset + usable_config.radix.sequence_number // 4 > len(data):
+            break
         sequence_number = int(
             data[offset : offset + usable_config.radix.sequence_number // 4],
             16,
         )
         offset += usable_config.radix.sequence_number // 4
 
+        if offset + usable_config.radix.packet_type // 4 > len(data):
+            break
         packet_type = int(
             data[offset : offset + usable_config.radix.packet_type // 4],
             16,
         )
         offset += usable_config.radix.packet_type // 4
 
+        if offset + usable_config.radix.timestamp_length // 4 > len(data):
+            break
         timestamp = int(
             data[offset : offset + usable_config.radix.timestamp_length // 4],
             16,
         )
         offset += usable_config.radix.timestamp_length // 4
 
+        if offset + usable_config.radix.payload_length // 4 > len(data):
+            break
         payload_length = int(
             data[offset : offset + usable_config.radix.payload_length // 4],
             16,
@@ -241,8 +257,11 @@ def decode_packet(
 
         payload_data = ''
         if payload_length != 0:
-            payload_data = data[offset : offset + payload_length * 2]
-            offset += payload_length * 2
+            available_length = len(data) - offset
+            read_length = min(payload_length * 2, available_length)
+            if read_length > 0:
+                payload_data = data[offset : offset + read_length]
+                offset += read_length
         data = data[offset:]
 
         comm_data = (
