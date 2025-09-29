@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Bitcoin app for Cypherock SDK"
 authors = ["Temiloluwa Yusuf <ytemiloluwa@gmail.com>"]
 readme = "README.md"
-packages = [{include = "src"}]
+packages = [{include = "src/app_btc"}]
 
 [tool.poetry.dependencies]
 python = ">=3.11"

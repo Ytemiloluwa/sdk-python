@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Core SDK functionality for Cypherock X1"
 authors = ["Temiloluwa Yusuf <ytemiloluwa@gmail.com>"]
 readme = "README.md"
-packages = [{include = "src"}]
+packages = [{include = "src/core"}]
 
 [tool.poetry.dependencies]
 python = ">=3.11"

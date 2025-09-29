@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Interfaces for Cypherock SDK"
 authors = ["Temiloluwa Yusuf <ytemiloluwa@gmail.com>"]
 readme = "README.md"
-packages = [{include = "interfaces"}]
+packages = [{include = "src/interfaces"}]
 
 [tool.poetry.dependencies]
 python = ">=3.11"
