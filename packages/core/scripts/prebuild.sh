@@ -3,18 +3,17 @@
 
 set -e
 
-# Create output directory
-mkdir -p src/encoders/proto/generated
+# Ensure we're in the correct directory
+cd "$(dirname "$0")/.."
 
-# Cross-platform Python command detection (same logic as TypeScript version)
-if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]]; then
-    PYTHON_CMD="python"
-else
-    PYTHON_CMD="python3"
-fi
+# Create output directory
+mkdir -p src/core/encoders/proto/generated
+
+# Use poetry run python3 to ensure we use the root environment with betterproto
+PYTHON_CMD="poetry run python3"
 
 # Step 1: Compile .proto files using betterproto (equivalent to protoc + ts-proto)
-protoc --python_betterproto_out=./src/encoders/proto/generated \
+protoc --python_betterproto_out=./src/core/encoders/proto/generated \
     --proto_path="../../submodules/common/proto" \
     ../../submodules/common/proto/common.proto \
     ../../submodules/common/proto/core.proto \
@@ -23,4 +22,4 @@ protoc --python_betterproto_out=./src/encoders/proto/generated \
     ../../submodules/common/proto/version.proto
 
 # Step 2: Extract and consolidate types (equivalent to extractTypes/index.js)
-$PYTHON_CMD ../../scripts/extract_types/__init__.py ./src/encoders/proto/generated ./src/encoders/proto/generated/types.py
+$PYTHON_CMD ../../scripts/extract_types/__init__.py ./src/core/encoders/proto/generated ./src/core/encoders/proto/generated/types.py
