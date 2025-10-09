@@ -1,5 +1,5 @@
 from typing import Dict, List, Optional, Literal
-from packages.util.utils.assert_utils import assert_condition
+from util.utils.assert_utils import assert_condition
 
 try:
     from bdkpython import Network

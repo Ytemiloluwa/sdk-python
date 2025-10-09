@@ -1,7 +1,7 @@
 from typing import Callable, Optional, Protocol
-from packages.interfaces import IDevice, IDeviceConnection
-from packages.core.src.encoders.proto.generated.common import Version
-from packages.app_manager.src.proto.types import UpdateFirmwareStatus
+from interfaces import IDevice, IDeviceConnection
+from core.encoders.proto.generated.common import Version
+from app_manager.proto.types import UpdateFirmwareStatus
 
 # Re-export types
 __all__ = ['GetDevices', 'CreateDeviceConnection', 'UpdateFirmwareEventHandler', 'IUpdateFirmwareParams']

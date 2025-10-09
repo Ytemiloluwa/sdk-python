@@ -1,10 +1,10 @@
 import asyncio
 import pytest
-from packages.interfaces import DeviceState
-from packages.interfaces.__mocks__.connection import MockDeviceConnection
-from packages.interfaces.errors.communication_error import DeviceCommunicationErrorType, deviceCommunicationErrorTypeDetails
+from interfaces import DeviceState
+from interfaces.__mocks__.connection import MockDeviceConnection
+from interfaces.errors.communication_error import DeviceCommunicationErrorType, deviceCommunicationErrorTypeDetails
 
-from packages.core.src.sdk import SDK
+from core import SDK
 
 
 class TestBootloaderOperation:
@@ -16,7 +16,7 @@ class TestBootloaderOperation:
         sdk = await SDK.create(connection, 0)
 
         if not hasattr(sdk, 'deprecated') or sdk.deprecated is None:
-            from packages.core.src.deprecated import DeprecatedCommunication
+            from core.deprecated import DeprecatedCommunication
             sdk.deprecated = DeprecatedCommunication(sdk)
 
         sdk.get_version = lambda: "0.0.0"

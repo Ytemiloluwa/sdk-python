@@ -4,7 +4,7 @@ import time
 import uuid
 from typing import Any, Dict, Optional
 
-from packages.interfaces import IDevice, PoolData
+from interfaces import IDevice, PoolData
 
 from ..logger import logger
 from .connection import get_available_devices

@@ -1,4 +1,4 @@
-from packages.app_btc.src.utils.network import (
+from ....utils.network import (
     BITCOIN_COIN_INDEX,
     DASH_COIN_INDEX,
     DOGECOIN_COIN_INDEX,

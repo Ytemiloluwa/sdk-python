@@ -1,6 +1,6 @@
 from unittest.mock import AsyncMock, MagicMock
-from packages.core.src.types import ISDK
-from packages.interfaces import DeviceState
+from core.types import ISDK
+from interfaces import DeviceState
 
 # Sequence number management
 sequence_number = 0

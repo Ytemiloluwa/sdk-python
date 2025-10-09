@@ -1,5 +1,5 @@
 import pytest
-from packages.util.utils.config import get_env_variable, Config
+from util.utils.config import get_env_variable, Config
 
 class TestConfig:
 

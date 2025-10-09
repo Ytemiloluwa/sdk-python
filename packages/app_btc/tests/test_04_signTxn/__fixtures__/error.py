@@ -1,8 +1,8 @@
-from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType, deviceAppErrorTypeDetails
+from interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType, deviceAppErrorTypeDetails
 from .types import SignTxnTestCase, QueryData, ResultData
-from packages.app_btc.src.proto.generated.btc import Query, Result, SignTxnRequest, SignTxnInitiateRequest, SignTxnResponse
-from packages.app_btc.src.proto.generated import error
-from packages.app_btc.src.proto.generated.error import DataFlow, UserRejection
+from app_btc.proto.generated.btc import Query, Result, SignTxnRequest, SignTxnInitiateRequest, SignTxnResponse
+from app_btc.proto.generated import error
+from app_btc.proto.generated.error import DataFlow, UserRejection
 
 common_params = {
     'params': {

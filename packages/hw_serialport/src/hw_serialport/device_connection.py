@@ -2,13 +2,13 @@ import uuid
 import serial
 from typing import Optional, List
 
-from packages.interfaces.connection import (
+from interfaces.connection import (
     DeviceState,
     ConnectionTypeMap,
     IDevice,
     PoolData
 )
-from packages.interfaces.errors.connection_error import (
+from interfaces.errors.connection_error import (
     DeviceConnectionError,
     DeviceConnectionErrorType
 )

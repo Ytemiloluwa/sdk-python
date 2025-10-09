@@ -1,6 +1,6 @@
 from unittest.mock import AsyncMock
-from packages.app_manager.src.__mocks__ import sdk as sdk_mocks
-from ..__fixtures__.types import IGetDeviceInfoTestCase
+from tests.__mocks__ import sdk as sdk_mocks
+from __fixtures__.types import IGetDeviceInfoTestCase
 
 
 def setup_mocks(test_case: IGetDeviceInfoTestCase):

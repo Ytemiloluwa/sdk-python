@@ -1,5 +1,5 @@
 import pytest
-from packages.util.utils.crypto import (
+from util.utils.crypto import (
     crc16, is_hex, hex_to_uint8array, uint8array_to_hex,
     pad_start, int_to_uint_byte, hex_to_ascii
 )

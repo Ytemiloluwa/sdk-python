@@ -1,5 +1,5 @@
-from packages.interfaces import ILogger, LogCreator
-from packages.util.utils import create_default_console_logger, update_logger_object
+from interfaces import ILogger, LogCreator
+from util.utils import create_default_console_logger, update_logger_object
 
 logger_service_name = "sdk-hw_hid"
 

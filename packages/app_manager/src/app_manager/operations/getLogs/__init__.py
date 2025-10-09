@@ -1,10 +1,10 @@
 from typing import Optional
-from packages.core.src.types import ISDK
-from packages.util.utils import create_logger_with_prefix, create_status_listener
-from packages.app_manager.src.constants.appId import APP_VERSION
-from packages.app_manager.src.proto.generated.manager import GetLogsStatus, GetLogsErrorResponse
-from packages.app_manager.src.utils import assert_or_throw_invalid_result, OperationHelper
-from packages.app_manager.src.utils import logger as rootlogger
+from core.types import ISDK
+from util.utils import create_logger_with_prefix, create_status_listener
+from ...constants.appId import APP_VERSION
+from ...proto.generated.manager import GetLogsStatus, GetLogsErrorResponse
+from ...utils import assert_or_throw_invalid_result, OperationHelper
+from ...utils import logger as rootlogger
 from .types import GetLogsError, GetLogsErrorType, GetLogsEventHandler
 
 __all__ = ['get_logs', 'GetLogsError', 'GetLogsErrorType', 'GetLogsEventHandler']

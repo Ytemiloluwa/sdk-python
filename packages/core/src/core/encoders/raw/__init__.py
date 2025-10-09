@@ -1,12 +1,12 @@
-from packages.interfaces.errors import (
+from interfaces.errors import (
     DeviceCompatibilityError,
     DeviceCompatibilityErrorType,
 )
-from packages.util.utils.crypto import int_to_uint_byte, is_hex
-from packages.util.utils.assert_utils import assert_condition
+from util.utils.crypto import int_to_uint_byte, is_hex
+from util.utils.assert_utils import assert_condition
 
-from packages.core.src.config import v3 as config
-from packages.core.src.utils.packetversion import PacketVersion, PacketVersionMap
+from core.config import v3 as config
+from ...utils.packetversion import PacketVersion, PacketVersionMap
 from .types import RawData, StatusData, DeviceIdleState, DeviceWaitOn, CmdState
 
 # Export types

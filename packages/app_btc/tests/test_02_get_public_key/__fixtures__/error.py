@@ -1,7 +1,7 @@
-from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType, deviceAppErrorTypeDetails
+from interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType, deviceAppErrorTypeDetails
 from .types import GetPublicKeyTestCase, QueryData, ResultData
-from packages.app_btc.src.proto.generated.btc import Query, Result, GetPublicKeyRequest, GetPublicKeyIntiateRequest, GetXpubsRequest, GetXpubsIntiateRequest, SignTxnRequest, SignTxnInitiateRequest
-from packages.app_btc.src.proto.generated.error import CardError, CommonError, CommonError
+from app_btc.proto.generated.btc import Query, Result, GetPublicKeyRequest, GetPublicKeyIntiateRequest, GetXpubsRequest, GetXpubsIntiateRequest, SignTxnRequest, SignTxnInitiateRequest
+from app_btc.proto.generated.error import CardError, CommonError, CommonError
 
 # Common parameters shared across error test cases
 common_params = {

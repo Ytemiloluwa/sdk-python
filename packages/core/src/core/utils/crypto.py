@@ -1,7 +1,7 @@
-from packages.util.utils.assert_utils import assert_condition
-from packages.util.utils.crypto import uint8array_to_hex
-from packages.core.src.config import v1, v2
-from packages.core.src.utils.packetversion import PacketVersion, PacketVersionMap
+from util.utils.assert_utils import assert_condition
+from util.utils.crypto import uint8array_to_hex
+from core.config import v1, v2
+from .packetversion import PacketVersion, PacketVersionMap
 
 
 def byte_unstuffing(input_buff: bytes, version: PacketVersion) -> str:

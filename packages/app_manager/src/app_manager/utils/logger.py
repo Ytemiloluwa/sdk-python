@@ -1,5 +1,5 @@
-from packages.interfaces.logger import ILogger, LogCreator
-from packages.util.utils.logger import create_default_console_logger, update_logger_object
+from interfaces.logger import ILogger, LogCreator
+from util.utils.logger import create_default_console_logger, update_logger_object
 
 logger_service_name = "sdk-app-manager"
 logger: ILogger = create_default_console_logger(logger_service_name)

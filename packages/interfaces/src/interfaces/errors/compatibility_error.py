@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import Dict
-from packages.interfaces.errors.device_error import DeviceError
+from .device_error import DeviceError
 
 class DeviceCompatibilityErrorType(Enum):
     INVALID_SDK_OPERATION = 'COM_0200'

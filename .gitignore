@@ -43,4 +43,4 @@ thumbs.db
 .ipynb_checkpoints
 
 # Generated protobuf files
-**/proto
+**/src/**/proto

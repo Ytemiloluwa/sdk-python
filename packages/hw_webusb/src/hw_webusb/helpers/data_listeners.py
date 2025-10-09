@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Optional
 import usb.core
 import usb.util
 
-from packages.interfaces import (
+from interfaces import (
     DeviceConnectionError,
     DeviceConnectionErrorType,
     PoolData,

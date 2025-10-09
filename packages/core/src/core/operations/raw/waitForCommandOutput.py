@@ -1,12 +1,12 @@
 from typing import Optional, Callable, Dict, Any
-from packages.interfaces import IDeviceConnection
-from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
-from packages.interfaces.errors.compatibility_error import DeviceCompatibilityError, DeviceCompatibilityErrorType
-from packages.util.utils.assert_utils import assert_condition
-from packages.util.utils.sleep import sleep
-from packages.core.src.utils.packetversion import PacketVersion, PacketVersionMap
-from packages.core.src.encoders.raw import CmdState, DeviceIdleState, RawData, StatusData
-from .get_command_output import get_command_output
+from interfaces import IDeviceConnection
+from interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
+from interfaces.errors.compatibility_error import DeviceCompatibilityError, DeviceCompatibilityErrorType
+from util.utils.assert_utils import assert_condition
+from util.utils.sleep import sleep
+from ...utils.packetversion import PacketVersion, PacketVersionMap
+from ...encoders.raw import CmdState, DeviceIdleState, RawData, StatusData
+from ...operations.raw.get_command_output import get_command_output
 
 
 async def wait_for_command_output(

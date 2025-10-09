@@ -1,5 +1,5 @@
 from enum import Enum
-from packages.interfaces.errors.device_error import DeviceError
+from interfaces.errors.device_error import DeviceError
 
 
 class UpdateFirmwareErrorType(Enum):

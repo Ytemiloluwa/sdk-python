@@ -1,9 +1,9 @@
 from typing import Protocol, TypedDict, List, Optional, Callable, Awaitable, Union, Any, Dict
-from packages.interfaces import DeviceState, IDeviceConnection
-from packages.core.src.utils.packetversion import PacketVersion
-from packages.core.src.encoders.raw.types import RawData, StatusData
-from packages.core.src.encoders.proto.generated.core import AppVersionResultResponse
-from packages.core.src.encoders.proto.generated.common import Version
+from interfaces import DeviceState, IDeviceConnection
+from .utils.packetversion import PacketVersion
+from .encoders.raw.types import RawData, StatusData
+from .encoders.proto.generated.core import AppVersionResultResponse
+from .encoders.proto.generated.common import Version
 
 
 class IDeprecatedCommunication(Protocol):

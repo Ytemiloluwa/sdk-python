@@ -1,6 +1,6 @@
 from datetime import datetime
-from packages.interfaces.errors.app_error import DeviceAppError
-from packages.interfaces.errors.communication_error import DeviceCommunicationError
+from interfaces.errors.app_error import DeviceAppError
+from interfaces.errors.communication_error import DeviceCommunicationError
 
 raw_get_command_output_test_cases = {
     "constantDate": datetime(2023, 3, 7, 9, 43, 48, 755000),

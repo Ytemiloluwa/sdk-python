@@ -1,5 +1,5 @@
 from typing import Callable
-from packages.app_manager.src.proto.generated.types import GetLogsStatus
+from app_manager.proto.generated.types import GetLogsStatus
 from .error import GetLogsError, GetLogsErrorType
 
 # Re-export error types

@@ -1,5 +1,5 @@
-from packages.interfaces.logger import LogCreator, ILogger
-from packages.util.utils.logger import create_default_console_logger, update_logger_object
+from interfaces.logger import LogCreator, ILogger
+from util.utils.logger import create_default_console_logger, update_logger_object
 
 # Logger service name constant
 logger_service_name = 'sdk-hw_serialport'

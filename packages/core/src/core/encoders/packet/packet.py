@@ -1,11 +1,11 @@
 import time
 from typing import TypedDict, List, Dict
 from enum import Enum
-from packages.core.src import config
-from packages.util.utils.assert_utils import assert_condition
-from packages.util.utils import is_hex, uint8array_to_hex, hex_to_uint8array, int_to_uint_byte, crc16
-from packages.core.src.utils.packetversion import PacketVersion, PacketVersionMap
-from packages.interfaces.errors import DeviceCompatibilityError, DeviceCompatibilityErrorType
+from core.config import v1, v2, v3
+from util.utils.assert_utils import assert_condition
+from util.utils import is_hex, uint8array_to_hex, hex_to_uint8array, int_to_uint_byte, crc16
+from ...utils.packetversion import PacketVersion, PacketVersionMap
+from interfaces.errors import DeviceCompatibilityError, DeviceCompatibilityErrorType
 
 class DecodedPacketData(TypedDict):
     start_of_frame: str
@@ -66,7 +66,7 @@ def encode_payload_data(
     if len(raw_data) == 0 and len(protobuf_data) == 0:
         return ''
 
-    usable_config = config.v3
+    usable_config = v3
 
     serialized_raw_data_length = int_to_uint_byte(
         len(raw_data) // 2,
@@ -105,7 +105,7 @@ def encode_packet(
             DeviceCompatibilityErrorType.INVALID_SDK_OPERATION,
         )
 
-    usable_config = config.v3
+    usable_config = v3
 
     serialized_sequence_number = int_to_uint_byte(
         sequence_number,
@@ -184,7 +184,7 @@ def decode_packet(
             DeviceCompatibilityErrorType.INVALID_SDK_OPERATION,
         )
 
-    usable_config = config.v3
+    usable_config = v3
     start_of_frame = usable_config.constants.START_OF_FRAME
 
     data = uint8array_to_hex(param).lower()
@@ -313,7 +313,7 @@ def decode_payload_data(payload: str, version: PacketVersion) -> Dict[str, str]:
             DeviceCompatibilityErrorType.INVALID_SDK_OPERATION,
         )
 
-    usable_config = config.v3
+    usable_config = v3
     payload_offset = 0
 
     data_size_half = usable_config.radix.data_size // 4

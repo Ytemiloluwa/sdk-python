@@ -1,5 +1,5 @@
-from packages.interfaces.logger import ILogger, LogCreator
-from packages.util.utils.logger import (
+from interfaces.logger import ILogger, LogCreator
+from util.utils.logger import (
     create_default_console_logger,
     update_logger_object,
 )
@@ -16,7 +16,7 @@ def update_logger(create_logger: LogCreator) -> None:
     Args:
         create_logger: Function to create a new logger
     """
-    from packages.core.src.utils.logger import update_logger as update_logger_core
+    from core.utils.logger import update_logger as update_logger_core
     
     update_logger_core(create_logger)
     update_logger_object({

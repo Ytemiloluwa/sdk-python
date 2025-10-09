@@ -1,8 +1,8 @@
 import pytest
 
-from packages.core.src.encoders.raw import decode_raw_data, decode_status, encode_raw_data
-from packages.core.src.utils.packetversion import PacketVersionMap
-from packages.core.src.encoders.raw.__fixtures__ import (
+from core.encoders.raw import decode_raw_data, decode_status, encode_raw_data
+from core.utils.packetversion import PacketVersionMap
+from core.encoders.raw.__fixtures__ import (
     decode_raw_data_test_cases,
     decode_status_test_cases,
     encode_raw_data_test_cases,

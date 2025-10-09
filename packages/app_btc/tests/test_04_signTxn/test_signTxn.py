@@ -2,13 +2,13 @@ import pytest
 import pytest_asyncio
 import re
 from unittest.mock import AsyncMock, patch
-from packages.app_btc.src import BtcApp
-from packages.app_btc.tests.test_04_signTxn.__helpers__ import clear_mocks, expect_mock_calls, setup_mocks
-from packages.app_btc.tests.test_04_signTxn.__fixtures__ import fixtures
-from packages.app_btc.src.__mocks__ import sdk as sdk_mocks
-from packages.app_btc.src.utils.bitcoinlib import initialize_default_bitcoin_lib
-from packages.app_btc.src.operations.signTxn.types import SignTxnParams, SignTxnTxnData, SignTxnInputData, SignTxnOutputData
-from packages.interfaces.errors.app_error import DeviceAppError
+from app_btc import BtcApp
+from __helpers__ import clear_mocks, expect_mock_calls, setup_mocks
+from tests.__mocks__ import sdk as sdk_mocks
+from app_btc.utils.bitcoinlib import initialize_default_bitcoin_lib
+from app_btc.operations.signTxn.types import SignTxnParams, SignTxnTxnData, SignTxnInputData, SignTxnOutputData
+from interfaces.errors.app_error import DeviceAppError
+from tests.test_04_signTxn.__fixtures__ import fixtures
 
 
 def create_sign_txn_params(params_dict):
@@ -45,12 +45,13 @@ def create_sign_txn_params(params_dict):
 class TestBtcAppSignTxn:
     @pytest_asyncio.fixture
     async def btc_app(self):
+        sdk_mocks.reset_mocks()
         clear_mocks()
         mock_connection = AsyncMock()
         initialize_default_bitcoin_lib()
         
         # Use local patching instead of global patching
-        with patch('packages.core.src.sdk.SDK.create', side_effect=sdk_mocks.create_sdk_mock):
+        with patch('core.sdk.SDK.create', side_effect=sdk_mocks.create_sdk_mock):
             btc_app = await BtcApp.create(mock_connection)
             yield btc_app
             await btc_app.destroy()

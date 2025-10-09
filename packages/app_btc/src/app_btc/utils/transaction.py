@@ -1,7 +1,7 @@
 from typing import List, Dict, Any
-from packages.app_btc.src.utils.bitcoinlib import get_bitcoin_py_lib
-from packages.app_btc.src.utils.network import get_network_from_path
-from packages.util.utils.assert_utils import assert_condition
+from ..utils.bitcoinlib import get_bitcoin_py_lib
+from ..utils.network import get_network_from_path
+from util.utils.assert_utils import assert_condition
 from bitcoinlib.encoding import convert_der_sig
 
 def address_to_script_pub_key(address: str, derivation_path: List[int]) -> str:

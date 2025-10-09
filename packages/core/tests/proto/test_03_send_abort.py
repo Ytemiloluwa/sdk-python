@@ -2,11 +2,11 @@ import asyncio
 import pytest
 from unittest.mock import patch
 
-from packages.interfaces.__mocks__.connection import MockDeviceConnection
-from packages.interfaces.errors.connection_error import DeviceConnectionError
-from packages.core.src.sdk import SDK
-from packages.core.tests.proto.__fixtures__.send_Abort import fixtures, constant_date
-from packages.core.tests.__fixtures__.config import config as test_config
+from interfaces.__mocks__.connection import MockDeviceConnection
+from interfaces.errors.connection_error import DeviceConnectionError
+from core import SDK
+from tests.proto.__fixtures__.send_Abort import fixtures, constant_date
+from tests.__fixtures__.config import config as test_config
 
 
 class TestSDKSendAbort:
@@ -19,7 +19,7 @@ class TestSDKSendAbort:
         import calendar
         utc_timestamp = calendar.timegm(constant_date.timetuple()) + constant_date.microsecond / 1000000
         with patch('time.time', return_value=utc_timestamp), \
-             patch('packages.core.src.encoders.packet.packet.time.time', return_value=utc_timestamp), \
+             patch('core.encoders.packet.packet.time.time', return_value=utc_timestamp), \
              patch('os.times', return_value=type('MockTimes', (), {'elapsed': 16778725})()):
             connection = await MockDeviceConnection.create()
             applet_id = 12
@@ -52,8 +52,8 @@ class TestSDKSendAbort:
     # 
     #         async def on_data(data: bytes):
     #             # Generate dynamic STATUS response with correct timestamp and CRC
-    #             from packages.core.src.encoders.packet.packet import encode_packet
-    #             from packages.core.src.utils.packetversion import PacketVersionMap
+    #             from .encoders.packet.packet import encode_packet
+    #             from .utils.packetversion import PacketVersionMap
     #             
     #             ack_packets = encode_packet(
     #                 raw_data='',
@@ -90,8 +90,8 @@ class TestSDKSendAbort:
     # 
     #             if not do_trigger_error:
     #                 # Generate dynamic STATUS response with correct timestamp and CRC
-    #                 from packages.core.src.encoders.packet.packet import encode_packet
-    #                 from packages.core.src.utils.packetversion import PacketVersionMap
+    #                 from .encoders.packet.packet import encode_packet
+    #                 from .utils.packetversion import PacketVersionMap
     #                 
     #                 ack_packets = encode_packet(
     #                     raw_data='',
@@ -124,8 +124,8 @@ class TestSDKSendAbort:
     # 
     #         async def on_data(data: bytes):
     #             # Generate dynamic STATUS response with correct timestamp and CRC
-    #             from packages.core.src.encoders.packet.packet import encode_packet
-    #             from packages.core.src.utils.packetversion import PacketVersionMap
+    #             from .encoders.packet.packet import encode_packet
+    #             from .utils.packetversion import PacketVersionMap
     #             
     #             ack_packets = encode_packet(
     #                 raw_data='',
@@ -174,8 +174,8 @@ class TestSDKSendAbort:
     # 
     #         async def on_data(data: bytes):
     #             # Generate proper STATUS response then disconnect
-    #             from packages.core.src.encoders.packet.packet import decode_packet, decode_payload_data, encode_packet
-    #             from packages.core.src.utils.packetversion import PacketVersionMap
+    #             from .encoders.packet.packet import decode_packet, decode_payload_data, encode_packet
+    #             from .utils.packetversion import PacketVersionMap
     # 
     #             # Use test_case fixture ACK packet - send_abort expects STATUS responses
     #             original_fixture = test_case["ack_packets"][0][0]  # First ACK from first packet
@@ -221,8 +221,8 @@ class TestSDKSendAbort:
     # 
     #         async def on_data(data: bytes):
     #             # Generate proper error response with correct timestamp/CRC
-    #             from packages.core.src.encoders.packet.packet import decode_packet, decode_payload_data, encode_packet
-    #             from packages.core.src.utils.packetversion import PacketVersionMap
+    #             from .encoders.packet.packet import decode_packet, decode_payload_data, encode_packet
+    #             from .utils.packetversion import PacketVersionMap
     # 
     #             # Use test_case fixture ACK packet for error tests
     #             original_fixture = test_case["ack_packets"][0][0]  # First ACK from first packet

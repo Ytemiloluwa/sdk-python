@@ -2,19 +2,19 @@ import pytest
 from unittest.mock import patch
 from datetime import datetime
 import calendar
-from packages.interfaces.__mocks__.connection import MockDeviceConnection
-from packages.interfaces.connection import DeviceState
-from packages.interfaces.errors.bootloader_error import DeviceBootloaderError, DeviceBootloaderErrorType, deviceBootloaderErrorTypeDetails
-from packages.interfaces.errors.compatibility_error import DeviceCompatibilityError, DeviceCompatibilityErrorType, deviceCompatibilityErrorTypeDetails
-from packages.core.src.sdk import SDK
-from packages.core.src.utils.packetversion import PacketVersionMap
-from packages.core.src.deprecated import DeprecatedCommunication
+from interfaces.__mocks__.connection import MockDeviceConnection
+from interfaces.connection import DeviceState
+from interfaces.errors.bootloader_error import DeviceBootloaderError, DeviceBootloaderErrorType, deviceBootloaderErrorTypeDetails
+from interfaces.errors.compatibility_error import DeviceCompatibilityError, DeviceCompatibilityErrorType, deviceCompatibilityErrorTypeDetails
+from core import SDK
+from core.utils.packetversion import PacketVersionMap
+from core.deprecated import DeprecatedCommunication
 
 @pytest.fixture
 async def setup():
     constant_date = datetime(2023, 3, 7, 9, 43, 48, 755000)
     with patch('time.time', return_value=calendar.timegm(constant_date.timetuple()) + constant_date.microsecond / 1e6), \
-         patch('packages.core.src.encoders.packet.packet.time.time', return_value=calendar.timegm(constant_date.timetuple()) + constant_date.microsecond / 1e6), \
+         patch('core.encoders.packet.packet.time.time', return_value=calendar.timegm(constant_date.timetuple()) + constant_date.microsecond / 1e6), \
          patch('os.times', return_value=type('MockTimes', (), {'elapsed': 16778725})()):
         
         connection = await MockDeviceConnection.create()
@@ -79,8 +79,8 @@ async def test_should_be_able_to_get_status(setup):
     
     async def on_data(data: bytes):
         # Import necessary functions for dynamic packet generation
-        from packages.core.src.encoders.packet.packet import encode_packet, decode_packet, decode_payload_data
-        from packages.core.src.config import v3 as config_v3
+        from core.encoders.packet.packet import encode_packet, decode_packet, decode_payload_data
+        from core.config import v3 as config_v3
 
         decoded_packet = decode_packet(data, "v3")
         if decoded_packet:

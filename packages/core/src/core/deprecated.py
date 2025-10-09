@@ -1,15 +1,15 @@
 from typing import Optional, List, Dict, Any, Union
-from packages.interfaces import (
+from interfaces import (
     DeviceCompatibilityError,
     DeviceCompatibilityErrorType,
     DeviceState,
 )
-from packages.util.utils.assert_utils import assert_condition
-from packages.core.src.operations import legacy as legacy_operations
-from packages.core.src.operations import raw as raw_operations  
-from packages.core.src.utils.packetversion import PacketVersionMap
-from packages.core.src.utils.feature_map import FeatureName, is_feature_enabled
-from packages.core.src.types import ISDK
+from util.utils.assert_utils import assert_condition
+from .operations import legacy as legacy_operations
+from .operations import raw as raw_operations  
+from .utils.packetversion import PacketVersionMap
+from .utils.feature_map import FeatureName, is_feature_enabled
+from .types import ISDK
 
 
 class DeprecatedCommunication:

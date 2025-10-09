@@ -1,11 +1,11 @@
-from packages.util.utils import hex_to_uint8array, create_flow_status
+from util.utils import hex_to_uint8array, create_flow_status
 from .types import SignTxnTestCase, QueryData, ResultData, StatusData, MockData
-from packages.app_btc.src.proto.generated.btc import (
+from app_btc.proto.generated.btc import (
     Query, Result, SignTxnRequest, SignTxnInitiateRequest, SignTxnResponse,
     SignTxnMetadataAccepted, SignTxnInputAccepted, SignTxnOutputAccepted,
     SignTxnSignatureResponse, PrevTxnChunkAccepted
 )
-from packages.app_btc.src.proto.generated import common
+from app_btc.proto.generated import common
 
 
 with_one_input = SignTxnTestCase(

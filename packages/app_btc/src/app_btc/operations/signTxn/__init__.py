@@ -1,15 +1,15 @@
 import copy
 from typing import List
-from packages.core.src.types import ISDK
-from packages.util.utils import (
+from core.types import ISDK
+from util.utils import (
     create_logger_with_prefix,
     create_status_listener,
     hex_to_uint8array,
     uint8array_to_hex,
 )
-from packages.app_btc.src.proto.generated.btc import SignTxnStatus
-from packages.app_btc.src.proto.generated.common import SeedGenerationStatus
-from packages.app_btc.src.utils import (
+from ...proto.generated.btc import SignTxnStatus
+from ...proto.generated.common import SeedGenerationStatus
+from ...utils import (
     assert_or_throw_invalid_result,
     OperationHelper,
     logger as root_logger,
@@ -19,7 +19,7 @@ from packages.app_btc.src.utils import (
     address_to_script_pub_key,
     create_signed_transaction,
 )
-from packages.app_btc.src.services.transaction import get_raw_txn_hash
+from ...services.transaction import get_raw_txn_hash
 from .helpers import assert_sign_txn_params
 from .types import SignTxnParams, SignTxnResult, SignTxnEvent
 

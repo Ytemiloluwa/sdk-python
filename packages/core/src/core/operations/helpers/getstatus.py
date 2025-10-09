@@ -1,10 +1,10 @@
 from typing import Dict, Any, Optional
-from packages.interfaces.errors import DeviceCompatibilityError, DeviceCompatibilityErrorType
-from packages.interfaces import IDeviceConnection
-from packages.util.utils.assert_utils import assert_condition
-from packages.core.src.config import v3 as config_v3
-from packages.core.src.utils.packetversion import PacketVersion, PacketVersionMap
-from packages.core.src.encoders.packet.packet import decode_payload_data, encode_packet
+from interfaces.errors import DeviceCompatibilityError, DeviceCompatibilityErrorType
+from interfaces import IDeviceConnection
+from util.utils.assert_utils import assert_condition
+from core.config import v3 as config_v3
+from ...utils.packetversion import PacketVersion, PacketVersionMap
+from ...encoders.packet.packet import decode_payload_data, encode_packet
 from .writecommand import write_command
 from .can_retry import can_retry
 

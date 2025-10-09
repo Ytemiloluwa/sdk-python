@@ -1,7 +1,7 @@
 from typing import Optional
-from packages.interfaces import IDeviceConnection
-from packages.core.src import sdk as core_sdk
-from packages.core.src.types import ISDK
+from interfaces import IDeviceConnection
+from core import sdk as core_sdk
+from core.types import ISDK
 
 from . import operations
 from .services import firmware_service

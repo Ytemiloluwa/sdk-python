@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Optional, cast
 
 import hid
 
-from packages.interfaces import ConnectionTypeMap, DeviceState, IDevice
+from interfaces import ConnectionTypeMap, DeviceState, IDevice
 
 
 def format_device_info(device: Dict[str, Any]) -> Optional[IDevice]:

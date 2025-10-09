@@ -1,5 +1,5 @@
 from unittest.mock import AsyncMock
-from packages.app_manager.src.services import authverification
+from .services import authverification
 
 # Create mock functions
 verify_serial_signature = AsyncMock()

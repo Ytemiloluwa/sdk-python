@@ -4,7 +4,7 @@ from typing import List, Optional
 import usb.core
 import usb.util
 
-from packages.interfaces import (
+from interfaces import (
     ConnectionTypeMap,
     DeviceState,
     IDeviceConnection,

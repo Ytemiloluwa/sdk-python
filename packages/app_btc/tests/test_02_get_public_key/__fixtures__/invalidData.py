@@ -1,6 +1,6 @@
-from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType, deviceAppErrorTypeDetails
+from interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType, deviceAppErrorTypeDetails
 from .types import GetPublicKeyTestCase, QueryData, ResultData
-from packages.app_btc.src.proto.generated.btc import Query, GetPublicKeyRequest, GetPublicKeyIntiateRequest
+from app_btc.proto.generated.btc import Query, GetPublicKeyRequest, GetPublicKeyIntiateRequest
 
 # Common parameters for invalid data tests
 common_params = {

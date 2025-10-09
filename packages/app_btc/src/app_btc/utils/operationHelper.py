@@ -1,10 +1,10 @@
 from typing import List, Dict, Any, TypeVar, Generic, Optional
-from packages.core.src.sdk import ISDK
-from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
-from packages.util.utils.create_status_listener import OnStatus
-from packages.app_btc.src.proto.generated.btc import Query, Result
-from packages.app_btc.src.proto.generated.common import ChunkPayload
-from packages.app_btc.src.utils.assert_utils import assert_or_throw_invalid_result, parse_common_error
+from core.sdk import ISDK
+from interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
+from util.utils.create_status_listener import OnStatus
+from ..proto.generated.btc import Query, Result
+from ..proto.generated.common import ChunkPayload
+from ..utils.assert_utils import assert_or_throw_invalid_result, parse_common_error
 
 Q = TypeVar('Q')
 R = TypeVar('R')
@@ -45,7 +45,7 @@ def encode_query(query: Dict[str, Any]) -> bytes:
         Encoded query bytes
     """
     if 'get_public_key' in query:
-        from packages.app_btc.src.proto.generated.btc import GetPublicKeyRequest, GetPublicKeyIntiateRequest
+        from ..proto.generated.btc import GetPublicKeyRequest, GetPublicKeyIntiateRequest
         get_pub_key_data = query['get_public_key']
         if 'initiate' in get_pub_key_data:
             initiate_data = get_pub_key_data['initiate']
@@ -58,7 +58,7 @@ def encode_query(query: Dict[str, Any]) -> bytes:
         else:
             query_obj = Query()
     elif 'get_xpubs' in query:
-        from packages.app_btc.src.proto.generated.btc import GetXpubsRequest, GetXpubsIntiateRequest, GetXpubDerivationPath
+        from ..proto.generated.btc import GetXpubsRequest, GetXpubsIntiateRequest, GetXpubDerivationPath
         get_xpubs_data = query['get_xpubs']
         if 'initiate' in get_xpubs_data:
             initiate_data = get_xpubs_data['initiate']
@@ -72,7 +72,7 @@ def encode_query(query: Dict[str, Any]) -> bytes:
         else:
             query_obj = Query()
     elif 'sign_txn' in query:
-        from packages.app_btc.src.proto.generated.btc import SignTxnRequest, SignTxnInitiateRequest
+        from ..proto.generated.btc import SignTxnRequest, SignTxnInitiateRequest
         sign_txn_data = query['sign_txn']
         if 'initiate' in sign_txn_data:
             initiate_data = sign_txn_data['initiate']

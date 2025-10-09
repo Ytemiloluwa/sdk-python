@@ -1,12 +1,12 @@
 import asyncio
 from typing import List, Optional
-from packages.interfaces.connection import IDeviceConnection
-from packages.interfaces.errors import DeviceConnectionError, DeviceConnectionErrorType, DeviceCommunicationError, DeviceCommunicationErrorType, DeviceCompatibilityError, DeviceCompatibilityErrorType
-from packages.util.utils.assert_utils import assert_condition
-from packages.util.utils.crypto import is_hex
-from packages.core.src import config
-from packages.core.src.utils.packetversion import PacketVersion, PacketVersionMap
-from packages.core.src.encoders.packet.legacy import xmodem_encode, xmodem_decode
+from interfaces.connection import IDeviceConnection
+from interfaces.errors import DeviceConnectionError, DeviceConnectionErrorType, DeviceCommunicationError, DeviceCommunicationErrorType, DeviceCompatibilityError, DeviceCompatibilityErrorType
+from util.utils.assert_utils import assert_condition
+from util.utils.crypto import is_hex
+from core.config import v1, v2
+from ...utils.packetversion import PacketVersion, PacketVersionMap
+from ...encoders.packet.legacy import xmodem_encode, xmodem_decode
 
 async def write_packet(
     connection: IDeviceConnection,
@@ -15,9 +15,9 @@ async def write_packet(
     skip_packet_ids: List[str],
     ack_timeout: Optional[int] = None,
 ) -> None:
-    usable_config = config.v1
+    usable_config = v1
     if version == PacketVersionMap.v2:
-        usable_config = config.v2
+        usable_config = v2
 
     is_completed = False
     timeout_handle = None

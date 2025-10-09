@@ -1,6 +1,6 @@
 import usb.core
 import usb.util
-from packages.interfaces import DeviceConnectionError, DeviceConnectionErrorType
+from interfaces import DeviceConnectionError, DeviceConnectionErrorType
 from ..logger import logger
 
 supported_devices = [{"vendorId": 0x3503, "productId": 259}]

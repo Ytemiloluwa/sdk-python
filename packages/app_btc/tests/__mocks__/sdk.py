@@ -1,6 +1,6 @@
 from unittest.mock import AsyncMock
-from packages.core.src.types import ISDK
-from packages.interfaces import DeviceState
+from core.types import ISDK
+from interfaces import DeviceState
 
 # Global sequence number for mock
 _sequence_number = 0
@@ -72,7 +72,7 @@ _original_sdk_create = None
 
 def setup_sdk_mock():
     global _original_sdk_create
-    import packages.core.src.sdk as sdk_module
+    import core.sdk as sdk_module
 
     if _original_sdk_create is None:
         _original_sdk_create = sdk_module.SDK.create
@@ -86,7 +86,7 @@ def restore_original_sdk():
     """
     global _original_sdk_create
     if _original_sdk_create is not None:
-        import packages.core.src.sdk as sdk_module
+        import core.sdk as sdk_module
         sdk_module.SDK.create = _original_sdk_create
 
 

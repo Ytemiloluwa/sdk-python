@@ -2,11 +2,11 @@ import pytest
 from unittest.mock import patch
 import calendar
 
-from packages.core.src.sdk import SDK
-from packages.core.tests.raw.__fixtures__.sendCommandAbort import raw_send_abort_test_cases
-from packages.interfaces.__mocks__.connection import MockDeviceConnection
-from packages.interfaces.errors.connection_error import DeviceConnectionError
-from packages.core.tests.__fixtures__.config import config
+from core import SDK
+from tests.raw.__fixtures__.sendCommandAbort import raw_send_abort_test_cases
+from interfaces.__mocks__.connection import MockDeviceConnection
+from interfaces.errors.connection_error import DeviceConnectionError
+from tests.__fixtures__.config import config
 
 
 @pytest.fixture
@@ -47,8 +47,8 @@ async def test_should_be_able_to_send_abort(setup):
     for test_case in raw_send_abort_test_cases["valid"]:
         async def on_data(data: bytes):
             print(f"🔍 on_data called with packet: {data.hex()}")
-            from packages.core.src.encoders.packet.packet import decode_packet, decode_payload_data, encode_packet
-            from packages.core.src.config import v3 as config_v3
+            from core.encoders.packet.packet import decode_packet, decode_payload_data, encode_packet
+            from core.config import v3 as config_v3
 
             decoded_packet = decode_packet(data, "v3")
             if decoded_packet:
@@ -103,8 +103,8 @@ async def test_should_throw_error_when_device_is_disconnected(setup):
     for test_case in raw_send_abort_test_cases["valid"]:
         async def on_data(data: bytes):
             print(f"🔍 on_data called with packet: {data.hex()}")
-            from packages.core.src.encoders.packet.packet import decode_packet, decode_payload_data, encode_packet
-            from packages.core.src.config import v3 as config_v3
+            from core.encoders.packet.packet import decode_packet, decode_payload_data, encode_packet
+            from core.config import v3 as config_v3
 
             decoded_packet = decode_packet(data, "v3")
             if decoded_packet:
@@ -148,8 +148,8 @@ async def test_should_throw_error_when_device_is_disconnected_in_between(setup):
     for test_case in raw_send_abort_test_cases["valid"]:
         async def on_data(data: bytes):
             print(f"🔍 on_data called with packet: {data.hex()}")
-            from packages.core.src.encoders.packet.packet import decode_packet, decode_payload_data, encode_packet
-            from packages.core.src.config import v3 as config_v3
+            from core.encoders.packet.packet import decode_packet, decode_payload_data, encode_packet
+            from core.config import v3 as config_v3
 
             decoded_packet = decode_packet(data, "v3")
             if decoded_packet:

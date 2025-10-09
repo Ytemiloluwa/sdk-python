@@ -1,15 +1,15 @@
 from typing import TYPE_CHECKING
 from unittest.mock import MagicMock, AsyncMock
 
-from packages.app_btc.tests.__helpers__ import (
+from tests.__helpers__ import (
     setup_mocks as super_setup_mocks,
     clear_mocks as super_clear_mocks,
     expect_mock_calls as super_expect_mock_calls,
 )
-from packages.app_btc.src.__mocks__ import sdk as sdk_mocks
+from tests.__mocks__ import sdk as sdk_mocks
 
 if TYPE_CHECKING:
-    from packages.app_btc.tests.test_02_get_public_key.__fixtures__.types import GetPublicKeyTestCase
+    from ..__fixtures__.types import GetPublicKeyTestCase
 
 
 def setup_mocks(test_case: 'GetPublicKeyTestCase') -> MagicMock:

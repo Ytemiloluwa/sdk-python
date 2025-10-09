@@ -1,8 +1,8 @@
 from typing import Optional, Dict, Tuple
-from packages.core.src.types import ISDK
-from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
+from core.types import ISDK
+from interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
 
-from packages.util.utils import (
+from util.utils import (
     assert_condition,
     create_logger_with_prefix,
     create_status_listener,
@@ -10,10 +10,10 @@ from packages.util.utils import (
     OnStatus,
 )
 
-from packages.app_manager.src.constants.appId import APP_VERSION
-from packages.app_manager.src.proto.generated.types import AuthCardStatus
-from packages.app_manager.src.services import card_auth as card_auth_service
-from packages.app_manager.src.utils import (
+from app_manager.constants.appId import APP_VERSION
+from app_manager.proto.generated.types import AuthCardStatus
+from ...services import card_auth as card_auth_service
+from ...utils import (
     assert_or_throw_invalid_result,
     logger as root_logger,
     OperationHelper,

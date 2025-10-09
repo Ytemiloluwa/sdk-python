@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Callable, Optional
-from packages.app_manager.src.proto.generated.types import AuthCardStatus
+from app_manager.proto.generated.types import AuthCardStatus
 
 
 AuthCardEventHandler = Callable[[AuthCardStatus], None]

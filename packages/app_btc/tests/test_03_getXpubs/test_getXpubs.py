@@ -2,22 +2,23 @@ import pytest
 import pytest_asyncio
 import re
 from unittest.mock import AsyncMock, patch
-from packages.app_btc.src import BtcApp
-from packages.app_btc.tests.test_03_getXpubs.__helpers__ import clear_mocks, expect_mock_calls, setup_mocks
-from packages.app_btc.tests.test_03_getXpubs.__fixtures__ import fixtures
-from packages.app_btc.src.__mocks__ import sdk as sdk_mocks
+from app_btc import BtcApp
+from __helpers__ import clear_mocks, expect_mock_calls, setup_mocks
+from tests.__mocks__ import sdk as sdk_mocks
+from tests.test_03_getXpubs.__fixtures__ import fixtures
 
 class TestBtcAppGetXpubs:
     
     @pytest_asyncio.fixture
     async def btc_app(self):
+        sdk_mocks.reset_mocks()
         clear_mocks()
         mock_connection = AsyncMock()
-        from packages.app_btc.src.utils.bitcoinlib import initialize_default_bitcoin_lib
+        from app_btc.utils.bitcoinlib import initialize_default_bitcoin_lib
         initialize_default_bitcoin_lib()
         
         # Use local patching instead of global patching
-        with patch('packages.core.src.sdk.SDK.create', side_effect=sdk_mocks.create_sdk_mock):
+        with patch('core.sdk.SDK.create', side_effect=sdk_mocks.create_sdk_mock):
             btc_app = await BtcApp.create(mock_connection)
             yield btc_app
             await btc_app.destroy()
@@ -27,7 +28,7 @@ class TestBtcAppGetXpubs:
         for test_case in fixtures.valid:
             clear_mocks()
             on_event = setup_mocks(test_case)
-            from packages.app_btc.src.operations.getXpubs.types import GetXpubsParams
+            from app_btc.operations.getXpubs.types import GetXpubsParams
             params = GetXpubsParams(**test_case.params)
             if on_event:
                 params.on_event = on_event
@@ -39,7 +40,7 @@ class TestBtcAppGetXpubs:
     async def test_should_throw_error_with_invalid_arguments(self, btc_app: BtcApp):
         for test_case in fixtures.invalid_args:
             setup_mocks(test_case)
-            from packages.app_btc.src.operations.getXpubs.types import GetXpubsParams
+            from app_btc.operations.getXpubs.types import GetXpubsParams
             
         async def rejected_promise():
             if test_case.params is None:
@@ -70,7 +71,7 @@ class TestBtcAppGetXpubs:
             clear_mocks()
             on_event = setup_mocks(test_case)
 
-            from packages.app_btc.src.operations.getXpubs.types import GetXpubsParams
+            from app_btc.operations.getXpubs.types import GetXpubsParams
             params = GetXpubsParams(**test_case.params)
             if on_event:
                 params.on_event = on_event
@@ -84,7 +85,7 @@ class TestBtcAppGetXpubs:
         for test_case in fixtures.invalid_args:
             setup_mocks(test_case)
 
-            from packages.app_btc.src.operations.getXpubs.types import GetXpubsParams
+            from app_btc.operations.getXpubs.types import GetXpubsParams
             with pytest.raises(test_case.error_instance):
                 if test_case.params is None:
                     await btc_app.get_xpubs(None)
@@ -102,7 +103,7 @@ class TestBtcAppGetXpubs:
             clear_mocks()
             on_event = setup_mocks(test_case)
 
-            from packages.app_btc.src.operations.getXpubs.types import GetXpubsParams
+            from app_btc.operations.getXpubs.types import GetXpubsParams
             async def rejected_promise():
                 params = GetXpubsParams(**test_case.params)
                 if on_event:
@@ -128,7 +129,7 @@ class TestBtcAppGetXpubs:
             clear_mocks()
             on_event = setup_mocks(test_case)
 
-            from packages.app_btc.src.operations.getXpubs.types import GetXpubsParams
+            from app_btc.operations.getXpubs.types import GetXpubsParams
 
             async def rejected_promise():
                 params = GetXpubsParams(**test_case.params)
@@ -154,7 +155,7 @@ class TestBtcAppGetXpubs:
             clear_mocks()
             on_event = setup_mocks(test_case)
 
-            from packages.app_btc.src.operations.getXpubs.types import GetXpubsParams
+            from app_btc.operations.getXpubs.types import GetXpubsParams
             params = GetXpubsParams(**test_case.params)
             if on_event:
                 params.on_event = on_event
@@ -173,7 +174,7 @@ class TestBtcAppGetXpubs:
             clear_mocks()
             on_event = setup_mocks(test_case)
 
-            from packages.app_btc.src.operations.getXpubs.types import GetXpubsParams
+            from app_btc.operations.getXpubs.types import GetXpubsParams
             params = GetXpubsParams(**test_case.params)
             if on_event:
                 params.on_event = on_event

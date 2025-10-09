@@ -1,5 +1,5 @@
-from packages.util.utils.crypto import uint8array_to_hex
-from packages.core.src.utils.http import http
+from util.utils.crypto import uint8array_to_hex
+from ..utils.http import http
 from .types import IInitiateServerSessionParams, IInitiateServerSessionResult
 
 BASE_URL = '/inheritance/device-session'

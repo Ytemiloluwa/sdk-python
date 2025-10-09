@@ -1,14 +1,14 @@
 from typing import TYPE_CHECKING
 from unittest.mock import MagicMock, AsyncMock
-from packages.app_btc.tests.__helpers__ import (
+from tests.__helpers__ import (
     clear_mocks as super_clear_mocks,
     expect_mock_calls as super_expect_mock_calls,
 )
-from packages.app_btc.src.proto.generated.btc import Query, Result
-from packages.app_btc.src.__mocks__ import sdk as sdk_mocks
+from app_btc.proto.generated.btc import Query, Result
+from tests.__mocks__ import sdk as sdk_mocks
 
 if TYPE_CHECKING:
-    from packages.app_btc.tests.test_04_signTxn.__fixtures__.types import SignTxnTestCase
+    from ..__fixtures__.types import SignTxnTestCase
 
 
 def setup_mocks(test_case: 'SignTxnTestCase') -> MagicMock:

@@ -1,15 +1,15 @@
 import pytest
 import asyncio
-from packages.interfaces import (
+from interfaces import (
     DeviceConnectionError,
     ConnectionTypeMap,
     DeviceState,
 )
-from packages.interfaces.__mocks__.connection import MockDeviceConnection
-from packages.util.utils.sleep import sleep
-from packages.core.src.utils.packetversion import PacketVersionMap
-from packages.core.src.operations.helpers.writecommand import write_command
-from packages.core.src.operations.helpers.__fixtures__.write_command import write_command_helper_test_cases
+from interfaces.__mocks__.connection import MockDeviceConnection
+from util.utils.sleep import sleep
+from core.utils.packetversion import PacketVersionMap
+from core.operations.helpers.writecommand import write_command
+from core.operations.helpers.__fixtures__.write_command import write_command_helper_test_cases
 
 
 class TestWriteCommand:

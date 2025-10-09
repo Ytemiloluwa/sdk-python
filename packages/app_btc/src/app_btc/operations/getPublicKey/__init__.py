@@ -1,10 +1,10 @@
-from packages.core.src.types import ISDK
-from packages.util.utils import create_status_listener, create_logger_with_prefix
-from packages.util.utils.assert_utils import assert_condition
-from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
-from packages.app_btc.src.proto.generated.btc import GetPublicKeyStatus
-from packages.app_btc.src.proto.generated.common import SeedGenerationStatus
-from packages.app_btc.src.utils import (
+from core.types import ISDK
+from util.utils import create_status_listener, create_logger_with_prefix
+from util.utils.assert_utils import assert_condition
+from interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
+from ...proto.generated.btc import GetPublicKeyStatus
+from ...proto.generated.common import SeedGenerationStatus
+from ...utils import (
     assert_or_throw_invalid_result,
     OperationHelper,
     logger as root_logger,

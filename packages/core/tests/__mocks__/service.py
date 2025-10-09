@@ -9,7 +9,7 @@ initiate_server_session: AsyncMock = AsyncMock()
 start_server_session: AsyncMock = AsyncMock()
 
 patch.multiple(
-    'packages.core.src.services',
+    'core.services',
     initiate_server_session=initiate_server_session,
     start_server_session=start_server_session
 ).start()

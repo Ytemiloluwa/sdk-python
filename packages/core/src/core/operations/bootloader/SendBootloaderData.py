@@ -1,7 +1,7 @@
 import asyncio
 from typing import Optional, Dict, Any, Callable
 
-from packages.interfaces.errors import (
+from interfaces.errors import (
     DeviceBootloaderError,
     DeviceBootloaderErrorType,
     DeviceCommunicationError,
@@ -9,10 +9,10 @@ from packages.interfaces.errors import (
     DeviceConnectionError,
     DeviceConnectionErrorType,
 )
-from packages.interfaces import IDeviceConnection
-from packages.util.utils import hex_to_uint8array, uint8array_to_hex, assert_condition
-from packages.core.src.utils.logger import logger
-from packages.core.src.encoders.packet.Bootloader import stm_xmodem_encode
+from interfaces import IDeviceConnection
+from util.utils import hex_to_uint8array, uint8array_to_hex, assert_condition
+from ...utils.logger import logger
+from ...encoders.packet.Bootloader import stm_xmodem_encode
 
 RECHECK_TIME = 1
 ACK_PACKET = '06'

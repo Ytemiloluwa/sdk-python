@@ -1,7 +1,7 @@
 import serial
 import serial.tools.list_ports
 from typing import Dict, List
-from packages.interfaces.connection import DeviceState, IDevice, ConnectionTypeMap
+from interfaces.connection import DeviceState, IDevice, ConnectionTypeMap
 
 supported_versions_to_device_state: Dict[str, DeviceState] = {
     # Bootloader

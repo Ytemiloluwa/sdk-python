@@ -1,4 +1,4 @@
-from packages.core.src.utils.packetversion import PacketVersionMap
+from ...utils.packetversion import PacketVersionMap
 
 # Raw data test cases for valid encodings
 raw_data_test_cases = {

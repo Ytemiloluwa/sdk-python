@@ -21,3 +21,14 @@ pytest-asyncio = "^1.1.0"
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath = "."
+testpaths = ["tests"]
+filterwarnings = [
+    "ignore::pytest.PytestRemovedIn9Warning",
+    "ignore::DeprecationWarning",
+    "ignore::RuntimeWarning",
+    "ignore:.*Task exception was never retrieved.*:RuntimeWarning",
+    "ignore:.*coroutine.*was never awaited.*:RuntimeWarning",
+]

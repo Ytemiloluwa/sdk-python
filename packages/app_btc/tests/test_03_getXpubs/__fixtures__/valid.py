@@ -1,6 +1,6 @@
-from packages.util.utils import create_flow_status
+from util.utils import create_flow_status
 from .types import GetXpubsTestCase, QueryData, ResultData, StatusData, MockData
-from packages.app_btc.src.proto.generated.btc import (
+from app_btc.proto.generated.btc import (
     Query, 
     Result, 
     GetXpubsRequest, 

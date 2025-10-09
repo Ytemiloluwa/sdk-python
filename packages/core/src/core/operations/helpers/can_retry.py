@@ -1,5 +1,5 @@
-from packages.interfaces.errors.app_error import DeviceAppError,DeviceAppErrorType
-from packages.interfaces.errors import(DeviceCommunicationError, DeviceCommunicationErrorType,DeviceConnectionErrorType)
+from interfaces.errors.app_error import DeviceAppError,DeviceAppErrorType
+from interfaces.errors import(DeviceCommunicationError, DeviceCommunicationErrorType,DeviceConnectionErrorType)
 
 def can_retry(error: Exception) -> bool:
     dont_retry = False

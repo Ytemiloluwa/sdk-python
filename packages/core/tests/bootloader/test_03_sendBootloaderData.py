@@ -3,14 +3,14 @@ import pytest
 import random
 from unittest.mock import Mock
 
-from packages.interfaces.errors.bootloader_error import DeviceBootloaderError
-from packages.interfaces.errors.connection_error import DeviceConnectionError
-from packages.interfaces import DeviceState
-from packages.interfaces.__mocks__.connection import MockDeviceConnection
+from interfaces.errors.bootloader_error import DeviceBootloaderError
+from interfaces.errors.connection_error import DeviceConnectionError
+from interfaces import DeviceState
+from interfaces.__mocks__.connection import MockDeviceConnection
 
-from packages.core.src.sdk import SDK
-from packages.core.tests.__fixtures__.config import config
-from packages.core.tests.bootloader.__fixtures__.sendBootloaderData import send_bootloader_data_test_cases
+from core import SDK
+from tests.__fixtures__.config import config
+from tests.bootloader.__fixtures__.sendBootloaderData import send_bootloader_data_test_cases
 
 
 class TestSendBootloaderData:

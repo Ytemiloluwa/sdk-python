@@ -2,7 +2,7 @@ import uuid
 import threading
 from typing import List, Optional, Dict, Any
 import serial
-from packages.interfaces.connection import PoolData
+from interfaces.connection import PoolData
 
 class DataListener:
     """

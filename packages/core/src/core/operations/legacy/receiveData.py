@@ -1,7 +1,7 @@
 import asyncio
 from typing import List, Dict, Any
-from packages.interfaces.connection import IDeviceConnection
-from packages.interfaces.errors import (
+from interfaces.connection import IDeviceConnection
+from interfaces.errors import (
     DeviceConnectionError,
     DeviceConnectionErrorType,
     DeviceCommunicationError,
@@ -9,10 +9,10 @@ from packages.interfaces.errors import (
     DeviceCompatibilityError,
     DeviceCompatibilityErrorType,
 )
-from packages.util.utils.assert_utils import assert_condition
-from packages.core.src.utils.packetversion import PacketVersion, PacketVersionMap
-from packages.core.src.encoders.packet.legacy import xmodem_decode, LegacyDecodedPacketData
-from packages.core.src.config import v1 as config_v1
+from util.utils.assert_utils import assert_condition
+from ...utils.packetversion import PacketVersion, PacketVersionMap
+from ...encoders.packet.legacy import xmodem_decode, LegacyDecodedPacketData
+from core.config import v1 as config_v1
 
 DEFAULT_RECEIVE_TIMEOUT = 15000
 

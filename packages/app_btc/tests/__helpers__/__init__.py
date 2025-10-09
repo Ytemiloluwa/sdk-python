@@ -2,7 +2,7 @@ from typing import List, Optional
 from dataclasses import dataclass
 from unittest.mock import MagicMock, AsyncMock
 
-from packages.app_btc.src.__mocks__ import sdk as sdk_mocks
+from tests.__mocks__ import sdk as sdk_mocks
 
 
 @dataclass

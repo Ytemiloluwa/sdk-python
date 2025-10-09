@@ -7,19 +7,19 @@ from .connection import (
 )
 from .logger import ILogger, LogCreator
 
-from packages.interfaces.errors.connection_error import (
+from .errors.connection_error import (
      DeviceConnectionError,
      DeviceConnectionErrorType
 )
-from packages.interfaces.errors.bootloader_error import (
+from .errors.bootloader_error import (
     DeviceBootloaderError,
     DeviceBootloaderErrorType
 )
-from packages.interfaces.errors.communication_error import (
+from .errors.communication_error import (
     DeviceCommunicationError,
     DeviceCommunicationErrorType
 )
-from packages.interfaces.errors.compatibility_error import (
+from .errors.compatibility_error import (
     DeviceCompatibilityError,
     DeviceCompatibilityErrorType
 )

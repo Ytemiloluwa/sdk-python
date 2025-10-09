@@ -1,10 +1,10 @@
 from typing import TypedDict, List
-from packages.core.src import config
-from packages.util.utils.assert_utils import assert_condition
-from packages.util.utils import is_hex, uint8array_to_hex, hex_to_uint8array, int_to_uint_byte, crc16, pad_start
-from packages.core.src.utils.packetversion import PacketVersion, PacketVersionMap
-from packages.core.src.utils.crypto import byte_unstuffing, byte_stuffing
-from packages.interfaces.errors import DeviceCompatibilityError, DeviceCompatibilityErrorType
+from core.config import v1, v2
+from util.utils.assert_utils import assert_condition
+from util.utils import is_hex, uint8array_to_hex, hex_to_uint8array, int_to_uint_byte, crc16, pad_start
+from ...utils.packetversion import PacketVersion, PacketVersionMap
+from ...utils.crypto import byte_unstuffing, byte_stuffing
+from interfaces.errors import DeviceCompatibilityError, DeviceCompatibilityErrorType
 
 class LegacyDecodedPacketData(TypedDict):
     startOfFrame: str
@@ -33,9 +33,9 @@ def xmodem_encode(
             DeviceCompatibilityErrorType.INVALID_SDK_OPERATION,
         )
 
-    usable_config = config.v1
+    usable_config = v1
     if version == PacketVersionMap.v2:
-        usable_config = config.v2
+        usable_config = v2
 
     chunk_size = usable_config.constants.CHUNK_SIZE
     start_of_frame = usable_config.constants.START_OF_FRAME
@@ -77,9 +77,9 @@ def xmodem_decode(
             DeviceCompatibilityErrorType.INVALID_SDK_OPERATION,
         )
 
-    usable_config = config.v1
+    usable_config = v1
     if version == PacketVersionMap.v2:
-        usable_config = config.v2
+        usable_config = v2
 
     chunk_size = usable_config.constants.CHUNK_SIZE
     start_of_frame = usable_config.constants.START_OF_FRAME
@@ -180,9 +180,9 @@ def create_ack_packet(
             DeviceCompatibilityErrorType.INVALID_SDK_OPERATION,
         )
 
-    usable_config = config.v1
+    usable_config = v1
     if version == PacketVersionMap.v2:
-        usable_config = config.v2
+        usable_config = v2
 
     start_of_frame = usable_config.constants.START_OF_FRAME
 

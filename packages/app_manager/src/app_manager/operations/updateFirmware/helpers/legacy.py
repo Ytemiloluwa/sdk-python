@@ -1,10 +1,10 @@
-from packages.core.src.types import ISDK
-from packages.interfaces.errors import (
+from core.types import ISDK
+from interfaces.errors import (
     DeviceCompatibilityError,
     DeviceCompatibilityErrorType,
 )
-from packages.interfaces.errors.app_error import DeviceAppError,DeviceAppErrorType
-from packages.core.src.encoders.proto.generated.common import Version
+from interfaces.errors.app_error import DeviceAppError,DeviceAppErrorType
+from core.encoders.proto.generated.common import Version
 
 
 def create_version_hex(version: Version) -> str:

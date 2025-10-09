@@ -1,15 +1,15 @@
 from typing import Optional
-from packages.core.src.types import ISDK
-from packages.core.src import sdk as core_sdk
-from packages.interfaces import (
+from core.types import ISDK
+from core import sdk as core_sdk
+from interfaces import (
     IDeviceConnection,
     DeviceState,
     DeviceConnectionError,
     DeviceConnectionErrorType,
     IDevice,
 )
-from packages.util.utils import sleep
-from packages.app_manager.src.utils import logger
+from util.utils import sleep
+from ....utils import logger
 from ..types import GetDevices, CreateDeviceConnection
 
 MAX_WAIT_TIME_TO_ENTER_BOOTLOADER = 3_000

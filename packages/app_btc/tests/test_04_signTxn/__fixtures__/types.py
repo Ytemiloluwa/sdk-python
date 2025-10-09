@@ -1,6 +1,6 @@
 from typing import List, Any, Optional, Union
 from dataclasses import dataclass
-from packages.app_btc.src.operations.signTxn.types import SignTxnParams, SignTxnResult
+from app_btc.operations.signTxn.types import SignTxnParams, SignTxnResult
 
 
 @dataclass

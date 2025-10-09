@@ -1,5 +1,5 @@
 from unittest.mock import AsyncMock
-from packages.app_manager.src.utils import http
+from .utils import http
 
 # Create mock functions
 post = AsyncMock()

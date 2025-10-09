@@ -4,7 +4,7 @@ from typing import Any, List, Optional
 
 import hid
 
-from packages.interfaces import (
+from interfaces import (
     ConnectionTypeMap,
     DeviceConnectionError,
     DeviceConnectionErrorType,

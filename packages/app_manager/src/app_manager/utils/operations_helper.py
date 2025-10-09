@@ -1,9 +1,9 @@
 from typing import TypeVar, Generic, Callable, Optional, Any, Dict
-from packages.core.src.types import ISDK
-from packages.core.src.encoders.proto.generated.core import Status
-from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
-from packages.app_manager.src.proto.generated.manager import Query, Result
-from packages.app_manager.src.utils.assert_utils import assert_or_throw_invalid_result, parse_common_error
+from core.types import ISDK
+from core.encoders.proto.generated.core import Status
+from interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
+from app_manager.proto.generated.manager import Query, Result
+from ..utils.assert_utils import assert_or_throw_invalid_result, parse_common_error
 
 Q = TypeVar('Q')
 R = TypeVar('R')

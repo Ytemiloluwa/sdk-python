@@ -1,6 +1,6 @@
 from typing import Dict, Any, Optional, Callable, List, TypedDict, Type
 from enum import Enum
-from packages.interfaces.logger import ILogger
+from interfaces.logger import ILogger
 from .crypto import num_to_byte_array
 
 ForceStatusUpdate = Callable[[int], None]

@@ -1,6 +1,6 @@
 from typing import List
 from coincurve import PublicKey
-from packages.app_btc.src.utils import get_bitcoin_py_lib, get_network_from_path, get_purpose_type
+from ....utils import get_bitcoin_py_lib, get_network_from_path, get_purpose_type
 
 def get_address_from_public_key(uncompressed_public_key: bytes, path: List[int]) -> str:
     """

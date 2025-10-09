@@ -1,9 +1,9 @@
 from typing import Optional, Union
-from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
-from packages.interfaces import IDeviceConnection
-from packages.core.src.utils.packetversion import PacketVersion
-from packages.core.src.encoders.raw import decode_raw_data, decode_status, RawData, StatusData
-from packages.core.src.operations.helpers.getcommandoutput import get_command_output as get_command_output_helper
+from interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
+from interfaces import IDeviceConnection
+from ...utils.packetversion import PacketVersion
+from ...encoders.raw import decode_raw_data, decode_status, RawData, StatusData
+from ...operations.helpers.getcommandoutput import get_command_output as get_command_output_helper
 
 
 async def get_command_output(

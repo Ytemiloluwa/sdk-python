@@ -4,12 +4,12 @@ import random
 from unittest.mock import patch
 from datetime import datetime
 
-from packages.interfaces.__mocks__.connection import MockDeviceConnection
-from packages.interfaces.errors.connection_error import DeviceConnectionError
-from packages.core.src.sdk import SDK
-from packages.core.src.utils.packetversion import PacketVersionMap
-from packages.core.tests.proto.__fixtures__.send_Query import fixtures, constant_date
-from packages.core.tests.__fixtures__.config import config as test_config
+from interfaces.__mocks__.connection import MockDeviceConnection
+from interfaces.errors.connection_error import DeviceConnectionError
+from core import SDK
+from core.utils.packetversion import PacketVersionMap
+from tests.proto.__fixtures__.send_Query import fixtures, constant_date
+from tests.__fixtures__.config import config as test_config
 
 
 class TestSDKSendQuery:
@@ -22,7 +22,7 @@ class TestSDKSendQuery:
         import calendar
         utc_timestamp = calendar.timegm(constant_date.timetuple()) + constant_date.microsecond / 1000000
         with patch('time.time', return_value=utc_timestamp), \
-             patch('packages.core.src.encoders.packet.packet.time.time', return_value=utc_timestamp), \
+             patch('core.encoders.packet.packet.time.time', return_value=utc_timestamp), \
              patch('os.times', return_value=type('MockTimes', (), {'elapsed': 16778725})()):
             connection = await MockDeviceConnection.create()
             applet_id = 12
@@ -55,8 +55,8 @@ class TestSDKSendQuery:
             
             async def on_data(data: bytes):
                 # Generate ACK packet with correct timestamp and CRC
-                from packages.core.src.encoders.packet.packet import encode_packet
-                from packages.core.src.utils.packetversion import PacketVersionMap
+                from core.encoders.packet.packet import encode_packet
+                from core.utils.packetversion import PacketVersionMap
                 
                 ack_packets = encode_packet(
                     raw_data='',

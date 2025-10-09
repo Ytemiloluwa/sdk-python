@@ -1,5 +1,5 @@
 from typing import List
-from packages.interfaces.errors.app_error import DeviceAppError
+from interfaces.errors.app_error import DeviceAppError
 from .types import IGetWalletsTestCase
 
 invalid_data: List[IGetWalletsTestCase] = [

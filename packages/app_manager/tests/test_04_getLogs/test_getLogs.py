@@ -1,10 +1,10 @@
 import pytest
 from unittest.mock import patch, AsyncMock, MagicMock
-from packages.interfaces.__mocks__.connection import MockDeviceConnection
-from packages.app_manager.src import ManagerApp
-from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
-from packages.app_manager.src.operations.getLogs.error import GetLogsError, GetLogsErrorType
-from packages.app_manager.tests.test_04_getLogs.__fixtures__ import fixtures
+from interfaces.__mocks__.connection import MockDeviceConnection
+from app_manager import ManagerApp
+from interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
+from app_manager.operations.getLogs.error import GetLogsError, GetLogsErrorType
+from tests.test_04_getLogs.__fixtures__ import fixtures
 
 
 @pytest.fixture
@@ -20,7 +20,7 @@ class TestManagerAppGetLogs:
         mock_sdk.run_operation = AsyncMock(return_value=test_case['output'])
         mock_sdk.destroy = AsyncMock()
         
-        with patch('packages.core.src.sdk.SDK.create', return_value=mock_sdk):
+        with patch('core.sdk.SDK.create', return_value=mock_sdk):
             manager_app = await ManagerApp.create(connection)
             
             on_event = AsyncMock()
@@ -38,7 +38,7 @@ class TestManagerAppGetLogs:
         mock_sdk.run_operation = AsyncMock(side_effect=error_instance)
         mock_sdk.destroy = AsyncMock()
         
-        with patch('packages.core.src.sdk.SDK.create', return_value=mock_sdk):
+        with patch('core.sdk.SDK.create', return_value=mock_sdk):
             manager_app = await ManagerApp.create(connection)
             
             with pytest.raises(error_class):
@@ -54,7 +54,7 @@ class TestManagerAppGetLogs:
         mock_sdk.run_operation = AsyncMock(side_effect=error_instance)
         mock_sdk.destroy = AsyncMock()
         
-        with patch('packages.core.src.sdk.SDK.create', return_value=mock_sdk):
+        with patch('core.sdk.SDK.create', return_value=mock_sdk):
             manager_app = await ManagerApp.create(connection)
             
             with pytest.raises(error_class) as exc_info:

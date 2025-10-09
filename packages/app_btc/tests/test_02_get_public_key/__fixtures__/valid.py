@@ -1,6 +1,6 @@
-from packages.util.utils import create_flow_status
+from util.utils import create_flow_status
 from .types import GetPublicKeyTestCase, QueryData, ResultData, StatusData, MockData
-from packages.app_btc.src.proto.generated.btc import Query, GetPublicKeyRequest, GetPublicKeyIntiateRequest
+from app_btc.proto.generated.btc import Query, GetPublicKeyRequest, GetPublicKeyIntiateRequest
 
 request_address = GetPublicKeyTestCase(
     name='Request Address',

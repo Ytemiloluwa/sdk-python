@@ -1,12 +1,12 @@
 from typing import Optional
-from packages.core.src.types import ISDK
-from packages.util.utils import create_logger_with_prefix, create_status_listener, string_to_version, uint8array_to_hex
-from packages.app_manager.src.constants.appId import APP_VERSION
-from packages.app_manager.src.proto.generated.manager import FirmwareUpdateErrorResponse, FirmwareUpdateError
-from packages.app_manager.src.proto.types import UpdateFirmwareStatus
-from packages.app_manager.src.services import firmware_service
-from packages.app_manager.src.utils import assert_or_throw_invalid_result, OperationHelper
-from packages.app_manager.src.utils import logger as rootlogger
+from core.types import ISDK
+from util.utils import create_logger_with_prefix, create_status_listener, string_to_version, uint8array_to_hex
+from app_manager.constants.appId import APP_VERSION
+from app_manager.proto.generated.manager import FirmwareUpdateErrorResponse, FirmwareUpdateError
+from app_manager.proto.types import UpdateFirmwareStatus
+from ...services import firmware_service
+from ...utils import assert_or_throw_invalid_result, OperationHelper
+from ...utils import logger as rootlogger
 from .error import UpdateFirmwareError, UpdateFirmwareErrorType
 from .helpers import create_bootloader_sdk, handle_legacy_device, wait_for_reconnection
 from .types import IUpdateFirmwareParams, UpdateFirmwareEventHandler

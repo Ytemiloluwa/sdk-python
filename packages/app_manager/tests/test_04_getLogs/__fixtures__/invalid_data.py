@@ -2,7 +2,7 @@ from typing import List, TYPE_CHECKING
 from .types import IGetLogsTestCase
 
 if TYPE_CHECKING:
-    from packages.interfaces.errors.app_error import DeviceAppError
+    from interfaces.errors.app_error import DeviceAppError
 
 withInvaidLogData: IGetLogsTestCase = {
     'name': 'Invalid log data in first step',

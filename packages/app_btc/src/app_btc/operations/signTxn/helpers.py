@@ -1,6 +1,6 @@
-from packages.util.utils.assert_utils import assert_condition
-from packages.util.utils import is_hex
-from packages.app_btc.src.utils import assert_derivation_path
+from util.utils.assert_utils import assert_condition
+from util.utils import is_hex
+from ...utils import assert_derivation_path
 from .types import SignTxnParams
 
 

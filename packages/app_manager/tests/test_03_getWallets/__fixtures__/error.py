@@ -1,5 +1,5 @@
 from typing import List
-from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType, deviceAppErrorTypeDetails
+from interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType, deviceAppErrorTypeDetails
 from .types import IGetWalletsTestCase
 
 with_unknown_error: IGetWalletsTestCase = {

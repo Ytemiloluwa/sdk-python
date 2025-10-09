@@ -1,5 +1,5 @@
 from datetime import datetime
-from packages.interfaces.errors.communication_error import DeviceCommunicationError
+from interfaces.errors.communication_error import DeviceCommunicationError
 
 # Constant date for mocking Date.now() in tests  
 constant_date = datetime(2023, 3, 7, 9, 43, 48, 755000)

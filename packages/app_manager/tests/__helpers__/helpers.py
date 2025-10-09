@@ -1,6 +1,6 @@
 from typing import List, Optional, Dict, Any
 from unittest.mock import Mock
-from packages.app_manager.src.__mocks__ import sdk as sdk_mocks
+from .__mocks__ import sdk as sdk_mocks
 
 on_event = Mock()
 

@@ -2,11 +2,11 @@ import asyncio
 import pytest
 import random
 
-from packages.interfaces.errors.connection_error import DeviceConnectionError
-from packages.interfaces.__mocks__.connection import MockDeviceConnection
-from packages.core.src.sdk import SDK
-from packages.core.tests.__fixtures__.config import config
-from packages.core.tests.__fixtures__.create import sdk_create_test_cases
+from interfaces.errors.connection_error import DeviceConnectionError
+from interfaces.__mocks__.connection import MockDeviceConnection
+from core import SDK
+from tests.__fixtures__.config import config
+from tests.__fixtures__.create import sdk_create_test_cases
 
 
 class TestSDKCreate:

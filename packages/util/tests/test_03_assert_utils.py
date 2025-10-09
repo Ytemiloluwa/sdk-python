@@ -1,5 +1,5 @@
 import pytest
-from packages.util.utils.assert_utils import assert_condition
+from util.utils.assert_utils import assert_condition
 
 class TestAssert:
     def test_assert_fails(self):

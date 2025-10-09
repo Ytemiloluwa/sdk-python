@@ -1,7 +1,7 @@
 from typing import Optional
 from dataclasses import dataclass
-from packages.app_manager.src.utils import http, download_file
-from packages.util.utils.queryString import create_query_string
+from ..utils import http, download_file
+from util.utils.queryString import create_query_string
 BASE_URL = "/firmware-stm"
 
 

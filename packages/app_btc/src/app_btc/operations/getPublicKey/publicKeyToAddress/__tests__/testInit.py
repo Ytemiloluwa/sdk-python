@@ -1,12 +1,12 @@
 import pytest
 import asyncio
-from packages.app_btc.src.operations.getPublicKey.publicKeyToAddress.__fixtures__ import (
+from ....operations.getPublicKey.publicKeyToAddress.__fixtures__ import (
     get_address_from_public_key_test_cases
 )
-from packages.app_btc.src.operations.getPublicKey.publicKeyToAddress import (
+from ....operations.getPublicKey.publicKeyToAddress import (
     get_address_from_public_key
 )
-from packages.app_btc.src.utils.bitcoinlib import set_bitcoin_py_lib
+from ....utils.bitcoinlib import set_bitcoin_py_lib
 
 try:
     import bitcoinlib

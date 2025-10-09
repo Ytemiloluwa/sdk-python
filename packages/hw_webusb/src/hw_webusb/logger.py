@@ -1,5 +1,5 @@
-from packages.interfaces.logger import ILogger, LogCreator
-from packages.util.utils.logger import (
+from interfaces.logger import ILogger, LogCreator
+from util.utils.logger import (
     create_default_console_logger,
     update_logger_object,
 )

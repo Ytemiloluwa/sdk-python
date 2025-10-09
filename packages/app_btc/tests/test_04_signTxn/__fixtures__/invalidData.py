@@ -1,6 +1,6 @@
-from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType, deviceAppErrorTypeDetails
+from interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType, deviceAppErrorTypeDetails
 from .types import SignTxnTestCase, QueryData, ResultData
-from packages.app_btc.src.proto.generated.btc import Query, SignTxnRequest, SignTxnInitiateRequest
+from app_btc.proto.generated.btc import Query, SignTxnRequest, SignTxnInitiateRequest
 
 common_params = {
     'params': {

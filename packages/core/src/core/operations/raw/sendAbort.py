@@ -1,14 +1,14 @@
 from typing import Optional
-from packages.interfaces import IDeviceConnection
-from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
-from packages.interfaces.errors.compatibility_error import DeviceCompatibilityError, DeviceCompatibilityErrorType
-from packages.util.utils.assert_utils import assert_condition
-from packages.core.src.utils.packetversion import PacketVersion, PacketVersionMap
-from packages.core.src.config import v3 as config
-from packages.core.src.encoders.packet.packet import decode_payload_data, encode_packet
-from packages.core.src.encoders.raw import decode_status, StatusData
-from packages.core.src.operations.helpers.writecommand import write_command
-from packages.core.src.operations.helpers.can_retry import can_retry
+from interfaces import IDeviceConnection
+from interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
+from interfaces.errors.compatibility_error import DeviceCompatibilityError, DeviceCompatibilityErrorType
+from util.utils.assert_utils import assert_condition
+from ...utils.packetversion import PacketVersion, PacketVersionMap
+from core.config import v3 as config
+from ...encoders.packet.packet import decode_payload_data, encode_packet
+from ...encoders.raw import decode_status, StatusData
+from ...operations.helpers.writecommand import write_command
+from ...operations.helpers.can_retry import can_retry
 
 
 async def send_abort(

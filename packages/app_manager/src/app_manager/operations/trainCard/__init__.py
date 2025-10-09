@@ -1,9 +1,9 @@
-from packages.core.src.types import ISDK
-from packages.util.utils import create_logger_with_prefix, create_status_listener
-from packages.app_manager.src.constants.appId import APP_VERSION
-from packages.app_manager.src.proto.generated.manager import TrainCardResult, TrainCardStatus
-from packages.app_manager.src.utils import assert_or_throw_invalid_result, OperationHelper
-from packages.app_manager.src.utils import logger as rootlogger
+from core.types import ISDK
+from util.utils import create_logger_with_prefix, create_status_listener
+from app_manager.constants.appId import APP_VERSION
+from app_manager.proto.generated.manager import TrainCardResult, TrainCardStatus
+from ...utils import assert_or_throw_invalid_result, OperationHelper
+from ...utils import logger as rootlogger
 from .types import ITrainCardParams, TrainCardEventHandler
 
 # Re-export types

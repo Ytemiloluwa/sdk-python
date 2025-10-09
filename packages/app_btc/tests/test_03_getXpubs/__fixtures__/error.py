@@ -1,7 +1,7 @@
-from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType, deviceAppErrorTypeDetails
+from interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType, deviceAppErrorTypeDetails
 from .types import GetXpubsTestCase, QueryData, ResultData
-from packages.app_btc.src.proto.generated.btc import Query, Result, GetXpubsRequest, GetXpubsIntiateRequest, GetXpubDerivationPath, GetXpubsResponse
-from packages.app_btc.src.proto.generated.error import CommonError
+from app_btc.proto.generated.btc import Query, Result, GetXpubsRequest, GetXpubsIntiateRequest, GetXpubDerivationPath, GetXpubsResponse
+from app_btc.proto.generated.error import CommonError
 
 def create_get_xpubs_error_result(common_error):
     """Create a properly structured GetXpubs error result."""

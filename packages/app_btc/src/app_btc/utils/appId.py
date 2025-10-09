@@ -1,8 +1,8 @@
 from typing import List
-from packages.core.src.sdk import ISDK
-from packages.core.src.types import IFeatureSupport
-from packages.util.utils.assert_utils import assert_condition
-from packages.app_btc.src.constants.appId import APP_VERSION, coin_index_to_app_id_map
+from core.sdk import ISDK
+from core.types import IFeatureSupport
+from util.utils.assert_utils import assert_condition
+from app_btc.constants.appId import APP_VERSION, coin_index_to_app_id_map
 
 
 def get_app_id_from_derivation_paths(derivation_paths: List[List[int]]) -> int:

@@ -1,4 +1,4 @@
-from packages.core.src.utils.packetversion import PacketVersionMap
+from ...utils.packetversion import PacketVersionMap
 from datetime import datetime
 
 encode_payload_data_test_cases = {

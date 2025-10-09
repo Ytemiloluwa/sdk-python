@@ -1,8 +1,8 @@
 from typing import Optional
-from packages.interfaces import IDeviceConnection
-from packages.core.src.utils.packetversion import PacketVersion
-from packages.core.src.encoders.raw import encode_raw_data
-from packages.core.src.operations.helpers.sendcommand import send_command as send_command_helper
+from interfaces import IDeviceConnection
+from ...utils.packetversion import PacketVersion
+from ...encoders.raw import encode_raw_data
+from ...operations.helpers.sendcommand import send_command as send_command_helper
 
 
 async def send_command(

@@ -2,7 +2,7 @@ import uuid
 import inspect
 from typing import List, Optional, Callable, Awaitable, Union
 
-from packages.interfaces.connection import (
+from ..connection import (
     ConnectionTypeMap,
     DeviceState,
     PoolData

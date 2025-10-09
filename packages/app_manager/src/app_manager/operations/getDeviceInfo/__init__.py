@@ -1,9 +1,9 @@
-from packages.core.src.types import ISDK
-from packages.util.utils import create_logger_with_prefix
-from packages.app_manager.src.constants.appId import APP_VERSION
-from packages.app_manager.src.proto.generated.manager import GetDeviceInfoResultResponse
-from packages.app_manager.src.utils import assert_or_throw_invalid_result, OperationHelper
-from packages.app_manager.src.utils import logger as rootlogger
+from core.types import ISDK
+from util.utils import create_logger_with_prefix
+from ...constants.appId import APP_VERSION
+from ...proto.generated.manager import GetDeviceInfoResultResponse
+from ...utils import assert_or_throw_invalid_result, OperationHelper
+from ...utils import logger as rootlogger
 
 logger = create_logger_with_prefix(rootlogger, "GetDeviceInfo")
 

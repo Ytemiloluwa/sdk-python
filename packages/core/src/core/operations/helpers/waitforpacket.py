@@ -1,6 +1,6 @@
 import asyncio
 from typing import List, Optional
-from packages.interfaces.errors import (
+from interfaces.errors import (
     DeviceConnectionError,
     DeviceConnectionErrorType,
     DeviceCommunicationError,
@@ -8,13 +8,13 @@ from packages.interfaces.errors import (
     DeviceCompatibilityError,
     DeviceCompatibilityErrorType,
 )
-from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
-from packages.interfaces import IDeviceConnection
-from packages.util.utils.assert_utils import assert_condition
-from packages.core.src.config import v3 as config_v3
-from packages.core.src.utils.packetversion import PacketVersion, PacketVersionMap
-from packages.core.src.utils.logger import logger
-from packages.core.src.encoders.packet.packet import (
+from interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
+from interfaces import IDeviceConnection
+from util.utils.assert_utils import assert_condition
+from core.config import v3 as config_v3
+from ...utils.packetversion import PacketVersion, PacketVersionMap
+from ...utils.logger import logger
+from ...encoders.packet.packet import (
     DecodedPacketData,
     decode_packet,
     decode_payload_data,

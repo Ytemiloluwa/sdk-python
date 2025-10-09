@@ -1,5 +1,5 @@
-from packages.interfaces import IDeviceConnection
-from packages.core.src.sdk import SDK
+from interfaces import IDeviceConnection
+from core.sdk import SDK
 from . import operations
 
 

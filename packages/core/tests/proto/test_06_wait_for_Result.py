@@ -1,10 +1,10 @@
 import asyncio
 import pytest
 from unittest.mock import patch
-from packages.interfaces.__mocks__.connection import MockDeviceConnection
-from packages.core.src.sdk import SDK
-from packages.core.tests.proto.__fixtures__.wait_For_result import fixtures, constant_date
-from packages.core.tests.__fixtures__.config import config as test_config
+from interfaces.__mocks__.connection import MockDeviceConnection
+from core import SDK
+from tests.proto.__fixtures__.wait_For_result import fixtures, constant_date
+from tests.__fixtures__.config import config as test_config
 
 class TestSDKWaitForResult:
     """Test sdk.wait_for_result"""
@@ -16,7 +16,7 @@ class TestSDKWaitForResult:
         import calendar
         utc_timestamp = calendar.timegm(constant_date.timetuple()) + constant_date.microsecond / 1000000
         with patch('time.time', return_value=utc_timestamp), \
-             patch('packages.core.src.encoders.packet.packet.time.time', return_value=utc_timestamp), \
+             patch('core.encoders.packet.packet.time.time', return_value=utc_timestamp), \
              patch('os.times', return_value=type('MockTimes', (), {'elapsed': 16778725})()):
             connection = await MockDeviceConnection.create()
             applet_id = 0

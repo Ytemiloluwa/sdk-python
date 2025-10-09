@@ -1,19 +1,19 @@
 import asyncio
 from typing import Optional, Dict, Any
-from packages.interfaces.errors import (
+from interfaces.errors import (
     DeviceCommunicationError,
     DeviceCommunicationErrorType,
     DeviceConnectionError,
     DeviceConnectionErrorType,
 )
-from packages.interfaces import IDeviceConnection
-from packages.util.utils.crypto import (
+from interfaces import IDeviceConnection
+from util.utils.crypto import (
     hex_to_uint8array,
     uint8array_to_hex,
     assert_condition,
 )
-from packages.core.src import config
-from packages.core.src.operations.helpers.can_retry import can_retry
+from core.config import v1
+from ..helpers.can_retry import can_retry
 
 ACK_PACKET = '18'
 
@@ -52,7 +52,7 @@ async def send_bootloader_abort(
                     connection=connection,
                     data=data,
                     timeout=first_timeout if index == 0 else timeout,
-                    recheck_time=config.v1.constants.RECHECK_TIME,
+                    recheck_time=v1.constants.RECHECK_TIME,
                 )
                 success = True
                 break  # Success

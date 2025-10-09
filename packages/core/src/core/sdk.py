@@ -1,5 +1,5 @@
 from typing import Optional, Dict, Any, Callable, Awaitable, List
-from packages.interfaces import (
+from interfaces import (
     DeviceBootloaderError,
     DeviceBootloaderErrorType,
     DeviceCommunicationError,
@@ -9,22 +9,22 @@ from packages.interfaces import (
     DeviceState,
     IDeviceConnection,
 )
-from packages.util.utils.assert_utils import assert_condition
-from packages.core.src.utils.version_compare import compare_versions
-from packages.core.src.operations import bootloader as bootloader_operations
-from packages.core.src.operations import legacy as legacy_operations
-from packages.core.src.operations import proto as operations
-from packages.core.src import commands
-from packages.core.src.utils.sdk_version import get_packet_version_from_sdk, format_sdk_version
-from packages.core.src.utils.packetversion import PacketVersion, PacketVersionMap
-from packages.core.src.utils.feature_map import FeatureName, is_feature_enabled
-from packages.core.src.types import IFeatureSupport, ISDK
-from packages.core.src.deprecated import DeprecatedCommunication
-from packages.core.src.encoders.proto.types import DeviceIdleState
-from packages.core.src.encoders.raw.types import DeviceIdleState as RawDeviceIdleState
-from packages.core.src.utils.logger import logger
-from packages.core.src.encoders.proto.generated.core import AppVersionResultResponse
-from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
+from util import assert_condition
+from .utils.version_compare import compare_versions
+from .operations import bootloader as bootloader_operations
+from .operations import legacy as legacy_operations
+from .operations import proto as operations
+from . import commands
+from .utils.sdk_version import get_packet_version_from_sdk, format_sdk_version
+from .utils.packetversion import PacketVersion, PacketVersionMap
+from .utils.feature_map import FeatureName, is_feature_enabled
+from .types import IFeatureSupport, ISDK
+from .deprecated import DeprecatedCommunication
+from .encoders.proto.types import DeviceIdleState
+from .encoders.raw.types import DeviceIdleState as RawDeviceIdleState
+from .utils.logger import logger
+from .encoders.proto.generated.core import AppVersionResultResponse
+from interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
 
 
 class SDK:

@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import Dict
-from packages.interfaces.errors.device_error import DeviceError
+from .device_error import DeviceError
 
 class DeviceConnectionErrorType(Enum):
     NOT_CONNECTED = 'CON_0100'

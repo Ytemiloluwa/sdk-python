@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock
-from packages.util.utils.create_status_listener import create_status_listener
-from packages.util.tests.__fixtures__.create_status_listener import fixtures
+from util.utils.create_status_listener import create_status_listener
+from tests.__fixtures__.create_status_listener import fixtures
 
 class TestCreateStatusListener:
     def test_trigger_events(self):

@@ -1,6 +1,6 @@
 from typing import Optional, Dict, Any
-from packages.app_manager.src.utils import http
-from packages.util.utils.crypto import hex_to_uint8array, uint8array_to_hex
+from ..utils import http
+from util.utils.crypto import hex_to_uint8array, uint8array_to_hex
 
 BASE_URL = "/verification"
 

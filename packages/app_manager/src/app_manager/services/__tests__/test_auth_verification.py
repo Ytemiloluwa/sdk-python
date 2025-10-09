@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch, AsyncMock
-from packages.app_manager.src.services.__fixtures__.auth_verification import fixtures
-from packages.app_manager.src.services.authverification import (
+from app_manager.services.__fixtures__.auth_verification import fixtures
+from app_manager.services.authverification import (
     verify_serial_signature,
     verify_challenge_signature,
 )
@@ -10,7 +10,7 @@ from packages.app_manager.src.services.authverification import (
 class TestDeviceAuthService:
     @pytest.fixture(autouse=True)
     def setup(self):
-        with patch('packages.app_manager.src.services.authverification.http') as mock_http:
+        with patch('app_manager.services.authverification.http') as mock_http:
             mock_http.post = AsyncMock()
             yield mock_http
 

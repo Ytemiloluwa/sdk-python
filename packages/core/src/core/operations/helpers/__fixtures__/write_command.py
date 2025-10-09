@@ -1,5 +1,5 @@
-from packages.interfaces.errors import DeviceCommunicationError
-from packages.core.src.utils.packetversion import PacketVersionMap
+from interfaces.errors import DeviceCommunicationError
+from ....utils.packetversion import PacketVersionMap
 
 write_command_helper_test_cases = {
     "invalid_args": [

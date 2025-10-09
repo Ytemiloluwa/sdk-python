@@ -1,6 +1,6 @@
-from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType, deviceAppErrorTypeDetails
+from interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType, deviceAppErrorTypeDetails
 from .types import GetXpubsTestCase, QueryData, ResultData
-from packages.app_btc.src.proto.generated.btc import Query, GetXpubsRequest, GetXpubsIntiateRequest, GetXpubDerivationPath
+from app_btc.proto.generated.btc import Query, GetXpubsRequest, GetXpubsIntiateRequest, GetXpubDerivationPath
 
 # Common parameters for invalid data tests
 common_params = {

@@ -1,9 +1,9 @@
 from typing import TypedDict
-from packages.util.utils.assert_utils import assert_condition
-from packages.util.utils import crc16, hex_to_uint8array, int_to_uint_byte, is_hex, uint8array_to_hex
-from packages.core.src.utils.packetversion import PacketVersionMap
-from packages.core.src.utils.crypto import byte_unstuffing
-from packages.core.src.config.radix import v1 as radix
+from util.utils.assert_utils import assert_condition
+from util.utils import crc16, hex_to_uint8array, int_to_uint_byte, is_hex, uint8array_to_hex
+from ...utils.packetversion import PacketVersionMap
+from ...utils.crypto import byte_unstuffing
+from core.config.radix import v1 as radix
 
 
 START_OF_FRAME = '01'

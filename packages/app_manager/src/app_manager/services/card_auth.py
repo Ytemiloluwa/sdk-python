@@ -1,6 +1,6 @@
 from typing import Optional, Dict, Any
-from packages.util.utils.crypto import sha256
-from packages.app_manager.src.services.authverification import verify_serial_signature, verify_challenge_signature
+from util.utils.crypto import sha256
+from ..services.authverification import verify_serial_signature, verify_challenge_signature
 
 async def verify_card_serial_signature(params: Dict[str, Any]) -> Optional[bytes]:
     """

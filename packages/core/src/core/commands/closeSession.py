@@ -1,15 +1,15 @@
 from typing import Optional, Callable, Dict, Any, Awaitable
-from packages.interfaces import IDeviceConnection
-from packages.core.src.encoders.proto.generated.core import (
+from interfaces import IDeviceConnection
+from ..encoders.proto.generated.core import (
     Msg, SessionCloseCmd, SessionCloseRequest, SessionCloseClearRequest, SessionCloseResponse
 )
-from packages.core.src.operations.helpers.sendcommand import send_command
-from packages.core.src.operations.proto import wait_for_result
-from packages.core.src.utils.packetversion import PacketVersionMap
-from packages.core.src.utils.common_error import assert_or_throw_invalid_result, parse_common_error
-from packages.util.utils.assert_utils import assert_condition
-from packages.util.utils.crypto import uint8array_to_hex
-from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
+from ..operations.helpers.sendcommand import send_command
+from ..operations.proto import wait_for_result
+from ..utils.packetversion import PacketVersionMap
+from ..utils.common_error import assert_or_throw_invalid_result, parse_common_error
+from util.utils.assert_utils import assert_condition
+from util.utils.crypto import uint8array_to_hex
+from interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
 
 
 class CloseSessionParams:

@@ -1,7 +1,7 @@
 from typing import List, Optional, Dict, Any
 from unittest.mock import Mock
-from packages.app_manager.src.__mocks__ import sdk as sdk_mocks
-from packages.app_manager.tests.test_04_getLogs.__fixtures__.types import IGetLogsTestCase
+from tests.__mocks__ import sdk as sdk_mocks
+from __fixtures__.types import IGetLogsTestCase
 
 on_event = Mock()
 

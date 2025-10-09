@@ -1,14 +1,14 @@
 from typing import TYPE_CHECKING
 from unittest.mock import MagicMock
 
-from packages.app_btc.tests.__helpers__ import (
+from tests.__helpers__ import (
     setup_mocks as super_setup_mocks,
     clear_mocks as super_clear_mocks,
     expect_mock_calls as super_expect_mock_calls,
 )
 
 if TYPE_CHECKING:
-    from packages.app_btc.tests.test_03_getXpubs.__fixtures__.types import GetXpubsTestCase
+    from ..__fixtures__.types import GetXpubsTestCase
 
 
 def setup_mocks(test_case: 'GetXpubsTestCase') -> MagicMock:

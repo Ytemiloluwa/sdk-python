@@ -1,8 +1,8 @@
 from typing import Optional
-from packages.interfaces import IDeviceConnection
-from packages.core.src.utils.packetversion import PacketVersion
-from packages.core.src.encoders.raw import decode_status, StatusData
-from packages.core.src.operations.helpers.getstatus import get_status as get_status_helper
+from interfaces import IDeviceConnection
+from ...utils.packetversion import PacketVersion
+from ...encoders.raw import decode_status, StatusData
+from ...operations.helpers.getstatus import get_status as get_status_helper
 
 
 async def get_status(

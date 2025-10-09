@@ -3,13 +3,13 @@ import pytest
 import random
 from unittest.mock import Mock
 
-from packages.interfaces.errors.connection_error import DeviceConnectionError
-from packages.interfaces.errors.communication_error import DeviceCommunicationError
-from packages.interfaces.__mocks__.connection import MockDeviceConnection
+from interfaces.errors.connection_error import DeviceConnectionError
+from interfaces.errors.communication_error import DeviceCommunicationError
+from interfaces.__mocks__.connection import MockDeviceConnection
 
-from packages.core.src.sdk import SDK
-from packages.core.tests.__fixtures__.config import config
-from packages.core.tests.legacy.__fixtures__.sendLegacyCommand import legacy_send_command_test_cases
+from core import SDK
+from tests.__fixtures__.config import config
+from tests.legacy.__fixtures__.sendLegacyCommand import legacy_send_command_test_cases
 
 class TestSendLegacyCommand:
     @pytest.fixture
