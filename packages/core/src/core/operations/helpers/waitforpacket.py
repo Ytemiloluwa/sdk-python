@@ -41,17 +41,19 @@ class CancellableTask:
 
 
 def wait_for_packet(
-        connection: IDeviceConnection,
-        sequence_number: int,
-        packet_types: List[int],
-        version: PacketVersion,
-        ack_timeout: Optional[int] = None
+    connection: IDeviceConnection,
+    sequence_number: int,
+    packet_types: List[int],
+    version: PacketVersion,
+    ack_timeout: Optional[int] = None,
 ) -> CancellableTask:
-    assert_condition(connection, 'Invalid connection')
-    assert_condition(version, 'Invalid version')
-    assert_condition(packet_types, 'Invalid packetTypes')
-    assert_condition(sequence_number, 'Invalid sequenceNumber')
-    assert_condition(len(packet_types) > 0, 'packetTypes should contain atleast 1 element')
+    assert_condition(connection, "Invalid connection")
+    assert_condition(version, "Invalid version")
+    assert_condition(packet_types, "Invalid packetTypes")
+    assert_condition(sequence_number, "Invalid sequenceNumber")
+    assert_condition(
+        len(packet_types) > 0, "packetTypes should contain atleast 1 element"
+    )
 
     if version != PacketVersionMap.v3:
         raise DeviceCompatibilityError(
@@ -62,9 +64,7 @@ def wait_for_packet(
 
     async def promise_func() -> DecodedPacketData:
         if not await connection.is_connected():
-            raise DeviceConnectionError(
-                DeviceConnectionErrorType.CONNECTION_CLOSED
-            )
+            raise DeviceConnectionError(DeviceConnectionErrorType.CONNECTION_CLOSED)
 
         is_completed = False
         success = False
@@ -107,40 +107,52 @@ def wait_for_packet(
                     error: Optional[Exception] = None
 
                     for packet in packet_list:
-                        if len(packet['error_list']) == 0:
-                            if packet['packet_type'] == usable_config.commands.PACKET_TYPE.ERROR:
+                        if len(packet["error_list"]) == 0:
+                            if (
+                                packet["packet_type"]
+                                == usable_config.commands.PACKET_TYPE.ERROR
+                            ):
                                 error = DeviceCommunicationError(
                                     DeviceCommunicationErrorType.WRITE_REJECTED
                                 )
 
                                 payload_data = decode_payload_data(
-                                    packet['payload_data'],
-                                    version
+                                    packet["payload_data"], version
                                 )
-                                raw_data = payload_data['raw_data']
+                                raw_data = payload_data["raw_data"]
 
-                                reject_status = int(f'0x{raw_data}', 16)
-                                latest_seq_number = await connection.get_sequence_number()
+                                reject_status = int(f"0x{raw_data}", 16)
+                                latest_seq_number = (
+                                    await connection.get_sequence_number()
+                                )
 
-                                if (reject_status == ErrorPacketRejectReason.INVALID_SEQUENCE_NO and
-                                        latest_seq_number != sequence_number):
+                                if (
+                                    reject_status
+                                    == ErrorPacketRejectReason.INVALID_SEQUENCE_NO
+                                    and latest_seq_number != sequence_number
+                                ):
                                     error = DeviceAppError(
                                         DeviceAppErrorType.PROCESS_ABORTED
                                     )
                                     break
 
-                                inner_reject_reason = RejectReasonToMsgMap.get(ErrorPacketRejectReason(reject_status))
+                                inner_reject_reason = RejectReasonToMsgMap.get(
+                                    ErrorPacketRejectReason(reject_status)
+                                )
 
                                 if inner_reject_reason:
                                     reject_reason = inner_reject_reason
                                 else:
-                                    reject_reason = f'Unknown reject reason: {raw_data}'
+                                    reject_reason = f"Unknown reject reason: {raw_data}"
 
-                                error.message = f'The write packet operation was rejected by the device because: {reject_reason}'
+                                error.message = f"The write packet operation was rejected by the device because: {reject_reason}"
 
-                            elif packet['packet_type'] in packet_types:
-                                if (sequence_number == packet['sequence_number'] or
-                                        packet['packet_type'] == usable_config.commands.PACKET_TYPE.STATUS):
+                            elif packet["packet_type"] in packet_types:
+                                if (
+                                    sequence_number == packet["sequence_number"]
+                                    or packet["packet_type"]
+                                    == usable_config.commands.PACKET_TYPE.STATUS
+                                ):
                                     is_success = True
                                     received_packet = packet
 
@@ -161,23 +173,26 @@ def wait_for_packet(
                         await asyncio.sleep(usable_config.constants.RECHECK_TIME / 1000)
 
                 except Exception as error:
-                    if hasattr(error, 'code') and error.code in [e.value for e in DeviceConnectionErrorType]:
+                    if hasattr(error, "code") and error.code in [
+                        e.value for e in DeviceConnectionErrorType
+                    ]:
                         error_result = error
                         cleanup()
                         return
 
-                    logger.error('Error while rechecking packet on `waitForPacket`')
+                    logger.error("Error while rechecking packet on `waitForPacket`")
                     logger.error(str(error))
                     await asyncio.sleep(usable_config.constants.RECHECK_TIME / 1000)
 
-        timeout_val = ack_timeout if ack_timeout is not None else usable_config.constants.ACK_TIME
+        timeout_val = (
+            ack_timeout if ack_timeout is not None else usable_config.constants.ACK_TIME
+        )
         timeout_task = asyncio.create_task(asyncio.sleep(timeout_val / 1000))
         recheck_task = asyncio.create_task(recheck_packet())
 
         try:
             done, pending = await asyncio.wait(
-                [timeout_task, recheck_task],
-                return_when=asyncio.FIRST_COMPLETED
+                [timeout_task, recheck_task], return_when=asyncio.FIRST_COMPLETED
             )
 
             for task in pending:
@@ -208,4 +223,3 @@ def wait_for_packet(
 
     task = asyncio.create_task(promise_func())
     return CancellableTask(task)
-

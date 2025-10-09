@@ -42,5 +42,8 @@ thumbs.db
 # Jupyter Notebook
 .ipynb_checkpoints
 
+# ruff cache
+.ruff_cache/
+
 # Generated protobuf files
 **/src/**/proto

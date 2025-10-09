@@ -11,4 +11,4 @@ fixtures = Fixtures(
     invalid_args=invalid_args_fixtures,
 )
 
-__all__ = ['fixtures']
+__all__ = ["fixtures"]

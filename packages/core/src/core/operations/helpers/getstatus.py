@@ -10,13 +10,13 @@ from .can_retry import can_retry
 
 
 async def get_status(
-        connection: IDeviceConnection,
-        version: PacketVersion,
-        max_tries: int = 5,
-        timeout: Optional[int] = None
+    connection: IDeviceConnection,
+    version: PacketVersion,
+    max_tries: int = 5,
+    timeout: Optional[int] = None,
 ) -> Dict[str, Any]:
-    assert_condition(connection, 'Invalid connection')
-    assert_condition(version, 'Invalid version')
+    assert_condition(connection, "Invalid connection")
+    assert_condition(version, "Invalid version")
 
     if version != PacketVersionMap.v3:
         raise DeviceCompatibilityError(
@@ -26,17 +26,17 @@ async def get_status(
     usable_config = config_v3
 
     packets_list = encode_packet(
-        raw_data='',
+        raw_data="",
         version=version,
         sequence_number=-1,
-        packet_type=usable_config.commands.PACKET_TYPE.STATUS_REQ
+        packet_type=usable_config.commands.PACKET_TYPE.STATUS_REQ,
     )
 
     if len(packets_list) == 0:
-        raise Exception('Could not create packets')
+        raise Exception("Could not create packets")
 
     if len(packets_list) > 1:
-        raise Exception('Status command has multiple packets')
+        raise Exception("Status command has multiple packets")
 
     first_error: Optional[Exception] = None
 
@@ -44,7 +44,7 @@ async def get_status(
     inner_max_tries = max_tries
     first_error = None
     is_success = False
-    final_data = ''
+    final_data = ""
 
     packet = packets_list[0]
 
@@ -56,9 +56,9 @@ async def get_status(
                 version=version,
                 sequence_number=-1,
                 ack_packet_types=[usable_config.commands.PACKET_TYPE.STATUS],
-                timeout=timeout
+                timeout=timeout,
             )
-            final_data = received_packet['payload_data']
+            final_data = received_packet["payload_data"]
             is_success = True
 
         except Exception as e:
@@ -74,4 +74,3 @@ async def get_status(
         raise first_error
 
     return decode_payload_data(final_data, version)
-

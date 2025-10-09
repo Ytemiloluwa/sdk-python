@@ -48,5 +48,3 @@ def t_sort(edges):
             visit(node)
 
     return result
-
-

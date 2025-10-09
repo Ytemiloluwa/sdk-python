@@ -51,7 +51,7 @@ class SDK:
     ) -> ISDK:
         max_tries = options.get("max_tries") if options else None
         timeout = options.get("timeout") if options else None
-        
+
         sdk_data = await cls.get_sdk_version(connection, max_tries, timeout)
         return cls(
             connection,
@@ -121,7 +121,7 @@ class SDK:
         sequence_number = options.get("sequence_number") if options else None
         if sequence_number is None:
             sequence_number = await self.get_new_sequence_number()
-            
+
         max_tries = options.get("max_tries") if options else None
         timeout = options.get("timeout") if options else None
 
@@ -134,7 +134,7 @@ class SDK:
             data=data,
             applet_id=self.applet_id,
             sequence_number=sequence_number,
-            version= PacketVersionMap.v3,
+            version=PacketVersionMap.v3,
             max_tries=max_tries,
             timeout=timeout,
         )
@@ -156,7 +156,7 @@ class SDK:
         sequence_number = options.get("sequence_number") if options else None
         if sequence_number is None:
             sequence_number = await self.get_sequence_number()
-            
+
         max_tries = options.get("max_tries") if options else None
         timeout = options.get("timeout") if options else None
 
@@ -168,7 +168,7 @@ class SDK:
             connection=self.connection,
             applet_id=self.applet_id,
             sequence_number=sequence_number,
-            version = PacketVersionMap.v3,
+            version=PacketVersionMap.v3,
             max_tries=max_tries,
             timeout=timeout,
         )
@@ -190,7 +190,7 @@ class SDK:
         sequence_number = params.get("sequence_number") if params else None
         if sequence_number is None:
             sequence_number = await self.get_sequence_number()
-            
+
         on_status = params.get("on_status") if params else None
         options = params.get("options") if params else None
 
@@ -230,7 +230,7 @@ class SDK:
 
         return await operations.get_status(
             connection=self.connection,
-            version = PacketVersionMap.v3,
+            version=PacketVersionMap.v3,
             max_tries=max_tries,
             timeout=timeout,
             dont_log=dont_log,
@@ -253,7 +253,7 @@ class SDK:
         sequence_number = options.get("sequence_number") if options else None
         if sequence_number is None:
             sequence_number = await self.get_new_sequence_number()
-            
+
         max_tries = options.get("max_tries") if options else None
         timeout = options.get("timeout") if options else None
 
@@ -264,7 +264,7 @@ class SDK:
         return await operations.send_abort(
             connection=self.connection,
             sequence_number=sequence_number,
-            version= PacketVersionMap.v3,
+            version=PacketVersionMap.v3,
             max_tries=max_tries,
             timeout=timeout,
         )
@@ -305,13 +305,15 @@ class SDK:
         await self.get_app_versions()
         if not self.app_versions_map or not self.app_versions_map.app_versions:
             return None
-            
+
         for app in self.app_versions_map.app_versions:
             if app.id == app_id:
                 return app.version
         return None
 
-    async def check_feature_support_compatibility(self, features: List[IFeatureSupport]) -> None:
+    async def check_feature_support_compatibility(
+        self, features: List[IFeatureSupport]
+    ) -> None:
         app_version_result = await self.get_app_version(self.applet_id)
 
         if not app_version_result:
@@ -336,7 +338,7 @@ class SDK:
         options: Optional[Dict[str, Any]] = None,
     ) -> None:
         app_versions_result = await self.get_app_versions(None, options)
-        
+
         app_version_result = None
         for app in app_versions_result.app_versions:
             if app.id == self.applet_id:
@@ -351,7 +353,9 @@ class SDK:
         is_compatible = compare_versions(version["from"], app_version) < 1
 
         if version.get("to"):
-            is_compatible = is_compatible and compare_versions(version["to"], app_version) > 0
+            is_compatible = (
+                is_compatible and compare_versions(version["to"], app_version) > 0
+            )
 
         if not is_compatible:
             raise DeviceCompatibilityError(
@@ -359,13 +363,17 @@ class SDK:
             )
 
     # ************** Bootloader operations ****************
-    async def send_bootloader_abort(self, options: Optional[Dict[str, Any]] = None) -> None:
+    async def send_bootloader_abort(
+        self, options: Optional[Dict[str, Any]] = None
+    ) -> None:
         if not await self.is_in_bootloader():
             raise DeviceBootloaderError(
                 DeviceBootloaderErrorType.NOT_IN_BOOTLOADER,
             )
 
-        return await bootloader_operations.send_bootloader_abort(self.connection, options)
+        return await bootloader_operations.send_bootloader_abort(
+            self.connection, options
+        )
 
     async def send_bootloader_data(
         self,
@@ -407,7 +415,9 @@ class SDK:
                 if status.abort_disabled:
                     raise DeviceAppError(DeviceAppErrorType.EXECUTING_OTHER_COMMAND)
 
-                await self.deprecated.send_command_abort(await self.get_sequence_number())
+                await self.deprecated.send_command_abort(
+                    await self.get_sequence_number()
+                )
 
     async def run_operation(self, operation: Callable[[], Awaitable[Any]]) -> Any:
         try:
@@ -453,7 +463,7 @@ class SDK:
         return await commands.start_session(
             commands.StartSessionParams(
                 connection=self.connection,
-                get_new_sequence_number= self.get_new_sequence_number,
+                get_new_sequence_number=self.get_new_sequence_number,
                 get_sequence_number=self.get_sequence_number,
                 on_status=on_status,
                 options=options,
@@ -493,7 +503,7 @@ class SDK:
             if await self.is_supported():
                 await operations.wait_for_idle(
                     connection=self.connection,
-                    version = PacketVersionMap.v3,
+                    version=PacketVersionMap.v3,
                 )
         except Exception as error:
             logger.warn("Error while checking for idle state")

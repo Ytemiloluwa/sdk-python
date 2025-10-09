@@ -5,6 +5,7 @@ from enum import IntEnum
 
 class SignTxnEvent(IntEnum):
     """Events that can occur during sign transaction operation."""
+
     INIT = 0
     CONFIRM = 1
     VERIFY = 2
@@ -18,6 +19,7 @@ SignTxnEventHandler = Callable[[SignTxnEvent], None]
 @dataclass
 class SignTxnInputData:
     """Input data for transaction signing."""
+
     prev_txn_id: str
     prev_index: int
     value: str
@@ -31,6 +33,7 @@ class SignTxnInputData:
 @dataclass
 class SignTxnOutputData:
     """Output data for transaction signing."""
+
     value: str
     address: str
     is_change: bool
@@ -40,6 +43,7 @@ class SignTxnOutputData:
 @dataclass
 class SignTxnTxnData:
     """Transaction data for signing."""
+
     inputs: List[SignTxnInputData]
     outputs: List[SignTxnOutputData]
     locktime: Optional[int] = None
@@ -49,6 +53,7 @@ class SignTxnTxnData:
 @dataclass
 class SignTxnParams:
     """Parameters for sign transaction operation."""
+
     wallet_id: bytes
     derivation_path: List[int]
     txn: SignTxnTxnData
@@ -58,5 +63,6 @@ class SignTxnParams:
 @dataclass
 class SignTxnResult:
     """Result of sign transaction operation."""
+
     signatures: List[str]
     signed_transaction: str

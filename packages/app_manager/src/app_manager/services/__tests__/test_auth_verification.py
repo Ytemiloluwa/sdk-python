@@ -10,7 +10,7 @@ from app_manager.services.authverification import (
 class TestDeviceAuthService:
     @pytest.fixture(autouse=True)
     def setup(self):
-        with patch('app_manager.services.authverification.http') as mock_http:
+        with patch("app_manager.services.authverification.http") as mock_http:
             mock_http.post = AsyncMock()
             yield mock_http
 
@@ -33,7 +33,7 @@ class TestDeviceAuthService:
                         actual_calls.append([args[0], kwargs])
                     else:
                         actual_calls.append([None, kwargs])
-                
+
                 assert actual_calls == expected_calls
 
                 mock_http.post.reset_mock()

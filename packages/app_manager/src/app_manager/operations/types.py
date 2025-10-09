@@ -4,13 +4,13 @@ from .trainCard.types import TrainCardEventHandler, ITrainCardParams
 from .updateFirmware.types import UpdateFirmwareEventHandler, IUpdateFirmwareParams
 
 __all__ = [
-    'AuthCardEventHandler',
-    'IAuthCardParams',
-    'GetLogsEventHandler',
-    'GetLogsError',
-    'GetLogsErrorType',
-    'TrainCardEventHandler',
-    'ITrainCardParams',
-    'UpdateFirmwareEventHandler',
-    'IUpdateFirmwareParams',
+    "AuthCardEventHandler",
+    "IAuthCardParams",
+    "GetLogsEventHandler",
+    "GetLogsError",
+    "GetLogsErrorType",
+    "TrainCardEventHandler",
+    "ITrainCardParams",
+    "UpdateFirmwareEventHandler",
+    "IUpdateFirmwareParams",
 ]

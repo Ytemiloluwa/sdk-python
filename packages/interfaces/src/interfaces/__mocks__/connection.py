@@ -2,11 +2,8 @@ import uuid
 import inspect
 from typing import List, Optional, Callable, Awaitable, Union
 
-from ..connection import (
-    ConnectionTypeMap,
-    DeviceState,
-    PoolData
-)
+from ..connection import ConnectionTypeMap, DeviceState, PoolData
+
 
 class MockDeviceConnection:
     def __init__(self):
@@ -16,20 +13,27 @@ class MockDeviceConnection:
         self.pool: List[PoolData] = []
         self.device_state = DeviceState.MAIN
         self.connection_type = ConnectionTypeMap.SERIAL_PORT.value
-        self.on_data: Optional[Union[Callable[[bytes], Awaitable[None]], Callable[[], Awaitable[None]]]] = None
+        self.on_data: Optional[
+            Union[Callable[[bytes], Awaitable[None]], Callable[[], Awaitable[None]]]
+        ] = None
 
     def configure_device(self, device_state: DeviceState, connection_type: str) -> None:
         self.device_state = device_state
         self.connection_type = connection_type
 
-    def configure_listeners(self, on_data: Union[Callable[[bytes], Awaitable[None]], Callable[[], Awaitable[None]]]) -> None:
+    def configure_listeners(
+        self,
+        on_data: Union[
+            Callable[[bytes], Awaitable[None]], Callable[[], Awaitable[None]]
+        ],
+    ) -> None:
         self.on_data = on_data
 
     def remove_listeners(self) -> None:
         self.on_data = None
 
     @classmethod
-    async def create(cls) -> 'MockDeviceConnection':
+    async def create(cls) -> "MockDeviceConnection":
         return cls()
 
     async def get_connection_type(self) -> str:
@@ -71,7 +75,6 @@ class MockDeviceConnection:
                     await self.on_data()
             except Exception:
                 pass
-
 
     async def mock_device_send(self, data: bytes) -> None:
         packet_data = {"id": str(uuid.uuid4()), "data": data}

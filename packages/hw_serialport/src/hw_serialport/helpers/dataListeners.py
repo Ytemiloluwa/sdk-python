@@ -4,10 +4,12 @@ from typing import List, Optional, Dict, Any
 import serial
 from interfaces.connection import PoolData
 
+
 class DataListener:
     """
     Listens for data events from a serial port connection and manages a data pool.
     """
+
     def __init__(self, params: Dict[str, Any]):
         self.connection = params.get("connection")
         self.on_close_callback = params.get("onClose")
@@ -83,10 +85,7 @@ class DataListener:
         Handle incoming data.
         """
         with self.pool_lock:
-            self.pool.append({
-                "id": str(uuid.uuid4()),
-                "data": bytearray(data)
-            })
+            self.pool.append({"id": str(uuid.uuid4()), "data": bytearray(data)})
 
     def _on_close(self) -> None:
         if self.on_close_callback:

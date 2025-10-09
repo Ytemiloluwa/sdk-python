@@ -3,42 +3,36 @@ from .connection import (
     DeviceState,
     IDevice,
     IDeviceConnection,
-    PoolData
+    PoolData,
 )
 from .logger import ILogger, LogCreator
 
-from .errors.connection_error import (
-     DeviceConnectionError,
-     DeviceConnectionErrorType
-)
-from .errors.bootloader_error import (
-    DeviceBootloaderError,
-    DeviceBootloaderErrorType
-)
+from .errors.connection_error import DeviceConnectionError, DeviceConnectionErrorType
+from .errors.bootloader_error import DeviceBootloaderError, DeviceBootloaderErrorType
 from .errors.communication_error import (
     DeviceCommunicationError,
-    DeviceCommunicationErrorType
+    DeviceCommunicationErrorType,
 )
 from .errors.compatibility_error import (
     DeviceCompatibilityError,
-    DeviceCompatibilityErrorType
+    DeviceCompatibilityErrorType,
 )
 
 
 __all__ = [
-    'ConnectionTypeMap',
-    'DeviceState',
-    'IDevice',
-    'IDeviceConnection',
-    'PoolData',
-    'ILogger',
-    'LogCreator',
-    'DeviceConnectionError',
-    'DeviceConnectionErrorType',
-    'DeviceBootloaderError',
-    'DeviceBootloaderErrorType',
-    'DeviceCommunicationError',
-    'DeviceCommunicationErrorType',
-    'DeviceCompatibilityError',
-    'DeviceCompatibilityErrorType'
+    "ConnectionTypeMap",
+    "DeviceState",
+    "IDevice",
+    "IDeviceConnection",
+    "PoolData",
+    "ILogger",
+    "LogCreator",
+    "DeviceConnectionError",
+    "DeviceConnectionErrorType",
+    "DeviceBootloaderError",
+    "DeviceBootloaderErrorType",
+    "DeviceCommunicationError",
+    "DeviceCommunicationErrorType",
+    "DeviceCompatibilityError",
+    "DeviceCompatibilityErrorType",
 ]

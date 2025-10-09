@@ -3,7 +3,9 @@ from interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
 from interfaces import IDeviceConnection
 from ...utils.packetversion import PacketVersion
 from ...encoders.raw import decode_raw_data, decode_status, RawData, StatusData
-from ...operations.helpers.getcommandoutput import get_command_output as get_command_output_helper
+from ...operations.helpers.getcommandoutput import (
+    get_command_output as get_command_output_helper,
+)
 
 
 async def get_command_output(

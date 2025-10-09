@@ -21,4 +21,3 @@ v3 = SimpleNamespace(
 )
 
 __all__ = ["v1", "v2", "v3", "command", "constants", "radix"]
-

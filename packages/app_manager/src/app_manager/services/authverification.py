@@ -8,7 +8,7 @@ BASE_URL = "/verification"
 async def verify_serial_signature(params: Dict[str, Any]) -> Optional[bytes]:
     """
     Verify serial signature and return challenge if verified.
-    
+
     Args:
         params: Dictionary containing:
             - serial: bytes
@@ -16,33 +16,37 @@ async def verify_serial_signature(params: Dict[str, Any]) -> Optional[bytes]:
             - postfix1: Optional[bytes]
             - postfix2: Optional[bytes]
             - message: Optional[bytes]
-    
+
     Returns:
         bytes if verified, None otherwise
     """
     verify_params = {
         "serial": uint8array_to_hex(params["serial"]),
         "signature": uint8array_to_hex(params["signature"]),
-        "postfix1": uint8array_to_hex(params["postfix1"]) if params.get("postfix1") else None,
-        "postfix2": uint8array_to_hex(params["postfix2"]) if params.get("postfix2") else None,
+        "postfix1": (
+            uint8array_to_hex(params["postfix1"]) if params.get("postfix1") else None
+        ),
+        "postfix2": (
+            uint8array_to_hex(params["postfix2"]) if params.get("postfix2") else None
+        ),
     }
-    
+
     # Only add message if it's provided (since it's not in the test fixtures)
     if params.get("message"):
         verify_params["message"] = uint8array_to_hex(params["message"])
-    
+
     res = await http.post(f"{BASE_URL}/verify", verify_params)
-    
+
     if res.get("data", {}).get("verified") is True:
         return hex_to_uint8array(res["data"]["challenge"])
-    
+
     return None
 
 
 async def verify_challenge_signature(params: Dict[str, Any]) -> Dict[str, Any]:
     """
     Verify challenge signature.
-    
+
     Args:
         params: Dictionary containing:
             - serial: bytes
@@ -56,19 +60,23 @@ async def verify_challenge_signature(params: Dict[str, Any]) -> Dict[str, Any]:
             - cysyncVersion: Optional[str]
             - sessionId: Optional[str]
             - onlyFailure: Optional[bool]
-    
+
     Returns:
         Dictionary with isVerified and sessionId
     """
     verify_params = {
         "serial": uint8array_to_hex(params["serial"]),
         "signature": uint8array_to_hex(params["signature"]),
-        "postfix1": uint8array_to_hex(params["postfix1"]) if params.get("postfix1") else None,
-        "postfix2": uint8array_to_hex(params["postfix2"]) if params.get("postfix2") else None,
+        "postfix1": (
+            uint8array_to_hex(params["postfix1"]) if params.get("postfix1") else None
+        ),
+        "postfix2": (
+            uint8array_to_hex(params["postfix2"]) if params.get("postfix2") else None
+        ),
         "challenge": uint8array_to_hex(params["challenge"]),
         "firmwareVersion": params["firmwareVersion"],
     }
-    
+
     # Only add optional parameters if they are provided
     if "isTestApp" in params:
         verify_params["isTestApp"] = params["isTestApp"]
@@ -80,9 +88,9 @@ async def verify_challenge_signature(params: Dict[str, Any]) -> Dict[str, Any]:
         verify_params["sessionId"] = params["sessionId"]
     if "onlyFailure" in params:
         verify_params["onlyFailure"] = params["onlyFailure"]
-    
+
     res = await http.post(f"{BASE_URL}/challenge", verify_params)
-    
+
     return {
         "isVerified": res.get("data", {}).get("verified", False),
         "sessionId": res.get("data", {}).get("sessionId"),

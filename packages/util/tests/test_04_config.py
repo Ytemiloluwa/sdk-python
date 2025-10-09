@@ -1,6 +1,7 @@
 import pytest
 from util.utils.config import get_env_variable, Config
 
+
 class TestConfig:
 
     def test_config_with_custom_env(self, monkeypatch):
@@ -18,5 +19,3 @@ class TestConfig:
     def test_get_env_variable_error(self):
         with pytest.raises(ValueError):
             get_env_variable("TEST")
-
-

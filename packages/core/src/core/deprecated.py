@@ -6,7 +6,7 @@ from interfaces import (
 )
 from util.utils.assert_utils import assert_condition
 from .operations import legacy as legacy_operations
-from .operations import raw as raw_operations  
+from .operations import raw as raw_operations
 from .utils.packetversion import PacketVersionMap
 from .utils.feature_map import FeatureName, is_feature_enabled
 from .types import ISDK
@@ -18,19 +18,19 @@ class DeprecatedCommunication:
 
     async def is_legacy_operation_supported(self) -> bool:
         packet_version = self.sdk.get_packet_version()
-        
+
         if not packet_version:
             return False
-            
+
         if await self.sdk.get_device_state() == DeviceState.BOOTLOADER:
             return False
-            
+
         return packet_version in [PacketVersionMap.v1, PacketVersionMap.v2]
 
     async def is_raw_operation_supported(self) -> bool:
         if await self.sdk.get_device_state() == DeviceState.BOOTLOADER:
             return False
-            
+
         return is_feature_enabled(FeatureName.RawCommand, self.sdk.get_version())
 
     # ************** v1/v2 Packet Version ****************
@@ -61,9 +61,7 @@ class DeprecatedCommunication:
         )
 
     async def receive_legacy_command(
-        self, 
-        commands: List[int], 
-        timeout: Optional[int] = None
+        self, commands: List[int], timeout: Optional[int] = None
     ) -> Dict[str, Union[int, str]]:
         await self.sdk.validate_not_in_bootloader_mode()
         packet_version = self.sdk.get_packet_version()
@@ -171,9 +169,7 @@ class DeprecatedCommunication:
         )
 
     async def get_command_status(
-        self, 
-        max_tries: Optional[int] = None, 
-        timeout: Optional[int] = None
+        self, max_tries: Optional[int] = None, timeout: Optional[int] = None
     ):
         await self.sdk.validate_not_in_bootloader_mode()
         packet_version = self.sdk.get_packet_version()

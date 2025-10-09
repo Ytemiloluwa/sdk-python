@@ -1,14 +1,21 @@
 from typing import TypedDict
 from util.utils.assert_utils import assert_condition
-from util.utils import crc16, hex_to_uint8array, int_to_uint_byte, is_hex, uint8array_to_hex
+from util.utils import (
+    crc16,
+    hex_to_uint8array,
+    int_to_uint_byte,
+    is_hex,
+    uint8array_to_hex,
+)
 from ...utils.packetversion import PacketVersionMap
 from ...utils.crypto import byte_unstuffing
 from core.config.radix import v1 as radix
 
 
-START_OF_FRAME = '01'
-END_OF_TRANSMISSION = '04'
+START_OF_FRAME = "01"
+END_OF_TRANSMISSION = "04"
 CHUNK_SIZE = 256
+
 
 class StmPacket(TypedDict):
     startOfFrame: str
@@ -20,13 +27,14 @@ class StmPacket(TypedDict):
     crc: str
     errorList: str
 
+
 def stm_xmodem_encode(data: str) -> list[str]:
-    assert_condition(data, 'Invalid data')
+    assert_condition(data, "Invalid data")
     hex_data = data
-    if hex_data.startswith('0x'):
+    if hex_data.startswith("0x"):
         hex_data = hex_data[2:]
-    assert_condition(bool(hex_data), 'Data cannot be empty')
-    assert_condition(is_hex(hex_data), f'Invalid hex: {data}')
+    assert_condition(bool(hex_data), "Data cannot be empty")
+    assert_condition(is_hex(hex_data), f"Invalid hex: {data}")
 
     rounds = (len(hex_data) + CHUNK_SIZE - 1) // CHUNK_SIZE
     packet_list: list[str] = []
@@ -38,15 +46,18 @@ def stm_xmodem_encode(data: str) -> list[str]:
         data_chunk = data_chunk_slice
         if len(data_chunk_slice) < CHUNK_SIZE:
             for _ in range(CHUNK_SIZE - len(data_chunk_slice)):
-                data_chunk += 'f'
+                data_chunk += "f"
 
-        comm_data = START_OF_FRAME + current_packet_number + packet_number_xor + data_chunk
+        comm_data = (
+            START_OF_FRAME + current_packet_number + packet_number_xor + data_chunk
+        )
         crc = int_to_uint_byte(crc16(hex_to_uint8array(data_chunk)), 16)
         packet = comm_data + crc
         packet_list.append(packet)
 
     packet_list.append(END_OF_TRANSMISSION)
     return packet_list
+
 
 def stm_xmodem_decode(param: bytes) -> list[StmPacket]:
     data = uint8array_to_hex(param).upper()
@@ -72,31 +83,23 @@ def stm_xmodem_decode(param: bytes) -> list[StmPacket]:
             offset : offset + radix.current_packet_number // 4
         ]
         offset += radix.current_packet_number // 4
-        total_packet = un_stuffed_data[
-            offset : offset + radix.total_packet // 4
-        ]
+        total_packet = un_stuffed_data[offset : offset + radix.total_packet // 4]
         offset += radix.total_packet // 4
-        data_chunk = un_stuffed_data[
-            offset : len(un_stuffed_data) - 6 * 2
-        ]
+        data_chunk = un_stuffed_data[offset : len(un_stuffed_data) - 6 * 2]
         offset += len(un_stuffed_data) - 6 * 2
         crc = un_stuffed_data[offset : offset + radix.crc // 4]
         crc_input = un_stuffed_data[0 : len(un_stuffed_data) - radix.crc // 4]
-        actual_crc = (
-            hex(crc16(hex_to_uint8array(crc_input)))
-            .replace("0x", "")
-            .zfill(4)
-        )
+        actual_crc = hex(crc16(hex_to_uint8array(crc_input))).replace("0x", "").zfill(4)
 
-        error_list = ''
-        if start_of_frame.upper() != 'AA':
-            error_list += ' Invalid Start of frame '
+        error_list = ""
+        if start_of_frame.upper() != "AA":
+            error_list += " Invalid Start of frame "
         if int(current_packet_number, 16) > int(total_packet, 16):
-            error_list += ' currentPacketNumber is greater than totalPacketNumber '
+            error_list += " currentPacketNumber is greater than totalPacketNumber "
         if data_size > CHUNK_SIZE:
-            error_list += ' invalid data size '
+            error_list += " invalid data size "
         if actual_crc != crc:
-            error_list += ' invalid crc '
+            error_list += " invalid crc "
 
         packet_list.append(
             StmPacket(
@@ -111,6 +114,3 @@ def stm_xmodem_decode(param: bytes) -> list[StmPacket]:
             )
         )
     return packet_list
-
-
-

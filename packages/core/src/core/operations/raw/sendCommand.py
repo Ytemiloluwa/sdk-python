@@ -14,10 +14,13 @@ async def send_command(
     max_tries: int = 5,
     timeout: Optional[int] = None,
 ) -> None:
-    raw_encoded_data = encode_raw_data({
-        'commandType': command_type,
-        'data': data,
-    }, version)
+    raw_encoded_data = encode_raw_data(
+        {
+            "commandType": command_type,
+            "data": data,
+        },
+        version,
+    )
 
     return await send_command_helper(
         connection=connection,

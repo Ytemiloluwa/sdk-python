@@ -12,10 +12,9 @@ fixtures = Fixtures(
 )
 
 __all__ = [
-    'fixtures',
-    'error_fixtures',
-    'invalid_data_fixtures', 
-    'valid_fixtures',
-    'invalid_args_fixtures',
+    "fixtures",
+    "error_fixtures",
+    "invalid_data_fixtures",
+    "valid_fixtures",
+    "invalid_args_fixtures",
 ]
-

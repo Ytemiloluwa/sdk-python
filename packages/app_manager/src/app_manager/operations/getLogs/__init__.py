@@ -7,9 +7,9 @@ from ...utils import assert_or_throw_invalid_result, OperationHelper
 from ...utils import logger as rootlogger
 from .types import GetLogsError, GetLogsErrorType, GetLogsEventHandler
 
-__all__ = ['get_logs', 'GetLogsError', 'GetLogsErrorType', 'GetLogsEventHandler']
+__all__ = ["get_logs", "GetLogsError", "GetLogsErrorType", "GetLogsEventHandler"]
 
-logger = create_logger_with_prefix(rootlogger, 'GetLogs')
+logger = create_logger_with_prefix(rootlogger, "GetLogs")
 
 
 def parse_get_logs_error(error: Optional[GetLogsErrorResponse]) -> None:
@@ -17,7 +17,7 @@ def parse_get_logs_error(error: Optional[GetLogsErrorResponse]) -> None:
         return
 
     error_types_map = {
-        'logsDisabled': GetLogsErrorType.LOGS_DISABLED,
+        "logsDisabled": GetLogsErrorType.LOGS_DISABLED,
     }
 
     for key, error_type in error_types_map.items():
@@ -38,20 +38,22 @@ async def get_logs(
     sdk: ISDK,
     on_event: Optional[GetLogsEventHandler] = None,
 ) -> str:
-    logger.info('Started')
-    helper = OperationHelper(sdk, 'getLogs', 'getLogs')
+    logger.info("Started")
+    helper = OperationHelper(sdk, "getLogs", "getLogs")
 
     await sdk.check_app_compatibility(APP_VERSION)
 
-    on_status, force_status_update = create_status_listener({
-        'enums': GetLogsStatus,
-        'onEvent': on_event,
-        'logger': logger,
-    })
+    on_status, force_status_update = create_status_listener(
+        {
+            "enums": GetLogsStatus,
+            "onEvent": on_event,
+            "logger": logger,
+        }
+    )
 
     # ASCII decoder for log data
     def decode_ascii(data: bytes) -> str:
-        return data.decode('ascii', errors='replace')
+        return data.decode("ascii", errors="replace")
 
     all_logs: list[str] = []
     is_confirmed = False
@@ -75,6 +77,5 @@ async def get_logs(
         else:
             break
 
-    logger.info('Completed')
-    return ''.join(all_logs)
-
+    logger.info("Completed")
+    return "".join(all_logs)

@@ -18,12 +18,12 @@ CONNECTION_RECHECK_TIME = 200
 
 
 async def wait_for_device_to_be_connected(params: dict) -> Optional[IDeviceConnection]:
-    get_devices = params['getDevices']
-    create_connection = params['createConnection']
-    in_bootloader = params['inBootloader']
-    max_tries = params['maxTries']
-    recheck_time = params['recheckTime']
-    dont_connect = params.get('dontConnect', False)
+    get_devices = params["getDevices"]
+    create_connection = params["createConnection"]
+    in_bootloader = params["inBootloader"]
+    max_tries = params["maxTries"]
+    recheck_time = params["recheckTime"]
+    dont_connect = params.get("dontConnect", False)
 
     tries = 0
     connection: Optional[IDeviceConnection] = None
@@ -49,7 +49,7 @@ async def wait_for_device_to_be_connected(params: dict) -> Optional[IDeviceConne
                     connection = await create_connection(device)
                 is_connected = True
             except Exception as error:
-                logger.error('Error while creating connection')
+                logger.error("Error while creating connection")
                 logger.error(error)
 
         if is_connected:
@@ -71,19 +71,23 @@ async def create_bootloader_sdk(
 ) -> ISDK:
     if await initial_sdk.is_in_bootloader():
         return initial_sdk
-    
+
     await initial_sdk.destroy()
-    logger.info('Waiting for device to enter bootloader mode')
+    logger.info("Waiting for device to enter bootloader mode")
 
-    max_tries = (MAX_WAIT_TIME_TO_ENTER_BOOTLOADER + CONNECTION_RECHECK_TIME - 1) // CONNECTION_RECHECK_TIME
+    max_tries = (
+        MAX_WAIT_TIME_TO_ENTER_BOOTLOADER + CONNECTION_RECHECK_TIME - 1
+    ) // CONNECTION_RECHECK_TIME
 
-    connection = await wait_for_device_to_be_connected({
-        'createConnection': create_connection,
-        'getDevices': get_devices,
-        'inBootloader': True,
-        'maxTries': max_tries,
-        'recheckTime': CONNECTION_RECHECK_TIME,
-    })
+    connection = await wait_for_device_to_be_connected(
+        {
+            "createConnection": create_connection,
+            "getDevices": get_devices,
+            "inBootloader": True,
+            "maxTries": max_tries,
+            "recheckTime": CONNECTION_RECHECK_TIME,
+        }
+    )
 
     if not connection:
         raise DeviceConnectionError(DeviceConnectionErrorType.CONNECTION_CLOSED)
@@ -95,17 +99,21 @@ async def wait_for_reconnection(
     get_devices: GetDevices,
     create_connection: CreateDeviceConnection,
 ) -> None:
-    logger.info('Waiting for device to be reconnected after update')
+    logger.info("Waiting for device to be reconnected after update")
 
-    max_tries = (MAX_WAIT_TIME_TO_RECONNECT_AFTER_UPDATE + CONNECTION_RECHECK_TIME - 1) // CONNECTION_RECHECK_TIME
+    max_tries = (
+        MAX_WAIT_TIME_TO_RECONNECT_AFTER_UPDATE + CONNECTION_RECHECK_TIME - 1
+    ) // CONNECTION_RECHECK_TIME
 
-    await wait_for_device_to_be_connected({
-        'createConnection': create_connection,
-        'getDevices': get_devices,
-        'inBootloader': False,
-        'maxTries': max_tries,
-        'recheckTime': CONNECTION_RECHECK_TIME,
-        'dontConnect': True,
-    })
+    await wait_for_device_to_be_connected(
+        {
+            "createConnection": create_connection,
+            "getDevices": get_devices,
+            "inBootloader": False,
+            "maxTries": max_tries,
+            "recheckTime": CONNECTION_RECHECK_TIME,
+            "dontConnect": True,
+        }
+    )
 
-    logger.info('Device reconnected after update')
+    logger.info("Device reconnected after update")

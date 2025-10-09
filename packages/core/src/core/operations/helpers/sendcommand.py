@@ -10,18 +10,18 @@ from .can_retry import can_retry
 
 
 async def send_command(
-        connection: IDeviceConnection,
-        version: PacketVersion,
-        sequence_number: int,
-        raw_data: Optional[str] = None,
-        proto_data: Optional[str] = None,
-        max_tries: int = 5,
-        timeout: Optional[int] = None
+    connection: IDeviceConnection,
+    version: PacketVersion,
+    sequence_number: int,
+    raw_data: Optional[str] = None,
+    proto_data: Optional[str] = None,
+    max_tries: int = 5,
+    timeout: Optional[int] = None,
 ) -> None:
-    assert_condition(connection, 'Invalid connection')
-    assert_condition(raw_data or proto_data, 'Raw data or proto data is required')
-    assert_condition(version, 'Invalid version')
-    assert_condition(sequence_number, 'Invalid sequenceNumber')
+    assert_condition(connection, "Invalid connection")
+    assert_condition(raw_data or proto_data, "Raw data or proto data is required")
+    assert_condition(version, "Invalid version")
+    assert_condition(sequence_number, "Invalid sequenceNumber")
 
     if version != PacketVersionMap.v3:
         raise DeviceCompatibilityError(
@@ -31,11 +31,11 @@ async def send_command(
     usable_config = config_v3
 
     packets_list = encode_packet(
-        raw_data=raw_data or '',
-        proto_data=proto_data or '',
+        raw_data=raw_data or "",
+        proto_data=proto_data or "",
         version=version,
         sequence_number=sequence_number,
-        packet_type=usable_config.commands.PACKET_TYPE.CMD
+        packet_type=usable_config.commands.PACKET_TYPE.CMD,
     )
 
     first_error: Optional[Exception] = None
@@ -54,7 +54,7 @@ async def send_command(
                     version=version,
                     sequence_number=sequence_number,
                     ack_packet_types=[usable_config.commands.PACKET_TYPE.CMD_ACK],
-                    timeout=timeout
+                    timeout=timeout,
                 )
                 is_success = True
 
@@ -69,4 +69,3 @@ async def send_command(
 
         if not is_success and first_error:
             raise first_error
-

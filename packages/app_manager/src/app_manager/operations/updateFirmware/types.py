@@ -4,7 +4,12 @@ from core.encoders.proto.generated.common import Version
 from app_manager.proto.types import UpdateFirmwareStatus
 
 # Re-export types
-__all__ = ['GetDevices', 'CreateDeviceConnection', 'UpdateFirmwareEventHandler', 'IUpdateFirmwareParams']
+__all__ = [
+    "GetDevices",
+    "CreateDeviceConnection",
+    "UpdateFirmwareEventHandler",
+    "IUpdateFirmwareParams",
+]
 
 GetDevices = Callable[[], list[IDevice]]
 

@@ -1,9 +1,13 @@
 from typing import Dict, TypeVar, Generic, Union
-T = TypeVar('T', int, str)
+
+T = TypeVar("T", int, str)
+
+
 class SubErrorDetail:
     def __init__(self, error_code: str, message: str):
         self.error_code = error_code
         self.message = message
+
 
 class SubErrorToMap(Generic[T]):
     def __init__(self):

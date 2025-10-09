@@ -10,15 +10,15 @@ from .can_retry import can_retry
 
 
 async def get_command_output(
-        connection: IDeviceConnection,
-        version: PacketVersion,
-        sequence_number: int,
-        max_tries: int = 5,
-        timeout: Optional[int] = None
+    connection: IDeviceConnection,
+    version: PacketVersion,
+    sequence_number: int,
+    max_tries: int = 5,
+    timeout: Optional[int] = None,
 ) -> Dict[str, Any]:
-    assert_condition(connection, 'Invalid connection')
-    assert_condition(version, 'Invalid version')
-    assert_condition(sequence_number, 'Invalid sequenceNumber')
+    assert_condition(connection, "Invalid connection")
+    assert_condition(version, "Invalid version")
+    assert_condition(sequence_number, "Invalid sequenceNumber")
 
     if version != PacketVersionMap.v3:
         raise DeviceCompatibilityError(
@@ -44,11 +44,11 @@ async def get_command_output(
             raw_data=int_to_uint_byte(current_packet, 16),
             version=version,
             sequence_number=sequence_number,
-            packet_type=usable_config.commands.PACKET_TYPE.CMD_OUTPUT
+            packet_type=usable_config.commands.PACKET_TYPE.CMD_OUTPUT,
         )
 
         if len(packets_list) > 1:
-            raise Exception('Get Command Output exceeded 1 packet limit')
+            raise Exception("Get Command Output exceeded 1 packet limit")
 
         packet = packets_list[0]
 
@@ -63,19 +63,19 @@ async def get_command_output(
                         usable_config.commands.PACKET_TYPE.CMD_OUTPUT,
                         usable_config.commands.PACKET_TYPE.STATUS,
                     ],
-                    timeout=timeout
+                    timeout=timeout,
                 )
 
                 data_list.insert(
-                    received_packet['current_packet_number'] - 1,
-                    received_packet['payload_data']
+                    received_packet["current_packet_number"] - 1,
+                    received_packet["payload_data"],
                 )
-                total_packets = received_packet['total_packet_number']
-                current_packet = received_packet['current_packet_number'] + 1
+                total_packets = received_packet["total_packet_number"]
+                current_packet = received_packet["current_packet_number"] + 1
                 is_success = True
                 is_status_response = (
-                        received_packet['packet_type'] ==
-                        usable_config.commands.PACKET_TYPE.STATUS
+                    received_packet["packet_type"]
+                    == usable_config.commands.PACKET_TYPE.STATUS
                 )
 
             except Exception as e:
@@ -90,10 +90,9 @@ async def get_command_output(
         if not is_success and first_error:
             raise first_error
 
-    final_data = ''.join(data_list)
+    final_data = "".join(data_list)
 
     result = decode_payload_data(final_data, version)
-    result['is_status'] = is_status_response
+    result["is_status"] = is_status_response
 
     return result
-

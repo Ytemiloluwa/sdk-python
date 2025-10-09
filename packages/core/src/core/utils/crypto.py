@@ -5,9 +5,9 @@ from .packetversion import PacketVersion, PacketVersionMap
 
 
 def byte_unstuffing(input_buff: bytes, version: PacketVersion) -> str:
-    assert_condition(input_buff, 'Invalid inputBuff')
-    assert_condition(version, 'Invalid version')
-    assert_condition(len(input_buff) > 0, 'Byte unstuffing failed: 0 size')
+    assert_condition(input_buff, "Invalid inputBuff")
+    assert_condition(version, "Invalid version")
+    assert_condition(len(input_buff) > 0, "Byte unstuffing failed: 0 size")
 
     usable_config = v1
     if version == PacketVersionMap.v2:
@@ -18,12 +18,12 @@ def byte_unstuffing(input_buff: bytes, version: PacketVersion) -> str:
 
     i = 0
     while i < size:
-        if input_buff[i] == 0xa3 and i < size - 1:
-            if input_buff[i + 1] == 0x3a:
+        if input_buff[i] == 0xA3 and i < size - 1:
+            if input_buff[i + 1] == 0x3A:
                 output_data.append(usable_config.constants.STUFFING_BYTE)
                 i += 1
             elif input_buff[i + 1] == 0x33:
-                output_data.append(0xa3)
+                output_data.append(0xA3)
                 i += 1
             else:
                 output_data.append(input_buff[i])
@@ -35,11 +35,10 @@ def byte_unstuffing(input_buff: bytes, version: PacketVersion) -> str:
 
 
 def byte_stuffing(input_buff: bytes, version: PacketVersion) -> str:
-    assert_condition(input_buff, 'Invalid inputBuff')
-    assert_condition(version, 'Invalid version')
+    assert_condition(input_buff, "Invalid inputBuff")
+    assert_condition(version, "Invalid version")
     assert_condition(
-        len(input_buff) > 0,
-        f'Byte stuffing failed: {len(input_buff)} size'
+        len(input_buff) > 0, f"Byte stuffing failed: {len(input_buff)} size"
     )
 
     usable_config = v1
@@ -49,10 +48,10 @@ def byte_stuffing(input_buff: bytes, version: PacketVersion) -> str:
     output_data = []
     for byte in input_buff:
         if byte == usable_config.constants.STUFFING_BYTE:
-            output_data.append(0xa3)
-            output_data.append(0x3a)
-        elif byte == 0xa3:
-            output_data.append(0xa3)
+            output_data.append(0xA3)
+            output_data.append(0x3A)
+        elif byte == 0xA3:
+            output_data.append(0xA3)
             output_data.append(0x33)
         else:
             output_data.append(byte)

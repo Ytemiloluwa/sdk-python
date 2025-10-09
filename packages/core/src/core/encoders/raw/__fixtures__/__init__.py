@@ -268,5 +268,3 @@ __all__ = [
     "decode_raw_data_test_cases",
     "decode_status_test_cases",
 ]
-
-

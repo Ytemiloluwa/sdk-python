@@ -1,6 +1,11 @@
 from typing import Optional, Callable, Dict, Any
 from interfaces import IDeviceConnection
-from ..encoders.proto.generated.core import Msg, AppVersionCmd, AppVersionRequest, AppVersionIntiateRequest
+from ..encoders.proto.generated.core import (
+    Msg,
+    AppVersionCmd,
+    AppVersionRequest,
+    AppVersionIntiateRequest,
+)
 from ..operations.helpers.sendcommand import send_command
 from ..operations.proto import wait_for_result
 from ..utils.packetversion import PacketVersionMap
@@ -25,23 +30,21 @@ class GetAppVersionsParams:
 
 
 async def get_app_versions(params: GetAppVersionsParams):
-    assert_condition(params.connection, 'Invalid connection')
-    assert_condition(params.sequence_number, 'Invalid sequenceNumber')
-    max_tries = params.options.get('maxTries')
-    timeout = params.options.get('timeout')
+    assert_condition(params.connection, "Invalid connection")
+    assert_condition(params.sequence_number, "Invalid sequenceNumber")
+    max_tries = params.options.get("maxTries")
+    timeout = params.options.get("timeout")
     version = PacketVersionMap.v3
     msg = Msg(
         app_version=AppVersionCmd(
-            request=AppVersionRequest(
-                initiate=AppVersionIntiateRequest()
-            )
+            request=AppVersionRequest(initiate=AppVersionIntiateRequest())
         )
     )
     msg_data = uint8array_to_hex(bytes(msg))
     await send_command(
         connection=params.connection,
         proto_data=msg_data,
-        raw_data='',
+        raw_data="",
         version=version,
         max_tries=max_tries,
         sequence_number=params.sequence_number,
@@ -65,9 +68,13 @@ async def get_app_versions(params: GetAppVersionsParams):
             raise DeviceAppError(DeviceAppErrorType.INVALID_MSG_FROM_DEVICE)
     except Exception:
         raise DeviceAppError(DeviceAppErrorType.INVALID_MSG_FROM_DEVICE)
-    response = msg.app_version.response if msg.app_version and msg.app_version.response else None
+    response = (
+        msg.app_version.response
+        if msg.app_version and msg.app_version.response
+        else None
+    )
     assert_or_throw_invalid_result(response)
     if response.common_error:
         parse_common_error(response.common_error)
-    assert_or_throw_invalid_result(getattr(response, 'result', None))
-    return getattr(response, 'result', None)
+    assert_or_throw_invalid_result(getattr(response, "result", None))
+    return getattr(response, "result", None)

@@ -1,13 +1,16 @@
 from enum import Enum
 from typing import Dict
 from .device_error import DeviceError
+
+
 class DeviceCommunicationErrorType(Enum):
-    IN_BOOTLOADER = 'COM_0000'
-    UNKNOWN_COMMUNICATION_ERROR = 'COM_0100'
-    WRITE_ERROR = 'COM_0101'
-    WRITE_TIMEOUT = 'COM_0102'
-    READ_TIMEOUT = 'COM_0103'
-    WRITE_REJECTED = 'COM_0104'
+    IN_BOOTLOADER = "COM_0000"
+    UNKNOWN_COMMUNICATION_ERROR = "COM_0100"
+    WRITE_ERROR = "COM_0101"
+    WRITE_TIMEOUT = "COM_0102"
+    READ_TIMEOUT = "COM_0103"
+    WRITE_REJECTED = "COM_0104"
+
 
 class CodeToErrorMap:
     def __init__(self):
@@ -29,20 +32,24 @@ class CodeToErrorMap:
             },
             DeviceCommunicationErrorType.UNKNOWN_COMMUNICATION_ERROR: {
                 "message": "Unknown Error at communication module"
-            }
+            },
         }
+
     def __getitem__(self, key: DeviceCommunicationErrorType) -> Dict[str, str]:
         return self._map.get(key)
 
+
 deviceCommunicationErrorTypeDetails = CodeToErrorMap()
+
 
 class DeviceCommunicationError(DeviceError):
     """
     Device communication error class.
     """
+
     def __init__(self, error_code: DeviceCommunicationErrorType):
         super().__init__(
             error_code.value,
             deviceCommunicationErrorTypeDetails[error_code]["message"],
-            DeviceCommunicationError
+            DeviceCommunicationError,
         )

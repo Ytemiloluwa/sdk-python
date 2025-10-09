@@ -2,18 +2,20 @@ from enum import Enum
 from typing import Dict
 from .device_error import DeviceError
 
+
 class DeviceBootloaderErrorType(Enum):
-    NOT_IN_BOOTLOADER = 'BTL_0000'
-    FIRMWARE_SIZE_LIMIT_EXCEEDED = 'BTL_0100'
-    WRONG_HARDWARE_VERSION = 'BTL_0101'
-    WRONG_MAGIC_NUMBER = 'BTL_0102'
-    SIGNATURE_NOT_VERIFIED = 'BTL_0103'
-    LOWER_FIRMWARE_VERSION = 'BTL_0104'
-    NOT_IN_RECEIVING_MODE = 'BTL_0105'
-    FLASH_WRITE_ERROR = 'BTL_0106'
-    FLASH_CRC_MISMATCH = 'BTL_0107'
-    FLASH_TIMEOUT_ERROR = 'BTL_0108'
-    FLASH_NACK = 'BTL_0109'
+    NOT_IN_BOOTLOADER = "BTL_0000"
+    FIRMWARE_SIZE_LIMIT_EXCEEDED = "BTL_0100"
+    WRONG_HARDWARE_VERSION = "BTL_0101"
+    WRONG_MAGIC_NUMBER = "BTL_0102"
+    SIGNATURE_NOT_VERIFIED = "BTL_0103"
+    LOWER_FIRMWARE_VERSION = "BTL_0104"
+    NOT_IN_RECEIVING_MODE = "BTL_0105"
+    FLASH_WRITE_ERROR = "BTL_0106"
+    FLASH_CRC_MISMATCH = "BTL_0107"
+    FLASH_TIMEOUT_ERROR = "BTL_0108"
+    FLASH_NACK = "BTL_0109"
+
 
 class CodeToErrorMap:
     def __init__(self):
@@ -50,10 +52,12 @@ class CodeToErrorMap:
             },
             DeviceBootloaderErrorType.NOT_IN_RECEIVING_MODE: {
                 "message": "The device is in fault state"
-            }
+            },
         }
+
     def __getitem__(self, key: DeviceBootloaderErrorType) -> Dict[str, str]:
         return self._map.get(key)
+
 
 deviceBootloaderErrorTypeDetails = CodeToErrorMap()
 
@@ -64,5 +68,5 @@ class DeviceBootloaderError(DeviceError):
         super().__init__(
             error_code.value,
             deviceBootloaderErrorTypeDetails[error_code]["message"],
-            DeviceBootloaderError
+            DeviceBootloaderError,
         )

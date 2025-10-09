@@ -5,8 +5,8 @@ from interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
 from app_manager.proto.generated.manager import Query, Result
 from ..utils.assert_utils import assert_or_throw_invalid_result, parse_common_error
 
-Q = TypeVar('Q')
-R = TypeVar('R')
+Q = TypeVar("Q")
+R = TypeVar("R")
 
 
 def decode_result(data: bytes) -> Result:
@@ -71,7 +71,9 @@ class OperationHelper(Generic[Q, R]):
         encoded_query = encode_query(query_data)
         return await self.sdk.send_query(encoded_query)
 
-    async def wait_for_result(self, on_status: Optional[Callable[[Status], None]] = None) -> Any:
+    async def wait_for_result(
+        self, on_status: Optional[Callable[[Status], None]] = None
+    ) -> Any:
         """
         Wait for and process the result from the device.
 
@@ -88,15 +90,13 @@ class OperationHelper(Generic[Q, R]):
         result_data = await self.sdk.wait_for_result(params=params)
         result = decode_result(result_data)
 
-        if hasattr(result, 'common_error') and result.common_error:
+        if hasattr(result, "common_error") and result.common_error:
             parse_common_error(result.common_error)
 
         result_value = getattr(result, self.result_key, None)
         assert_or_throw_invalid_result(result_value)
 
-        if hasattr(result_value, 'common_error') and result_value.common_error:
+        if hasattr(result_value, "common_error") and result_value.common_error:
             parse_common_error(result_value.common_error)
 
         return result_value
-
-

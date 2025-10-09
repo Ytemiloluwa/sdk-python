@@ -15,29 +15,26 @@ from util.utils.crypto import (
 from core.config import v1
 from ..helpers.can_retry import can_retry
 
-ACK_PACKET = '18'
+ACK_PACKET = "18"
 
 
 async def send_bootloader_abort(
-    connection: IDeviceConnection,
-    options: Optional[Dict[str, Any]] = None
+    connection: IDeviceConnection, options: Optional[Dict[str, Any]] = None
 ) -> None:
     if options is None:
         options = {}
 
-    timeout = options.get('timeout', 2000)  # Default timeout 
-    first_timeout = options.get('first_timeout', 2000)  # Default first timeout
-    max_tries = options.get('max_tries', 5)
+    timeout = options.get("timeout", 2000)  # Default timeout
+    first_timeout = options.get("first_timeout", 2000)  # Default first timeout
+    max_tries = options.get("max_tries", 5)
 
-    assert_condition(connection, 'Invalid connection')
-    
+    assert_condition(connection, "Invalid connection")
+
     # Check if connection is still active before proceeding
     if not await connection.is_connected():
-        raise DeviceConnectionError(
-            DeviceConnectionErrorType.CONNECTION_CLOSED
-        )
+        raise DeviceConnectionError(DeviceConnectionErrorType.CONNECTION_CLOSED)
 
-    packets_list = ['41']
+    packets_list = ["41"]
     data_list = [hex_to_uint8array(packet) for packet in packets_list]
 
     for index, data in enumerate(data_list):
@@ -68,16 +65,14 @@ async def send_bootloader_abort(
             if first_error:
                 raise first_error
             else:
-                raise DeviceCommunicationError(
-                    DeviceCommunicationErrorType.WRITE_ERROR
-                )
+                raise DeviceCommunicationError(DeviceCommunicationErrorType.WRITE_ERROR)
 
 
 async def write_packet(
     connection: IDeviceConnection,
     data: bytes,
     timeout: Optional[int] = 2000,
-    recheck_time: int = 500  # in milliseconds
+    recheck_time: int = 500,  # in milliseconds
 ) -> None:
     if timeout is None:
         timeout = 2000
@@ -121,7 +116,9 @@ async def write_packet(
                 await asyncio.sleep(recheck_time / 1000)
 
             except Exception as error:
-                if hasattr(error, 'code') and error.code in [e.value for e in DeviceConnectionErrorType]:
+                if hasattr(error, "code") and error.code in [
+                    e.value for e in DeviceConnectionErrorType
+                ]:
                     cleanup()
                     return
                 await asyncio.sleep(recheck_time / 1000)
@@ -133,8 +130,7 @@ async def write_packet(
         recheck_task = asyncio.create_task(recheck_packet())
 
         done, pending = await asyncio.wait(
-            [timeout_task, recheck_task],
-            return_when=asyncio.FIRST_COMPLETED
+            [timeout_task, recheck_task], return_when=asyncio.FIRST_COMPLETED
         )
 
         # Cancel any remaining tasks
@@ -152,18 +148,12 @@ async def write_packet(
         # If we get here, it means we timed out
         cleanup()
         if not await connection.is_connected():
-            raise DeviceConnectionError(
-                DeviceConnectionErrorType.CONNECTION_CLOSED
-            )
+            raise DeviceConnectionError(DeviceConnectionErrorType.CONNECTION_CLOSED)
         else:
-            raise DeviceCommunicationError(
-                DeviceCommunicationErrorType.WRITE_TIMEOUT
-            )
+            raise DeviceCommunicationError(DeviceCommunicationErrorType.WRITE_TIMEOUT)
 
     except Exception as err:
         cleanup()
         if not await connection.is_connected():
-            raise DeviceConnectionError(
-                DeviceConnectionErrorType.CONNECTION_CLOSED
-            )
+            raise DeviceConnectionError(DeviceConnectionErrorType.CONNECTION_CLOSED)
         raise err

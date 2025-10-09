@@ -10,9 +10,6 @@ coin_index_to_app_id_map = {
 }
 
 APP_VERSION = {
-    'from': '1.0.0',
-    'to': '2.0.0',
+    "from": "1.0.0",
+    "to": "2.0.0",
 }
-
-
-

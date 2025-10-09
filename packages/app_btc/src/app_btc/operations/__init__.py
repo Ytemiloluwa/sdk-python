@@ -18,16 +18,16 @@ from .signTxn import (
 )
 
 __all__ = [
-    'get_public_key',
-    'get_xpubs',
-    'sign_txn',
-    'GetPublicKeyEvent',
-    'GetPublicKeyParams',
-    'GetPublicKeyResult',
-    'GetXpubsEvent',
-    'GetXpubsParams',
-    'GetXpubsResultResponse',
-    'SignTxnEvent',
-    'SignTxnParams',
-    'SignTxnResult',
+    "get_public_key",
+    "get_xpubs",
+    "sign_txn",
+    "GetPublicKeyEvent",
+    "GetPublicKeyParams",
+    "GetPublicKeyResult",
+    "GetXpubsEvent",
+    "GetXpubsParams",
+    "GetXpubsResultResponse",
+    "SignTxnEvent",
+    "SignTxnParams",
+    "SignTxnResult",
 ]

@@ -26,6 +26,7 @@ class TestSendBootloaderAbort:
 
     def test_should_be_able_to_send_abort(self, setup):
         """Test basic abort functionality"""
+
         async def _test():
             connection, sdk = await setup.__anext__()
 
@@ -46,6 +47,7 @@ class TestSendBootloaderAbort:
 
     def test_should_be_able_to_handle_multiple_retries(self, setup):
         """Test retry functionality"""
+
         async def _test():
             connection, sdk = await setup.__anext__()
 
@@ -62,11 +64,13 @@ class TestSendBootloaderAbort:
                     await connection.mock_device_send(bytes([24]))
 
             connection.configure_listeners(on_data)
-            await sdk.send_bootloader_abort({
-                "firstTimeout": config.defaultTimeout,
-                "timeout": config.defaultTimeout,
-                "maxTries": max_tries,
-            })
+            await sdk.send_bootloader_abort(
+                {
+                    "firstTimeout": config.defaultTimeout,
+                    "timeout": config.defaultTimeout,
+                    "maxTries": max_tries,
+                }
+            )
 
             assert call_count == max_tries
 
@@ -74,6 +78,7 @@ class TestSendBootloaderAbort:
 
     def test_should_return_valid_errors_when_device_is_disconnected(self, setup):
         """Test error handling when device is disconnected"""
+
         async def _test():
             connection, sdk = await setup.__anext__()
 
@@ -95,8 +100,11 @@ class TestSendBootloaderAbort:
 
         asyncio.run(_test())
 
-    def test_should_return_valid_errors_when_device_is_disconnected_in_between(self, setup):
+    def test_should_return_valid_errors_when_device_is_disconnected_in_between(
+        self, setup
+    ):
         """Test error handling when device is disconnected during operation"""
+
         async def _test():
             connection, sdk = await setup.__anext__()
 

@@ -51,5 +51,3 @@ def is_feature_enabled(feature_name: FeatureName, sdk_version: str) -> bool:
     except (InvalidVersion, TypeError, ValueError):
         # If version parsing fails due to invalid version format, return False
         return False
-
-

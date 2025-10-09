@@ -3,7 +3,7 @@ from interfaces.errors import (
     DeviceCompatibilityError,
     DeviceCompatibilityErrorType,
 )
-from interfaces.errors.app_error import DeviceAppError,DeviceAppErrorType
+from interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType
 from core.encoders.proto.generated.common import Version
 
 
@@ -21,20 +21,26 @@ async def handle_legacy_device(sdk: ISDK, version: Version) -> None:
     if await sdk.deprecated.is_raw_operation_supported():
         sequence_number = await sdk.get_new_sequence_number()
 
-        await sdk.deprecated.send_command({
-            'commandType': 77,
-            'data': firmware_version_hex,
-            'sequenceNumber': sequence_number,
-        })
+        await sdk.deprecated.send_command(
+            {
+                "commandType": 77,
+                "data": firmware_version_hex,
+                "sequenceNumber": sequence_number,
+            }
+        )
 
-        update_confirmed = await sdk.deprecated.wait_for_command_output({
-            'sequenceNumber': sequence_number,
-            'expectedCommandTypes': [78],
-        })
+        update_confirmed = await sdk.deprecated.wait_for_command_output(
+            {
+                "sequenceNumber": sequence_number,
+                "expectedCommandTypes": [78],
+            }
+        )
 
-        is_confirmed = update_confirmed.data.startswith('01')
+        is_confirmed = update_confirmed.data.startswith("01")
     else:
-        raise DeviceCompatibilityError(DeviceCompatibilityErrorType.DEVICE_NOT_SUPPORTED)
+        raise DeviceCompatibilityError(
+            DeviceCompatibilityErrorType.DEVICE_NOT_SUPPORTED
+        )
 
     if not is_confirmed:
         raise DeviceAppError(DeviceAppErrorType.USER_REJECTION)

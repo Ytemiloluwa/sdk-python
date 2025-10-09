@@ -1,4 +1,6 @@
 from typing import Any, Dict, Type
+
+
 class DeviceError(Exception):
     def __init__(self, error_code: str, message: str, cls: Type):
         super().__init__(message)
@@ -23,5 +25,5 @@ class DeviceError(Exception):
             "code": self.code,
             "message": f"{self.code}: {self.message}",
             "isDeviceError": self.is_device_error,
-            "stack": self.__traceback__
+            "stack": self.__traceback__,
         }

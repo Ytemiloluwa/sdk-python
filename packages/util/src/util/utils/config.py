@@ -1,4 +1,6 @@
 import os
+
+
 def get_env_variable(key: str, default_value: str = None) -> str:
     value = None
 
@@ -12,10 +14,13 @@ def get_env_variable(key: str, default_value: str = None) -> str:
 
     raise ValueError(f"ENVIRONMENT VARIABLE '{key}' NOT SPECIFIED.")
 
+
 class Config:
     def __init__(self):
-        self.API_CYPHEROCK = get_env_variable('API_CYPHEROCK', 'https://api.cypherock.com')
-        self.LOG_LEVEL = get_env_variable('LOG_LEVEL', 'debug')
+        self.API_CYPHEROCK = get_env_variable(
+            "API_CYPHEROCK", "https://api.cypherock.com"
+        )
+        self.LOG_LEVEL = get_env_variable("LOG_LEVEL", "debug")
 
     def get(self, key: str, default=None):
         return getattr(self, key, default)
@@ -24,5 +29,6 @@ class Config:
         if hasattr(self, key):
             return getattr(self, key)
         raise KeyError(f"Configuration key '{key}' not found")
+
 
 config = Config()

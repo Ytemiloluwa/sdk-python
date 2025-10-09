@@ -9,7 +9,7 @@ class QueryData:
     data: bytes
 
 
-@dataclass 
+@dataclass
 class StatusData:
     flow_status: int
     expect_event_calls: Optional[List[int]] = None
@@ -48,12 +48,10 @@ class Fixtures:
 
 
 __all__ = [
-    'QueryData',
-    'StatusData', 
-    'ResultData',
-    'MockData',
-    'GetXpubsTestCase',
-    'Fixtures',
+    "QueryData",
+    "StatusData",
+    "ResultData",
+    "MockData",
+    "GetXpubsTestCase",
+    "Fixtures",
 ]
-
-

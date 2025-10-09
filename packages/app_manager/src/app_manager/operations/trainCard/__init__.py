@@ -7,30 +7,32 @@ from ...utils import logger as rootlogger
 from .types import ITrainCardParams, TrainCardEventHandler
 
 # Re-export types
-__all__ = ['train_card', 'ITrainCardParams', 'TrainCardEventHandler']
+__all__ = ["train_card", "ITrainCardParams", "TrainCardEventHandler"]
 
-logger = create_logger_with_prefix(rootlogger, 'TrainCard')
+logger = create_logger_with_prefix(rootlogger, "TrainCard")
 
 
 async def train_card(
     sdk: ISDK,
     params: ITrainCardParams,
 ) -> TrainCardResult:
-    logger.info('Started')
+    logger.info("Started")
 
     await sdk.check_app_compatibility(APP_VERSION)
 
-    helper = OperationHelper(sdk, 'trainCard', 'trainCard')
+    helper = OperationHelper(sdk, "trainCard", "trainCard")
 
-    on_status, force_status_update = create_status_listener({
-        'enums': TrainCardStatus,
-        'onEvent': params.onEvent,
-        'logger': logger,
-    })
+    on_status, force_status_update = create_status_listener(
+        {
+            "enums": TrainCardStatus,
+            "onEvent": params.onEvent,
+            "logger": logger,
+        }
+    )
 
     await helper.send_query({"initiate": {}})
     result = await helper.wait_for_result(on_status)
-    logger.verbose('TrainCardResponse', {"result": result})
+    logger.verbose("TrainCardResponse", {"result": result})
     assert_or_throw_invalid_result(result.result)
 
     force_status_update(TrainCardStatus.TRAIN_CARD_STATUS_CARD_TAPPED)
@@ -41,8 +43,8 @@ async def train_card(
         await helper.send_query({"walletVerify": {"selfCreated": is_self_created}})
 
         flow_complete = await helper.wait_for_result(on_status)
-        logger.verbose('TrainCardResponse', {"result": result})
+        logger.verbose("TrainCardResponse", {"result": result})
         assert_or_throw_invalid_result(flow_complete.flowComplete)
 
-    logger.info('Completed')
+    logger.info("Completed")
     return result.result

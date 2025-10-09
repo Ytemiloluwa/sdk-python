@@ -2,21 +2,16 @@ import uuid
 import serial
 from typing import Optional, List
 
-from interfaces.connection import (
-    DeviceState,
-    ConnectionTypeMap,
-    IDevice,
-    PoolData
-)
+from interfaces.connection import DeviceState, ConnectionTypeMap, IDevice, PoolData
 from interfaces.errors.connection_error import (
     DeviceConnectionError,
-    DeviceConnectionErrorType
+    DeviceConnectionErrorType,
 )
 from .helpers import (
     get_available_devices,
     close_connection,
     open_connection,
-    DataListener
+    DataListener,
 )
 
 
@@ -33,11 +28,7 @@ class DeviceConnection:
         self.connection_id = str(uuid.uuid4())
         self.sequence_number = 0
         self.connection = serial.Serial(
-            port=self.port,
-            baudrate=115200,
-            timeout=1,
-            write_timeout=1,
-            exclusive=True
+            port=self.port, baudrate=115200, timeout=1, write_timeout=1, exclusive=True
         )
         if self.connection.is_open:
             self.connection.close()
@@ -49,7 +40,7 @@ class DeviceConnection:
         return ConnectionTypeMap.SERIAL_PORT.value
 
     @classmethod
-    async def connect(cls, device: IDevice) -> 'DeviceConnection':
+    async def connect(cls, device: IDevice) -> "DeviceConnection":
         """
         Create a connection to a specific device.
         """
@@ -63,7 +54,7 @@ class DeviceConnection:
         return await get_available_devices()
 
     @classmethod
-    async def create(cls) -> 'DeviceConnection':
+    async def create(cls) -> "DeviceConnection":
         """
         Create a connection to the first available device.
         """
@@ -116,7 +107,9 @@ class DeviceConnection:
             self.connection.flush()
 
             if bytes_written != len(data):
-                raise Exception(f"Failed to write all data: wrote {bytes_written} of {len(data)} bytes")
+                raise Exception(
+                    f"Failed to write all data: wrote {bytes_written} of {len(data)} bytes"
+                )
 
         except Exception as e:
             raise e

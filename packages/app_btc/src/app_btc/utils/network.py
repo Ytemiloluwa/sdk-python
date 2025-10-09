@@ -3,6 +3,7 @@ from util.utils.assert_utils import assert_condition
 
 try:
     from bdkpython import Network
+
     BDK_AVAILABLE = True
 except ImportError:
     Network = None
@@ -21,20 +22,27 @@ DASH_COIN_INDEX = HARDENED_BASE + 5
 
 
 class NetworkConfig:
-    def __init__(self, message_prefix: str, bech32: str,
-                 bip32_public: int, bip32_private: int,
-                 pub_key_hash: int, script_hash: int, wif: int):
+    def __init__(
+        self,
+        message_prefix: str,
+        bech32: str,
+        bip32_public: int,
+        bip32_private: int,
+        pub_key_hash: int,
+        script_hash: int,
+        wif: int,
+    ):
         self.message_prefix = message_prefix
         self.bech32 = bech32
-        self.bip32 = {'public': bip32_public, 'private': bip32_private}
+        self.bip32 = {"public": bip32_public, "private": bip32_private}
         self.pub_key_hash = pub_key_hash
         self.script_hash = script_hash
         self.wif = wif
 
 
 bitcoin = NetworkConfig(
-    message_prefix='\x18Bitcoin Signed Message:\n',
-    bech32='bc',
+    message_prefix="\x18Bitcoin Signed Message:\n",
+    bech32="bc",
     bip32_public=76067358,
     bip32_private=76066276,
     pub_key_hash=0,
@@ -43,8 +51,8 @@ bitcoin = NetworkConfig(
 )
 
 testnet = NetworkConfig(
-    message_prefix='\x18Bitcoin Signed Message:\n',
-    bech32='tb',
+    message_prefix="\x18Bitcoin Signed Message:\n",
+    bech32="tb",
     bip32_public=70617039,
     bip32_private=70615956,
     pub_key_hash=111,
@@ -53,33 +61,33 @@ testnet = NetworkConfig(
 )
 
 litecoin = NetworkConfig(
-    message_prefix='\x19Litecoin Signed Message:\n',
-    bech32='ltc',
-    bip32_public=0x0488b21e,
-    bip32_private=0x0488ade4,
+    message_prefix="\x19Litecoin Signed Message:\n",
+    bech32="ltc",
+    bip32_public=0x0488B21E,
+    bip32_private=0x0488ADE4,
     pub_key_hash=0x30,
     script_hash=0x32,
-    wif=0xb0,
+    wif=0xB0,
 )
 
 dash = NetworkConfig(
-    message_prefix='\x19Dashcoin Signed Message:\n',
-    bech32='',
-    bip32_public=0x0488b21e,
-    bip32_private=0x0488ade4,
-    pub_key_hash=0x4c,
+    message_prefix="\x19Dashcoin Signed Message:\n",
+    bech32="",
+    bip32_public=0x0488B21E,
+    bip32_private=0x0488ADE4,
+    pub_key_hash=0x4C,
     script_hash=0x10,
-    wif=0xcc,
+    wif=0xCC,
 )
 
 dogecoin = NetworkConfig(
-    message_prefix='\x19Dogecoin Signed Message:\n',
-    bech32='',
-    bip32_public=0x02facafd,
-    bip32_private=0x02fac398,
-    pub_key_hash=0x1e,
+    message_prefix="\x19Dogecoin Signed Message:\n",
+    bech32="",
+    bip32_public=0x02FACAFD,
+    bip32_private=0x02FAC398,
+    pub_key_hash=0x1E,
     script_hash=0x16,
-    wif=0x9e,
+    wif=0x9E,
 )
 
 coin_index_to_network_map: Dict[int, Optional[NetworkConfig]] = {
@@ -90,19 +98,19 @@ coin_index_to_network_map: Dict[int, Optional[NetworkConfig]] = {
     DASH_COIN_INDEX: dash,
 }
 
-PurposeType = Literal['segwit', 'legacy']
+PurposeType = Literal["segwit", "legacy"]
 
 purpose_map: Dict[int, Optional[PurposeType]] = {
-    SEGWIT_PURPOSE: 'segwit',
-    LEGACY_PURPOSE: 'legacy',
+    SEGWIT_PURPOSE: "segwit",
+    LEGACY_PURPOSE: "legacy",
 }
 
 coin_index_to_coin_type_map: Dict[int, Optional[str]] = {
-    BITCOIN_COIN_INDEX: 'btc',
-    TESTNET_COIN_INDEX: 'btct',
-    LITECOIN_COIN_INDEX: 'ltc',
-    DOGECOIN_COIN_INDEX: 'doge',
-    DASH_COIN_INDEX: 'dash',
+    BITCOIN_COIN_INDEX: "btc",
+    TESTNET_COIN_INDEX: "btct",
+    LITECOIN_COIN_INDEX: "ltc",
+    DOGECOIN_COIN_INDEX: "doge",
+    DASH_COIN_INDEX: "dash",
 }
 
 
@@ -129,10 +137,10 @@ def get_coin_type_from_path(path: List[int]) -> str:
 
 
 supported_purpose_map: Dict[int, Optional[List[PurposeType]]] = {
-    BITCOIN_COIN_INDEX: ['legacy', 'segwit'],
-    LITECOIN_COIN_INDEX: ['legacy', 'segwit'],
-    DOGECOIN_COIN_INDEX: ['legacy'],
-    DASH_COIN_INDEX: ['legacy'],
+    BITCOIN_COIN_INDEX: ["legacy", "segwit"],
+    LITECOIN_COIN_INDEX: ["legacy", "segwit"],
+    DOGECOIN_COIN_INDEX: ["legacy"],
+    DASH_COIN_INDEX: ["legacy"],
 }
 
 
@@ -145,11 +153,14 @@ def assert_derivation_path(path: List[int]) -> None:
         f"Purpose: 0x{path[0]:x} not supported for given coin index: 0x{path[1]:x}",
     )
 
+
 def to_bdk_network(config: NetworkConfig):
     """Convert NetworkConfig to BDK Network (if BDK is available)."""
     if not BDK_AVAILABLE:
-        raise ImportError("bdkpython is not installed. Install with: pip install bdkpython")
-    
+        raise ImportError(
+            "bdkpython is not installed. Install with: pip install bdkpython"
+        )
+
     if config is bitcoin:
         return Network.BITCOIN
     elif config is testnet:
@@ -158,5 +169,3 @@ def to_bdk_network(config: NetworkConfig):
         raise ValueError(
             "Unsupported network for BDK: only Bitcoin mainnet and testnet supported"
         )
-
-

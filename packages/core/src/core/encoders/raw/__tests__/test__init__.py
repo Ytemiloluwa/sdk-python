@@ -9,6 +9,7 @@ from core.encoders.raw.__fixtures__ import (
     raw_data_test_cases,
 )
 
+
 class TestRawEncoder:
     class TestEncodeRawData:
         def test_should_return_valid_packets(self):

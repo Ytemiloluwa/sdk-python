@@ -16,20 +16,25 @@ from core.config import v1 as config_v1
 
 DEFAULT_RECEIVE_TIMEOUT = 15000
 
+
 async def receive_data(
     connection: IDeviceConnection,
     all_acceptable_commands: List[int],
     version: PacketVersion,
     timeout: int = DEFAULT_RECEIVE_TIMEOUT,
 ) -> Dict[str, Any]:
-    assert_condition(connection, 'Invalid connection')
-    assert_condition(all_acceptable_commands, 'Invalid allAcceptableCommands')
-    assert_condition(version, 'Invalid version')
+    assert_condition(connection, "Invalid connection")
+    assert_condition(all_acceptable_commands, "Invalid allAcceptableCommands")
+    assert_condition(version, "Invalid version")
 
     if version not in [PacketVersionMap.v1, PacketVersionMap.v2]:
-        raise DeviceCompatibilityError(DeviceCompatibilityErrorType.INVALID_SDK_OPERATION)
+        raise DeviceCompatibilityError(
+            DeviceCompatibilityErrorType.INVALID_SDK_OPERATION
+        )
 
-    assert_condition(len(all_acceptable_commands) > 0, 'allAcceptableCommands should not be empty')
+    assert_condition(
+        len(all_acceptable_commands) > 0, "allAcceptableCommands should not be empty"
+    )
 
     if not await connection.is_connected():
         raise DeviceConnectionError(DeviceConnectionErrorType.CONNECTION_CLOSED)
@@ -45,15 +50,15 @@ async def receive_data(
             future.cancel()
 
     def process_packet(packet: LegacyDecodedPacketData) -> bool:
-        command_type = packet['commandType']
-        current_packet_number = packet['currentPacketNumber']
-        total_packet = packet['totalPacket']
-        data_chunk = packet['dataChunk']
+        command_type = packet["commandType"]
+        current_packet_number = packet["currentPacketNumber"]
+        total_packet = packet["totalPacket"]
+        data_chunk = packet["dataChunk"]
 
         if command_type in all_acceptable_commands:
             res_data[current_packet_number] = data_chunk
             if len(res_data) == total_packet:
-                data = ''.join(res_data[i] for i in range(1, total_packet + 1))
+                data = "".join(res_data[i] for i in range(1, total_packet + 1))
                 if not future.done():
                     future.set_result({"commandType": command_type, "data": data})
                 return True
@@ -65,7 +70,11 @@ async def receive_data(
             while not is_completed and not future.done():
                 if not await connection.is_connected():
                     if not future.done():
-                        future.set_exception(DeviceConnectionError(DeviceConnectionErrorType.CONNECTION_CLOSED))
+                        future.set_exception(
+                            DeviceConnectionError(
+                                DeviceConnectionErrorType.CONNECTION_CLOSED
+                            )
+                        )
                     return
 
                 data = await connection.receive()
@@ -82,12 +91,18 @@ async def receive_data(
 
         except Exception as error:
             if not future.done():
-                future.set_exception(DeviceCommunicationError(DeviceCommunicationErrorType.UNKNOWN_COMMUNICATION_ERROR))
+                future.set_exception(
+                    DeviceCommunicationError(
+                        DeviceCommunicationErrorType.UNKNOWN_COMMUNICATION_ERROR
+                    )
+                )
 
     async def timeout_watchdog():
         await asyncio.sleep(timeout / 1000)
         if not future.done():
-            future.set_exception(DeviceCommunicationError(DeviceCommunicationErrorType.READ_TIMEOUT))
+            future.set_exception(
+                DeviceCommunicationError(DeviceCommunicationErrorType.READ_TIMEOUT)
+            )
 
     # Launch recheck and timeout concurrently
     tasks = [

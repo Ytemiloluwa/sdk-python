@@ -6,11 +6,10 @@ from .waitforpacket import wait_for_packet
 from .writecommand import write_command
 
 __all__ = [
-    'can_retry',
-    'get_command_output',
-    'get_status',
-    'send_command',
-    'wait_for_packet',
-    'write_command'
+    "can_retry",
+    "get_command_output",
+    "get_status",
+    "send_command",
+    "wait_for_packet",
+    "write_command",
 ]
-

@@ -13,15 +13,18 @@ send_query = AsyncMock()
 check_app_compatibility = AsyncMock()
 wait_for_result = AsyncMock()
 
+
 async def get_sequence_number():
     """Mock get_sequence_number that returns current sequence number"""
     return sequence_number
+
 
 async def get_new_sequence_number():
     """Mock get_new_sequence_number that increments and returns sequence number"""
     global sequence_number
     sequence_number += 1
     return sequence_number
+
 
 get_sequence_number_mock = AsyncMock(side_effect=get_sequence_number)
 get_new_sequence_number_mock = AsyncMock(side_effect=get_new_sequence_number)
@@ -48,16 +51,15 @@ mock_sdk_instance.get_device_state = get_device_state
 create = AsyncMock(return_value=mock_sdk_instance)
 
 __all__ = [
-    'create',
-    'mock_sdk_instance',
-    'get_status',
-    'send_abort', 
-    'get_result',
-    'send_query',
-    'check_app_compatibility',
-    'wait_for_result',
-    'run_operation',
-    'destroy',
-    'get_device_state'
+    "create",
+    "mock_sdk_instance",
+    "get_status",
+    "send_abort",
+    "get_result",
+    "send_query",
+    "check_app_compatibility",
+    "wait_for_result",
+    "run_operation",
+    "destroy",
+    "get_device_state",
 ]
-

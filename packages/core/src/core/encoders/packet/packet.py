@@ -3,9 +3,16 @@ from typing import TypedDict, List, Dict
 from enum import Enum
 from core.config import v1, v2, v3
 from util.utils.assert_utils import assert_condition
-from util.utils import is_hex, uint8array_to_hex, hex_to_uint8array, int_to_uint_byte, crc16
+from util.utils import (
+    is_hex,
+    uint8array_to_hex,
+    hex_to_uint8array,
+    int_to_uint_byte,
+    crc16,
+)
 from ...utils.packetversion import PacketVersion, PacketVersionMap
 from interfaces.errors import DeviceCompatibilityError, DeviceCompatibilityErrorType
+
 
 class DecodedPacketData(TypedDict):
     start_of_frame: str
@@ -17,6 +24,7 @@ class DecodedPacketData(TypedDict):
     packet_type: int
     error_list: List[str]
     timestamp: int
+
 
 class ErrorPacketRejectReason(Enum):
     NO_ERROR = 0
@@ -32,31 +40,33 @@ class ErrorPacketRejectReason(Enum):
     INVALID_CHUNK_NO = 10
     INCOMPLETE_PACKET = 11
 
+
 RejectReasonToMsgMap: Dict[ErrorPacketRejectReason, str] = {
-    ErrorPacketRejectReason.NO_ERROR: 'No error',
-    ErrorPacketRejectReason.CHECKSUM_ERROR: 'Checksum error',
-    ErrorPacketRejectReason.BUSY_PREVIOUS_CMD: 'Device is busy on previous command',
-    ErrorPacketRejectReason.OUT_OF_ORDER_CHUNK: 'Chunk out of order',
-    ErrorPacketRejectReason.INVALID_CHUNK_COUNT: 'Invalid chunk count',
-    ErrorPacketRejectReason.INVALID_SEQUENCE_NO: 'Invalid sequence number',
-    ErrorPacketRejectReason.INVALID_PAYLOAD_LENGTH: 'Invalid payload length',
-    ErrorPacketRejectReason.APP_BUFFER_BLOCKED: 'Application buffer blocked',
-    ErrorPacketRejectReason.NO_MORE_CHUNKS: 'No more chunks',
-    ErrorPacketRejectReason.INVALID_PACKET_TYPE: 'Invalid packet type',
-    ErrorPacketRejectReason.INVALID_CHUNK_NO: 'Invalid chunk number',
-    ErrorPacketRejectReason.INCOMPLETE_PACKET: 'Incomplete packet',
+    ErrorPacketRejectReason.NO_ERROR: "No error",
+    ErrorPacketRejectReason.CHECKSUM_ERROR: "Checksum error",
+    ErrorPacketRejectReason.BUSY_PREVIOUS_CMD: "Device is busy on previous command",
+    ErrorPacketRejectReason.OUT_OF_ORDER_CHUNK: "Chunk out of order",
+    ErrorPacketRejectReason.INVALID_CHUNK_COUNT: "Invalid chunk count",
+    ErrorPacketRejectReason.INVALID_SEQUENCE_NO: "Invalid sequence number",
+    ErrorPacketRejectReason.INVALID_PAYLOAD_LENGTH: "Invalid payload length",
+    ErrorPacketRejectReason.APP_BUFFER_BLOCKED: "Application buffer blocked",
+    ErrorPacketRejectReason.NO_MORE_CHUNKS: "No more chunks",
+    ErrorPacketRejectReason.INVALID_PACKET_TYPE: "Invalid packet type",
+    ErrorPacketRejectReason.INVALID_CHUNK_NO: "Invalid chunk number",
+    ErrorPacketRejectReason.INCOMPLETE_PACKET: "Incomplete packet",
 }
+
 
 def encode_payload_data(
     raw_data: str,
     protobuf_data: str,
     version: PacketVersion,
 ) -> str:
-    assert_condition(raw_data, 'Invalid rawData')
-    assert_condition(protobuf_data, 'Invalid protobufData')
-    assert_condition(version, 'Invalid version')
-    assert_condition(is_hex(raw_data), 'Invalid hex in rawData')
-    assert_condition(is_hex(protobuf_data), 'Invalid hex in protobufData')
+    assert_condition(raw_data, "Invalid rawData")
+    assert_condition(protobuf_data, "Invalid protobufData")
+    assert_condition(version, "Invalid version")
+    assert_condition(is_hex(raw_data), "Invalid hex in rawData")
+    assert_condition(is_hex(protobuf_data), "Invalid hex in protobufData")
 
     if version != PacketVersionMap.v3:
         raise DeviceCompatibilityError(
@@ -64,7 +74,7 @@ def encode_payload_data(
         )
 
     if len(raw_data) == 0 and len(protobuf_data) == 0:
-        return ''
+        return ""
 
     usable_config = v3
 
@@ -78,27 +88,31 @@ def encode_payload_data(
     )
 
     return (
-        serialized_protobuf_data_length + serialized_raw_data_length + protobuf_data + raw_data
+        serialized_protobuf_data_length
+        + serialized_raw_data_length
+        + protobuf_data
+        + raw_data
     )
 
+
 def encode_packet(
-    raw_data: str = '',
-    proto_data: str = '',
+    raw_data: str = "",
+    proto_data: str = "",
     version: PacketVersion = PacketVersionMap.v3,
     sequence_number: int = 0,
     packet_type: int = 0,
 ) -> List[bytes]:
-    assert_condition(raw_data or proto_data, 'Invalid data')
-    assert_condition(version, 'Invalid version')
-    assert_condition(sequence_number is not None, 'Invalid sequenceNumber')
-    assert_condition(packet_type is not None, 'Invalid packetType')
+    assert_condition(raw_data or proto_data, "Invalid data")
+    assert_condition(version, "Invalid version")
+    assert_condition(sequence_number is not None, "Invalid sequenceNumber")
+    assert_condition(packet_type is not None, "Invalid packetType")
 
     if raw_data:
-        assert_condition(is_hex(raw_data), 'Invalid hex in raw data')
+        assert_condition(is_hex(raw_data), "Invalid hex in raw data")
     if proto_data:
-        assert_condition(is_hex(proto_data), 'Invalid hex in proto data')
+        assert_condition(is_hex(proto_data), "Invalid hex in proto data")
 
-    assert_condition(packet_type > 0, 'Packet type cannot be negative')
+    assert_condition(packet_type > 0, "Packet type cannot be negative")
 
     if version != PacketVersionMap.v3:
         raise DeviceCompatibilityError(
@@ -151,7 +165,7 @@ def encode_packet(
         )
         # Match TypeScript behavior: Date.now().toString().slice(0, timestampLength / 4)
         timestamp_ms = int(time.time() * 1000)  # JavaScript Date.now() equivalent
-        timestamp_str = str(timestamp_ms)[:usable_config.radix.timestamp_length // 4]
+        timestamp_str = str(timestamp_ms)[: usable_config.radix.timestamp_length // 4]
         serialized_timestamp = int_to_uint_byte(
             int(timestamp_str),
             usable_config.radix.timestamp_length,
@@ -174,6 +188,7 @@ def encode_packet(
         packet_list.append(hex_to_uint8array(packet))
 
     return packet_list
+
 
 def decode_packet(
     param: bytes,
@@ -255,7 +270,7 @@ def decode_packet(
         )
         offset += usable_config.radix.payload_length // 4
 
-        payload_data = ''
+        payload_data = ""
         if payload_length != 0:
             available_length = len(data) - offset
             read_length = min(payload_length * 2, available_length)
@@ -282,11 +297,13 @@ def decode_packet(
 
         error_list = []
         if start_of_frame.upper() != start_of_frame.upper():
-            error_list.append('Invalid Start of frame')
+            error_list.append("Invalid Start of frame")
         if current_packet_number > total_packet_number:
-            error_list.append('current_packet_number is greater than total_packet_number')
+            error_list.append(
+                "current_packet_number is greater than total_packet_number"
+            )
         if actual_crc.upper() != crc.upper():
-            error_list.append('invalid crc')
+            error_list.append("invalid crc")
 
         packet_list.append(
             DecodedPacketData(
@@ -303,10 +320,11 @@ def decode_packet(
         )
     return packet_list
 
+
 def decode_payload_data(payload: str, version: PacketVersion) -> Dict[str, str]:
-    assert_condition(payload, 'Invalid payload')
-    assert_condition(version, 'Invalid version')
-    assert_condition(is_hex(payload), 'Invalid hex in payload')
+    assert_condition(payload, "Invalid payload")
+    assert_condition(version, "Invalid version")
+    assert_condition(is_hex(payload), "Invalid hex in payload")
 
     if version != PacketVersionMap.v3:
         raise DeviceCompatibilityError(
@@ -318,22 +336,21 @@ def decode_payload_data(payload: str, version: PacketVersion) -> Dict[str, str]:
 
     data_size_half = usable_config.radix.data_size // 4
 
-    protobuf_data_size = int(payload[payload_offset:payload_offset + data_size_half], 16)
+    protobuf_data_size = int(
+        payload[payload_offset : payload_offset + data_size_half], 16
+    )
     payload_offset += data_size_half
 
-    raw_data_size = int(payload[payload_offset:payload_offset + data_size_half], 16)
+    raw_data_size = int(payload[payload_offset : payload_offset + data_size_half], 16)
     payload_offset += data_size_half
 
-    protobuf_data = payload[payload_offset:payload_offset + protobuf_data_size * 2]
+    protobuf_data = payload[payload_offset : payload_offset + protobuf_data_size * 2]
     payload_offset += protobuf_data_size * 2
 
-    raw_data = payload[payload_offset:payload_offset + raw_data_size * 2]
+    raw_data = payload[payload_offset : payload_offset + raw_data_size * 2]
     payload_offset += raw_data_size * 2
 
     return {
         "protobuf_data": protobuf_data,
         "raw_data": raw_data,
     }
-
-
-

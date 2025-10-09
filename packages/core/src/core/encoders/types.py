@@ -9,6 +9,7 @@ from .proto.types import (
 # Import raw types module to create namespace
 from .raw import types as raw_types
 
+
 class RawEncoders:
     CmdState = raw_types.CmdState
     DeviceWaitOn = raw_types.DeviceWaitOn
@@ -16,10 +17,11 @@ class RawEncoders:
     StatusData = raw_types.StatusData
     RawData = raw_types.RawData
 
+
 __all__ = [
-    'Status',
-    'DeviceIdleState',
-    'DeviceWaitingOn',
-    'CmdState',
-    'RawEncoders',
+    "Status",
+    "DeviceIdleState",
+    "DeviceWaitingOn",
+    "CmdState",
+    "RawEncoders",
 ]

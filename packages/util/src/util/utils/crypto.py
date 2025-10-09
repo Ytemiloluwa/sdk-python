@@ -3,6 +3,7 @@ from typing import List, Union
 import re
 from .assert_utils import assert_condition
 
+
 def update_crc16(crc_param: int, byte: int) -> int:
     """
     Update CRC16 with a single byte.
@@ -14,8 +15,8 @@ def update_crc16(crc_param: int, byte: int) -> int:
     Returns:
         int: Updated CRC value
     """
-    assert_condition(crc_param is not None, 'Invalid crcParam')
-    assert_condition(byte is not None, 'Invalid byte')
+    assert_condition(crc_param is not None, "Invalid crcParam")
+    assert_condition(byte is not None, "Invalid byte")
 
     input_val = byte | 0x100
     crc = crc_param
@@ -28,7 +29,7 @@ def update_crc16(crc_param: int, byte: int) -> int:
         if crc & 0x10000:
             crc ^= 0x1021
 
-    return crc & 0xffff
+    return crc & 0xFFFF
 
 
 def crc16(data_buff: bytes) -> int:
@@ -41,7 +42,7 @@ def crc16(data_buff: bytes) -> int:
     Returns:
         int: CRC16 value
     """
-    assert_condition(data_buff is not None, 'Data buffer cannot be empty')
+    assert_condition(data_buff is not None, "Data buffer cannot be empty")
 
     crc = 0
     for i in data_buff:
@@ -50,7 +51,7 @@ def crc16(data_buff: bytes) -> int:
     crc = update_crc16(crc, 0)
     crc = update_crc16(crc, 0)
 
-    return crc & 0xffff
+    return crc & 0xFFFF
 
 
 def is_hex(maybe_hex: str) -> bool:
@@ -63,11 +64,11 @@ def is_hex(maybe_hex: str) -> bool:
     Returns:
         bool: True if the string is valid hex, False otherwise
     """
-    assert_condition(maybe_hex is not None, 'Data cannot be empty')
+    assert_condition(maybe_hex is not None, "Data cannot be empty")
     hex_str = maybe_hex
-    if hex_str.startswith('0x'):
+    if hex_str.startswith("0x"):
         hex_str = hex_str[2:]
-    return bool(re.match(r'^[a-fA-F0-9]*$', hex_str))
+    return bool(re.match(r"^[a-fA-F0-9]*$", hex_str))
 
 
 def format_hex(maybe_hex: str) -> str:
@@ -80,16 +81,16 @@ def format_hex(maybe_hex: str) -> str:
     Returns:
         str: Formatted hexadecimal string
     """
-    assert_condition(maybe_hex is not None, 'Invalid hex')
+    assert_condition(maybe_hex is not None, "Invalid hex")
 
     hex_str = maybe_hex
-    if hex_str.startswith('0x'):
+    if hex_str.startswith("0x"):
         hex_str = hex_str[2:]
 
-    assert_condition(is_hex(hex_str), f'Invalid hex string: {maybe_hex}')
+    assert_condition(is_hex(hex_str), f"Invalid hex string: {maybe_hex}")
 
     if len(hex_str) % 2 != 0:
-        hex_str = f'0{hex_str}'
+        hex_str = f"0{hex_str}"
 
     return hex_str
 
@@ -110,7 +111,7 @@ def hex_to_uint8array(data: str) -> bytes:
         return bytes()
 
     # Split the hex string into pairs of characters
-    hex_pairs = [hex_str[i:i + 2] for i in range(0, len(hex_str), 2)]
+    hex_pairs = [hex_str[i : i + 2] for i in range(0, len(hex_str), 2)]
 
     # Convert each pair to an integer and then to a byte
     return bytes(int(pair, 16) for pair in hex_pairs)
@@ -126,9 +127,9 @@ def uint8array_to_hex(data: bytes) -> str:
     Returns:
         str: Hexadecimal string
     """
-    assert_condition(data is not None, 'Invalid data')
+    assert_condition(data is not None, "Invalid data")
 
-    return ''.join(f'{i:02x}' for i in data)
+    return "".join(f"{i:02x}" for i in data)
 
 
 def pad_start(string: str, target_length: int, pad_string: str) -> str:
@@ -143,15 +144,15 @@ def pad_start(string: str, target_length: int, pad_string: str) -> str:
     Returns:
         str: Padded string
     """
-    assert_condition(string is not None, 'Invalid string')
-    assert_condition(target_length is not None, 'Invalid targetLength')
-    assert_condition(pad_string is not None, 'Invalid padString')
+    assert_condition(string is not None, "Invalid string")
+    assert_condition(target_length is not None, "Invalid targetLength")
+    assert_condition(pad_string is not None, "Invalid padString")
 
     if len(string) >= target_length:
         return string
 
     if len(pad_string) <= 0:
-        raise ValueError('padString should not be empty')
+        raise ValueError("padString should not be empty")
 
     padding_needed = target_length - len(string)
 
@@ -173,27 +174,27 @@ def int_to_uint_byte(num: Union[str, int], radix: int) -> str:
     Returns:
         str: Hexadecimal string
     """
-    assert_condition(num is not None, 'Invalid number')
-    assert_condition(radix is not None, 'Invalid radix')
+    assert_condition(num is not None, "Invalid number")
+    assert_condition(radix is not None, "Invalid radix")
 
-    if isinstance(num, str) and num.startswith('0x'):
+    if isinstance(num, str) and num.startswith("0x"):
         num_copy = int(num, 16)
     else:
         num_copy = int(num)
     if radix % 8 != 0:
-        raise ValueError(f'Invalid radix: {radix}')
+        raise ValueError(f"Invalid radix: {radix}")
 
     if num_copy < 0:
-        max_number = int('f' * (radix // 4), 16)
+        max_number = int("f" * (radix // 4), 16)
         num_copy = max_number - abs(num_copy) + 1
 
-    val = format(num_copy, 'x')
+    val = format(num_copy, "x")
     no_of_zeroes = radix // 4 - len(val)
 
     if no_of_zeroes < 0:
-        raise ValueError(f'Invalid serialization of data: {num} with radix {radix}')
+        raise ValueError(f"Invalid serialization of data: {num} with radix {radix}")
 
-    return '0' * no_of_zeroes + val
+    return "0" * no_of_zeroes + val
 
 
 def hex_to_ascii(hex_str: str) -> str:
@@ -206,13 +207,13 @@ def hex_to_ascii(hex_str: str) -> str:
     Returns:
         str: ASCII string
     """
-    assert_condition(hex_str is not None, 'Invalid string')
+    assert_condition(hex_str is not None, "Invalid string")
 
     hex_formatted = format_hex(hex_str)
-    result = ''
+    result = ""
 
     for i in range(0, len(hex_formatted), 2):
-        char_code = int(hex_formatted[i:i + 2], 16)
+        char_code = int(hex_formatted[i : i + 2], 16)
         result += chr(char_code)
 
     return result
@@ -247,7 +248,7 @@ def num_to_byte_array(num: int) -> List[int]:
     byte_array = []
 
     while n > 0:
-        byte = n & 0xff
+        byte = n & 0xFF
         byte_array.append(byte)
         n = (n - byte) // 256
 

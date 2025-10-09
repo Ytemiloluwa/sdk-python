@@ -1,5 +1,6 @@
 from typing import TypedDict, Optional
 
+
 class IInitiateServerSessionParams(TypedDict):
     deviceRandomPublic: bytes
     deviceId: bytes

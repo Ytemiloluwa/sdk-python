@@ -3,7 +3,9 @@ from unittest.mock import Mock, patch
 import calendar
 
 from core import SDK
-from tests.raw.__fixtures__.waitForCommandOutput import raw_wait_for_command_output_test_cases
+from tests.raw.__fixtures__.waitForCommandOutput import (
+    raw_wait_for_command_output_test_cases,
+)
 from interfaces.__mocks__.connection import MockDeviceConnection
 from interfaces.errors.connection_error import DeviceConnectionError
 from tests.__fixtures__.config import config
@@ -13,21 +15,52 @@ from tests.__fixtures__.config import config
 async def setup():
     """Setup fixture for each test"""
     constant_date = raw_wait_for_command_output_test_cases["constantDate"]
-    
-    with patch('time.time', return_value=calendar.timegm(constant_date.timetuple()) + constant_date.microsecond / 1e6), \
-         patch('os.times', return_value=type('MockTimes', (), {'elapsed': 16778725})()):
-        
+
+    with (
+        patch(
+            "time.time",
+            return_value=calendar.timegm(constant_date.timetuple())
+            + constant_date.microsecond / 1e6,
+        ),
+        patch("os.times", return_value=type("MockTimes", (), {"elapsed": 16778725})()),
+    ):
+
         connection = await MockDeviceConnection.create()
-        
+
         async def on_data():
             # SDK Version: 2.7.1, Packet Version: v3
             await connection.mock_device_send(
-                bytes([
-                    170, 1, 7, 0, 1, 0, 1, 0, 69, 133, 170, 88, 12, 0, 1, 0, 1, 0, 2, 0,
-                    7, 0, 1, 130, 112,
-                ])
+                bytes(
+                    [
+                        170,
+                        1,
+                        7,
+                        0,
+                        1,
+                        0,
+                        1,
+                        0,
+                        69,
+                        133,
+                        170,
+                        88,
+                        12,
+                        0,
+                        1,
+                        0,
+                        1,
+                        0,
+                        2,
+                        0,
+                        7,
+                        0,
+                        1,
+                        130,
+                        112,
+                    ]
+                )
             )
-        
+
         connection.configure_listeners(on_data)
 
         sdk = await SDK.create(connection, 0)
@@ -43,7 +76,7 @@ async def setup():
 @pytest.mark.asyncio
 async def test_should_be_able_to_wait_for_command_output(setup):
     connection, sdk = await setup.__anext__()
-    
+
     for test_case in raw_wait_for_command_output_test_cases["valid"]:
         status_index = 0
 
@@ -68,16 +101,18 @@ async def test_should_be_able_to_wait_for_command_output(setup):
             assert status == test_case["statusList"][status_index - 1]
 
         connection.configure_listeners(on_data)
-        output = await sdk.deprecated.wait_for_command_output({
-            "sequenceNumber": test_case["sequenceNumber"],
-            "expectedCommandTypes": test_case["expectedCommandTypes"],
-            "onStatus": on_status,
-            "options": {
-                "maxTries": 1,
-                "timeout": config.defaultTimeout,
-                "interval": 20,
-            },
-        })
+        output = await sdk.deprecated.wait_for_command_output(
+            {
+                "sequenceNumber": test_case["sequenceNumber"],
+                "expectedCommandTypes": test_case["expectedCommandTypes"],
+                "onStatus": on_status,
+                "options": {
+                    "maxTries": 1,
+                    "timeout": config.defaultTimeout,
+                    "interval": 20,
+                },
+            }
+        )
 
         assert output == test_case["output"]
 
@@ -85,7 +120,7 @@ async def test_should_be_able_to_wait_for_command_output(setup):
 @pytest.mark.asyncio
 async def test_should_be_able_to_handle_multiple_retries(setup):
     connection, sdk = await setup.__anext__()
-    
+
     for test_case in raw_wait_for_command_output_test_cases["valid"]:
         status_index = 0
         max_timeout_triggers = 3
@@ -123,16 +158,18 @@ async def test_should_be_able_to_handle_multiple_retries(setup):
 
         connection.configure_listeners(on_data)
 
-        output = await sdk.deprecated.wait_for_command_output({
-            "sequenceNumber": test_case["sequenceNumber"],
-            "expectedCommandTypes": test_case["expectedCommandTypes"],
-            "onStatus": on_status,
-            "options": {
-                "maxTries": max_tries,
-                "timeout": config.defaultTimeout,
-                "interval": 20,
-            },
-        })
+        output = await sdk.deprecated.wait_for_command_output(
+            {
+                "sequenceNumber": test_case["sequenceNumber"],
+                "expectedCommandTypes": test_case["expectedCommandTypes"],
+                "onStatus": on_status,
+                "options": {
+                    "maxTries": max_tries,
+                    "timeout": config.defaultTimeout,
+                    "interval": 20,
+                },
+            }
+        )
 
         assert output == test_case["output"]
 
@@ -140,7 +177,7 @@ async def test_should_be_able_to_handle_multiple_retries(setup):
 @pytest.mark.asyncio
 async def test_should_throw_error_when_device_is_disconnected(setup):
     connection, sdk = await setup.__anext__()
-    
+
     for test_case in raw_wait_for_command_output_test_cases["valid"]:
         on_data = Mock()
         on_status = Mock()
@@ -149,17 +186,19 @@ async def test_should_throw_error_when_device_is_disconnected(setup):
         await connection.destroy()
 
         with pytest.raises(DeviceConnectionError):
-            await sdk.deprecated.wait_for_command_output({
-                "sequenceNumber": test_case["sequenceNumber"],
-                "expectedCommandTypes": test_case["expectedCommandTypes"],
-                "onStatus": on_status,
-                "options": {
-                    "maxTries": 1,
-                    "timeout": config.defaultTimeout,
-                    "interval": 20,
-                },
-            })
-        
+            await sdk.deprecated.wait_for_command_output(
+                {
+                    "sequenceNumber": test_case["sequenceNumber"],
+                    "expectedCommandTypes": test_case["expectedCommandTypes"],
+                    "onStatus": on_status,
+                    "options": {
+                        "maxTries": 1,
+                        "timeout": config.defaultTimeout,
+                        "interval": 20,
+                    },
+                }
+            )
+
         on_data.assert_not_called()
         on_status.assert_not_called()
 
@@ -167,7 +206,7 @@ async def test_should_throw_error_when_device_is_disconnected(setup):
 @pytest.mark.asyncio
 async def test_should_throw_error_when_device_is_disconnected_in_between(setup):
     connection, sdk = await setup.__anext__()
-    
+
     for test_case in raw_wait_for_command_output_test_cases["valid"]:
         status_index = 0
 
@@ -195,21 +234,23 @@ async def test_should_throw_error_when_device_is_disconnected_in_between(setup):
 
         connection.configure_listeners(on_data)
         with pytest.raises(DeviceConnectionError):
-            await sdk.deprecated.wait_for_command_output({
-                "sequenceNumber": test_case["sequenceNumber"],
-                "expectedCommandTypes": test_case["expectedCommandTypes"],
-                "options": {
-                    "maxTries": 1,
-                    "timeout": config.defaultTimeout,
-                    "interval": 20,
-                },
-            })
+            await sdk.deprecated.wait_for_command_output(
+                {
+                    "sequenceNumber": test_case["sequenceNumber"],
+                    "expectedCommandTypes": test_case["expectedCommandTypes"],
+                    "options": {
+                        "maxTries": 1,
+                        "timeout": config.defaultTimeout,
+                        "interval": 20,
+                    },
+                }
+            )
 
 
 @pytest.mark.asyncio
 async def test_should_throw_error_when_device_sends_invalid_data(setup):
     connection, sdk = await setup.__anext__()
-    
+
     for test_case in raw_wait_for_command_output_test_cases["error"]:
         status_index = 0
 
@@ -234,12 +275,14 @@ async def test_should_throw_error_when_device_sends_invalid_data(setup):
 
         connection.configure_listeners(on_data)
         with pytest.raises(test_case["errorInstance"]):
-            await sdk.deprecated.wait_for_command_output({
-                "sequenceNumber": test_case["sequenceNumber"],
-                "expectedCommandTypes": test_case["expectedCommandTypes"],
-                "onStatus": on_status,
-                "options": {
-                    "maxTries": 1,
-                    "timeout": config.defaultTimeout,
-                },
-            })
+            await sdk.deprecated.wait_for_command_output(
+                {
+                    "sequenceNumber": test_case["sequenceNumber"],
+                    "expectedCommandTypes": test_case["expectedCommandTypes"],
+                    "onStatus": on_status,
+                    "options": {
+                        "maxTries": 1,
+                        "timeout": config.defaultTimeout,
+                    },
+                }
+            )

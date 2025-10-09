@@ -1,5 +1,6 @@
 from typing import List, Dict, Any, Optional, TypedDict
 
+
 class IGetDeviceInfoTestCase(TypedDict, total=False):
     name: str
     query: bytes
