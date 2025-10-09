@@ -30,10 +30,17 @@ prebuild:
 	poetry run packages/app_btc/scripts/prebuild.sh
 	@echo "Prebuild complete!"
 
-# Run all tests
-test:
+# Run all tests (runs each package individually)
+test: prebuild
 	@echo "Running all tests..."
-	poetry run pytest packages/
+	@echo "Running core package tests..."
+	poetry run pytest packages/core/tests/ -v
+	@echo "Running app_manager package tests..."
+	poetry run pytest packages/app_manager/tests/ -v
+	@echo "Running app_btc package tests..."
+	poetry run pytest packages/app_btc/tests/ -v
+	@echo "Running util package tests..."
+	poetry run pytest packages/util/tests/ -v
 
 # Run linting
 lint:
