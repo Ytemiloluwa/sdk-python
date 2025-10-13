@@ -1,9 +1,19 @@
 [tool.poetry]
-name = "cypherock-sdk-monorepo"
+name = "sdk-python"
 version = "0.1.0"
 description = "python-sdk"
 authors = ["Temiloluwa Yusuf <ytemiloluwa@gmail.com>"]
 readme = "README.md"
+packages = [
+    {include = "app_btc", from = "packages/app_btc/src"},
+    {include = "app_manager", from = "packages/app_manager/src"},
+    {include = "core", from = "packages/core/src"},
+    {include = "hw_hid", from = "packages/hw_hid/src"},
+    {include = "hw_serialport", from = "packages/hw_serialport/src"},
+    {include = "hw_webusb", from = "packages/hw_webusb/src"},
+    {include = "interfaces", from = "packages/interfaces/src"},
+    {include = "util", from = "packages/util/src"},
+]
 
 [tool.poetry.dependencies]
 python = ">=3.11"
@@ -51,7 +61,8 @@ warn_unused_configs = true
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
-pythonpath = "."
+pythonpath = ["."]
+testpaths = ["packages"]
 filterwarnings = [
     "ignore::pytest.PytestRemovedIn9Warning",
     "ignore::DeprecationWarning",

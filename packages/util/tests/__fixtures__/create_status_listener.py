@@ -1,5 +1,6 @@
 from enum import IntEnum
-from packages.util.utils.create_flow_status import create_flow_status
+from util.utils.create_flow_status import create_flow_status
+
 
 class TestCase1Enum(IntEnum):
     INIT = 0
@@ -87,8 +88,7 @@ fixtures = {
                 },
                 {
                     "flowStatus": create_flow_status(
-                        TestCase3Enum.END,
-                        SEED_GENERATION.INIT
+                        TestCase3Enum.END, SEED_GENERATION.INIT
                     ),
                 },
             ],

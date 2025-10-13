@@ -1,21 +1,29 @@
 from typing import List
-from packages.interfaces.errors.app_error import DeviceAppError, DeviceAppErrorType, deviceAppErrorTypeDetails
+from interfaces.errors.app_error import (
+    DeviceAppError,
+    DeviceAppErrorType,
+    deviceAppErrorTypeDetails,
+)
 from .types import IGetDeviceInfoTestCase
 
 with_unknown_error: IGetDeviceInfoTestCase = {
-    'name': 'With unknown error',
-    'query': bytes([10, 2, 10, 0]),
-    'result': bytes([10, 4, 18, 2, 8, 0]),
-    'error_instance': DeviceAppError,
-    'error_message': deviceAppErrorTypeDetails[DeviceAppErrorType.UNKNOWN_ERROR]['message'],
+    "name": "With unknown error",
+    "query": bytes([10, 2, 10, 0]),
+    "result": bytes([10, 4, 18, 2, 8, 0]),
+    "error_instance": DeviceAppError,
+    "error_message": deviceAppErrorTypeDetails[DeviceAppErrorType.UNKNOWN_ERROR][
+        "message"
+    ],
 }
 
 with_invalid_app_id: IGetDeviceInfoTestCase = {
-    'name': 'With corrupt msg from device',
-    'query': bytes([10, 2, 10, 0]),
-    'result': bytes([10, 4, 18, 2, 16, 0]),
-    'error_instance': DeviceAppError,
-    'error_message': deviceAppErrorTypeDetails[DeviceAppErrorType.CORRUPT_DATA]['message'],
+    "name": "With corrupt msg from device",
+    "query": bytes([10, 2, 10, 0]),
+    "result": bytes([10, 4, 18, 2, 16, 0]),
+    "error_instance": DeviceAppError,
+    "error_message": deviceAppErrorTypeDetails[DeviceAppErrorType.CORRUPT_DATA][
+        "message"
+    ],
 }
 
 error: List[IGetDeviceInfoTestCase] = [with_unknown_error, with_invalid_app_id]

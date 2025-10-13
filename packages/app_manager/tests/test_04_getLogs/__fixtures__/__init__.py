@@ -4,7 +4,7 @@ from .valid import valid
 from .error import error
 
 fixtures: IFixtures = {
-    'valid': valid,
-    'invalidData': invalidData,
-    'error': error,
+    "valid": valid,
+    "invalidData": invalidData,
+    "error": error,
 }

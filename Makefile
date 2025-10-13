@@ -23,17 +23,24 @@ setup:
 prebuild:
 	@echo "Running prebuild for all packages..."
 	@echo "Core package..."
-	cd packages/core && chmod +x scripts/prebuild.sh && ./scripts/prebuild.sh
+	poetry run packages/core/scripts/prebuild.sh
 	@echo "App Manager package..."
-	cd packages/app_manager && chmod +x scripts/prebuild.sh && ./scripts/prebuild.sh
+	poetry run packages/app_manager/scripts/prebuild.sh
 	@echo "BTC App package..."
-	cd packages/app_btc && chmod +x scripts/prebuild && ./scripts/prebuild
+	poetry run packages/app_btc/scripts/prebuild.sh
 	@echo "Prebuild complete!"
 
-# Run all tests
-test:
+# Run all tests (runs each package individually)
+test: prebuild
 	@echo "Running all tests..."
-	poetry run pytest
+	@echo "Running core package tests..."
+	poetry run pytest packages/core/tests/ -v
+	@echo "Running app_manager package tests..."
+	poetry run pytest packages/app_manager/tests/ -v
+	@echo "Running app_btc package tests..."
+	poetry run pytest packages/app_btc/tests/ -v
+	@echo "Running util package tests..."
+	poetry run pytest packages/util/tests/ -v
 
 # Run linting
 lint:
@@ -48,9 +55,14 @@ format:
 # Clean generated files
 clean:
 	@echo "Cleaning generated files..."
-	find . -name "*.pyc" -not -path "./*/.git/*" -delete
-	find . -name "__pycache__" -type d -not -path "./*/.git/*" -exec rm -rf {} +
-	find . -name "*.egg-info" -type d -not -path "./*/.git/*" -exec rm -rf {} +
-	find . -name "dist" -type d -not -path "./*/.git/*" -exec rm -rf {} +
-	find . -name "build" -type d -not -path "./*/.git/*" -exec rm -rf {} +
+	@echo "Cleaning Python cache files..."
+	find . -name "*.pyc" -not -path "./.git/*" -not -path "./*/.git/*" -not -path "./submodules/*" -delete
+	find . -name "__pycache__" -type d -not -path "./.git/*" -not -path "./*/.git/*" -not -path "./submodules/*" -exec rm -rf {} +
+	@echo "Cleaning build artifacts..."
+	find . -name "*.egg-info" -type d -not -path "./.git/*" -not -path "./*/.git/*" -not -path "./submodules/*" -exec rm -rf {} +
+	find . -name "dist" -type d -not -path "./.git/*" -not -path "./*/.git/*" -not -path "./submodules/*" -exec rm -rf {} +
+	find . -name "build" -type d -not -path "./.git/*" -not -path "./*/.git/*" -not -path "./submodules/*" -exec rm -rf {} +
+	@echo "Cleaning generated proto files..."
+	find packages -path "*/src/*/proto/generated" -type d -exec rm -rf {} +
+	find packages -path "*/src/*/encoders/proto/generated" -type d -exec rm -rf {} +
 	@echo "Clean complete!"

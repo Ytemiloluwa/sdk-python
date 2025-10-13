@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Hardware HID Connector for Cypherock X1"
 authors = ["Temiloluwa Yusuf <ytemiloluwa@gmail.com>"]
 readme = "README.md"
-packages = [{include = "hw_hid"}]
+packages = [{include = "src/hw_hid"}]
 
 [tool.poetry.dependencies]
 python = ">=3.11"

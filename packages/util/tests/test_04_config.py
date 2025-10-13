@@ -1,5 +1,6 @@
 import pytest
-from packages.util.utils.config import get_env_variable, Config
+from util.utils.config import get_env_variable, Config
+
 
 class TestConfig:
 
@@ -18,5 +19,3 @@ class TestConfig:
     def test_get_env_variable_error(self):
         with pytest.raises(ValueError):
             get_env_variable("TEST")
-
-

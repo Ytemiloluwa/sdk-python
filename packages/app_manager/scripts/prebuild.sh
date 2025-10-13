@@ -2,18 +2,18 @@
 
 set -e
 
-rm -rf ./src/proto/generated/*.py || true
-rm -rf ./src/proto/generated/manager || true
+# Ensure we're in the correct directory
+cd "$(dirname "$0")/.."
 
-mkdir -p src/proto/generated
+rm -rf ./src/app_manager/proto/generated/*.py || true
+rm -rf ./src/app_manager/proto/generated/manager || true
 
-if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]]; then
-    PYTHON_CMD="python"
-else
-    PYTHON_CMD="python3"
-fi
+mkdir -p src/app_manager/proto/generated
 
-protoc --python_betterproto_out=./src/proto/generated \
+# Use poetry run python3 to ensure we use the root environment with betterproto
+PYTHON_CMD="poetry run python3"
+
+protoc --python_betterproto_out=./src/app_manager/proto/generated \
     --proto_path="../../submodules/common/proto" \
     ../../submodules/common/proto/manager/common.proto \
     ../../submodules/common/proto/manager/core.proto \
@@ -25,4 +25,4 @@ protoc --python_betterproto_out=./src/proto/generated \
     ../../submodules/common/proto/manager/train_joystick.proto \
     ../../submodules/common/proto/manager/wallet_selector.proto
 
-$PYTHON_CMD ../../scripts/extract_types/__init__.py ./src/proto/generated ./src/proto/generated/types.py
+$PYTHON_CMD ../../scripts/extract_types/__init__.py ./src/app_manager/proto/generated ./src/app_manager/proto/generated/types.py
